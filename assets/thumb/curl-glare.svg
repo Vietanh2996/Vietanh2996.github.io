@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="22.7132" height="20.5551" viewBox="0 0 22.7132 20.5551" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="CURL (Glare)" d="M22.7132 0L0 20.5551C5.71295 15.385 18.5769 16.354 18.5769 16.354C18.5769 16.354 17.5166 4.70283 22.7132 0Z" fill-rule="evenodd" clip-rule="evenodd" fill="url(#paint0_linear_3764_62855)"/>
+<defs>
+<linearGradient id="paint0_linear_3764_62855" x1="11.9635" y1="9.10323" x2="18.0322" y2="16.9643" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.5"/>
+<stop offset="0.319642" stop-color="white" stop-opacity="0.2"/>
+<stop offset="1" stop-color="white" stop-opacity="0.2"/>
+</linearGradient>
+</defs>
+</svg>

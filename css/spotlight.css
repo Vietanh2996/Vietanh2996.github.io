@@ -1,0 +1,311 @@
+@font-face {
+  font-family: "Uxum";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../assets/fonts/uxum-bold.otf") format("opentype");
+}
+
+:root {
+  --blue: #0D5EFF;
+  --ink: #0C0C0C;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: #E5E5E5;
+  color: var(--ink);
+  font-family: "Darker Grotesque", system-ui, sans-serif;
+  font-weight: 600;
+  overflow-x: hidden;
+}
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 64px 16px 96px;
+}
+
+.page { position: relative; } /* no z-index: must not form a stacking context, so .stage-section can sit above .dim-overlay */
+.dim-overlay {
+  position: fixed; inset: 0;
+  z-index: 1;
+  background: rgba(229, 229, 229, .5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease-out, visibility 0s linear 180ms;
+}
+body.is-spotlight .dim-overlay {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 200ms ease-out, visibility 0s;
+}
+
+.intro h1 {
+  font-family: "Uxum", sans-serif;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.05;
+  margin: 0 0 20px;
+  color: var(--blue);
+}
+.intro p, .outro p {
+  font-size: 22px;
+  line-height: 1.35;
+  max-width: 640px;
+  margin: 0;
+}
+.outro { margin-top: 32px; text-align: center; }
+.outro p { margin: 0 auto; }
+
+/* ---------- stage ---------- */
+.stage-section { margin: 48px 0 0; position: relative; z-index: 2; }
+.stage-fit {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  height: calc(550px * var(--stage-scale, 1));
+}
+.stage {
+  position: absolute;
+  left: 0; top: 0;
+  width: 820px;
+  height: 550px;
+  transform-origin: 0 0;
+  scale: var(--stage-scale, 1);
+  perspective: 900px;
+}
+
+.layer {
+  position: absolute;
+  transform-origin: 50% 50%;
+  transform: translate(var(--dx), var(--dy)) scale(var(--s0)) rotate(var(--r0));
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+.stage.is-open .layer { pointer-events: auto; }
+
+/* start offsets: (circle center 274.56,407.09) minus each layer's box center */
+.layer--badge {
+  left: 0; top: 162px; width: 122.84px; height: 120.32px;
+  --dx: 213.14px; --dy: 184.93px; --s0: .4; --r0: -25deg;
+  --d-in: 20ms; --d-out: 30ms;
+}
+.layer--tagline {
+  left: 238.91px; top: 19.11px; width: 265.62px; height: 70.67px;
+  --dx: -97.16px; --dy: 352.65px; --s0: .4; --r0: 20deg;
+  --d-in: 40ms; --d-out: 15ms;
+}
+.layer--card {
+  left: 419.91px; top: 162px; width: 399.8px; height: 156.1px;
+  --dx: -345.25px; --dy: 167.04px; --s0: .4; --r0: -30deg;
+  --d-in: 60ms; --d-out: 0ms;
+}
+/* paint order bottom -> top: badge, tagline, card, person */
+.layer--badge { z-index: 1; }
+.layer--tagline { z-index: 2; }
+.layer--card { z-index: 3; }
+
+/* ---------- person (masked cut-out, grows out of the circle) ---------- */
+.avatar-group {
+  position: absolute;
+  z-index: 4;
+  left: 193.249px; top: 340.616px;
+  width: 150.608px; height: 207.819px;
+  overflow: visible;
+  transform-origin: 87.40px 208.47px;
+  transform: scale(1);
+  pointer-events: none;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+.avatar-photo {
+  position: absolute;
+  left: -1.292px; top: -16.088px;
+  width: 165px; height: 165px;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 1;
+  will-change: opacity;
+}
+.avatar-ring {
+  position: absolute;
+  left: -1.292px; top: -16.088px;
+  width: 165px; height: 165px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 1;
+  will-change: opacity;
+}
+.avatar-photo img {
+  position: absolute;
+  left: 0; top: -14.87%;
+  width: 100%; height: 150%;
+  display: block; max-width: none;
+}
+.person {
+  position: absolute;
+  left: 0; top: 0;
+  width: 150.608px; height: 207.819px;
+  overflow: hidden;
+  clip-path: circle(82.5px at 81.208px 66.412px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.9) 66.01%, transparent 93.27%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0,0,0,.9) 66.01%, transparent 93.27%);
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  pointer-events: none;
+}
+.person img {
+  position: absolute;
+  left: -42.8px; top: -40.748px;
+  width: 248.567px; height: 248.567px;
+  object-fit: contain;
+  display: block; max-width: none;
+  user-select: none; -webkit-user-drag: none;
+}
+.stage.is-open .person { pointer-events: auto; }
+
+/* ---------- rest avatar ---------- */
+.avatar-btn {
+  position: absolute;
+  z-index: 5;
+  left: 191.96px; top: 324.53px;
+  width: 165.12px; height: 165.12px;
+  padding: 0; margin: 0; border: 0;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.avatar-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.stage.is-open .avatar-btn { pointer-events: none; }
+
+/* ---------- badge ---------- */
+.badge-wrap {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.badge {
+  position: relative;
+  flex: none;
+  width: 106.128px; height: 103px;
+  transform: rotate(10.3deg);
+}
+.badge-circle, .badge-shine {
+  position: absolute; left: 0; top: 0;
+  width: 103px; height: 103px;
+  border-radius: 50%;
+}
+.badge-circle {
+  background: linear-gradient(-11.5deg, #0D5EFF 8.457%, #6F98FF 87.955%);
+  box-shadow: 4.901px 2.45px 9.801px rgba(38, 97, 246, .4);
+}
+.badge-shine {
+  box-shadow:
+    inset -1.225px -3.675px .245px #0039C8,
+    inset -1.225px 1.838px .613px #6390FF,
+    inset 0 2.45px .613px rgba(255, 255, 255, .95);
+}
+.badge-glyph {
+  position: absolute;
+  left: 17.34px; top: 24.81px;
+  width: 70.616px; height: 53.968px;
+}
+.badge-glyph img {
+  position: absolute;
+  top: -5.92%; right: -13.53%; bottom: -28.19%; left: -13.22%;
+  width: auto; height: auto;
+  display: block; max-width: none;
+}
+.badge-asterisk {
+  position: absolute;
+  left: 75.98px; top: 5.15px;
+  width: 30.148px; height: 29.244px;
+  display: flex; align-items: center; justify-content: center;
+}
+.badge-asterisk img {
+  display: block;
+  width: 28.736px; height: 27.781px;
+  transform: rotate(3deg);
+}
+
+/* ---------- tagline ---------- */
+.layer--tagline { display: flex; align-items: center; justify-content: center; }
+.pill {
+  height: 57px;
+  padding: 16px 16px 20px;
+  background: #fff;
+  border-radius: 28px;
+  filter: drop-shadow(1px 1px .5px rgba(0, 0, 0, .25));
+  transform: rotate(3deg);
+  white-space: nowrap;
+}
+.pill span {
+  display: block;
+  font-size: 24px; line-height: 24px;
+  color: var(--ink);
+}
+
+/* ---------- contact card ---------- */
+.layer--card { display: flex; align-items: center; justify-content: center; }
+.card {
+  flex: none;
+  width: 391px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+  transform: rotate(-4.62deg);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.card h2 {
+  margin: 0;
+  font-family: "Uxum", sans-serif; font-weight: 700;
+  font-size: 24px; line-height: 32px;
+  color: var(--blue);
+}
+.card-row { display: flex; justify-content: space-between; }
+.col { display: flex; flex-direction: column; gap: 5px; }
+.col--left { width: 221px; }
+.col--right { width: 126px; }
+.item {
+  display: flex; align-items: center; gap: 9.91px;
+  height: 24px;
+  font-size: 18px; line-height: 24px;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.item img { flex: none; width: 15.867px; height: 16px; display: block; }
+.item--two img + img { margin-left: -3.91px; } /* icons sit 6px apart */
+.item--social span { text-decoration: underline; }
+.item:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+
+/* ---------- reduced motion: crossfade only ---------- */
+@media (prefers-reduced-motion: reduce) {
+  /* JS snaps the person / photo; satellites only cross-fade */
+  .layer, .stage.is-open .layer {
+    transform: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 200ms linear, visibility 0s linear 200ms;
+  }
+  .stage.is-open .layer {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 200ms linear, visibility 0s;
+  }
+  .dim-overlay, body.is-spotlight .dim-overlay { transition: opacity 200ms linear, visibility 0s; }
+}
+
+@media (max-width: 600px) {
+  .intro h1 { font-size: 44px; }
+}
