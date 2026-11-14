@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   // spring config (live-editable with ?tune)
-  var SPRING = { openK: 650, openC: 32, closeK: 550, closeC: 34, ringWidth: 6, parK: 120, parAmt: 1, parTilt: 4 };
+  var SPRING = { openK: 650, openC: 32, closeK: 550, closeC: 34, ringWidth: 6, parK: 120, parAmt: 2.2, parTilt: 7 };
   var stage = document.getElementById('stage');
   var fit = document.getElementById('stage-fit');
   var btn = document.getElementById('avatar-btn');
@@ -205,7 +205,7 @@
     var hint = document.createElement('div'); hint.textContent = 'Bật cao = nhanh, gắt hơn. Hãm thấp = nảy nhiều hơn'; hint.style.cssText = 'color:#666;font-size:11px;margin-bottom:6px';
     panel.appendChild(hint);
     var defs = [['openK', 'Mở: độ bật'], ['openC', 'Mở: độ hãm'], ['closeK', 'Đóng: độ bật'], ['closeC', 'Đóng: độ hãm'],
-      ['parAmt', 'Lắc theo chuột: độ lệch (×)', 0, 2, .05], ['parTilt', 'Lắc theo chuột: độ nghiêng (°)', 0, 10, .5], ['parK', 'Lắc theo chuột: độ mềm', 40, 400, 5]];
+      ['parAmt', 'Lắc theo chuột: độ lệch (×)', 0, 4, .05], ['parTilt', 'Lắc theo chuột: độ nghiêng (°)', 0, 15, .5], ['parK', 'Lắc theo chuột: độ mềm', 40, 400, 5]];
     var outs = {};
     function over(k, c) { var z = c / (2 * Math.sqrt(k)); return z >= 1 ? 0 : Math.exp(-Math.PI * z / Math.sqrt(1 - z * z)) * 100; }
     function refresh() {

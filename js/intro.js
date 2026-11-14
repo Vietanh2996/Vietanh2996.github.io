@@ -27,6 +27,7 @@
     frame: 1300,                      // blue framing box drawn from its top-left corner
     caretBar: 6, caretEm: .936, caretDrop: 8.5,   // thin caret: width px, height as a ratio of font-size (em), caret bottom below the baseline px
     stampScale: 2.2, stampFall: 180, stampShake: 2,   // VIBECODE stamp: start scale, fall time (ms), headline thud (px, 0 = off)
+    enterRise: 140, enterScale: 1.35, enterDur: 1600, enterFade: 250,   // hero cluster entrance: start offset below (stage px), start scale, duration (ms, not affected by speed), fade-in (ms)
     seed: 7                           // fixed seed = same "human" rhythm every run
   };
   var SPRING = { k: 650, c: 32 };     // same as spotlight.js open
@@ -39,7 +40,7 @@
   function steps() { return [   // function so ?tune values are read at every replay
     { do: 'pause', ms: TIME.start },
     { do: 'caret', line: 'hi', mode: 'bar' },
-    { do: 'type', line: 'hi', text: 'Hi! I’m a', rate: 12 },
+    { do: 'type', line: 'hi', text: 'Hi! I’m an', rate: 12 },
     { do: 'pause', ms: 220 },
     { do: 'caret', line: 'ai', mode: 'bar' },
     { do: 'pause', ms: 120 },
@@ -84,7 +85,7 @@
     fl: scene.querySelector('.fr-l'), ft: scene.querySelector('.fr-t'), fr: scene.querySelector('.fr-r'), fb: scene.querySelector('.fr-b'),
     htl: scene.querySelector('.fr-h--tl'), htr: scene.querySelector('.fr-h--tr'), hbl: scene.querySelector('.fr-h--bl'), hbr: scene.querySelector('.fr-h--br'),
     selBg: scene.querySelector('.select-bg'), hL: scene.querySelector('.handle--l'), hR: scene.querySelector('.handle--r'),
-    toast: scene.querySelector('.toast')
+    toast: scene.querySelector('.toast'), cluster: scene.querySelector('.hero-cluster')
   };
   var lines = {};
   [['hi', '.hl-hi'], ['ai', '.hl-ai'], ['eng', '.hl-eng']].forEach(function (d) {
@@ -105,7 +106,9 @@
   /* ================= state ================= */
   var ev, evI, anims, springs, raf = 0, t0 = 0, lastT = 0, lastOp = 0, cur = null, blinking = false, caretOn = false;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
-  function scale() { return parseFloat(getComputedStyle(root).getPropertyValue('--stage-scale')) || 1; }
+  /* total on-screen scale of the cluster = --stage-scale x the entrance scale. Every rect-based measurement below only uses DIFFERENCES between rects
+     (char - line, baseline - line), so the entrance translate cancels out and dividing by this scale gives untransformed stage px. */
+  function scale() { var c = el.cluster, w = c.offsetWidth; return w ? (c.getBoundingClientRect().width / w) || 1 : 1; }
   function easeSine(p) { return .5 - .5 * Math.cos(Math.PI * p); }
   function ease(p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
 
@@ -118,7 +121,7 @@
       caretCh.textContent = n > 0 ? cs[idx].textContent : '';
       caret.classList.add('block');
     } else {
-      x = n < cs.length ? cs[n].getBoundingClientRect().left : cs[n - 1].getBoundingClientRect().right;
+      x = n < cs.length ? cs[n].getBoundingClientRect().left : cs[n - 1].getBoundingClientRect().right;   // (x - lr.left) below is a difference: translate-free
       w = TIME.caretBar; caret.classList.remove('block');
     }
     var h = lr.height / k, dy = 0;
@@ -316,7 +319,7 @@
 
   /* ---------- reset / finish ---------- */
   function clearInline() {
-    head.style.transform = '';
+    head.style.transform = ''; el.cluster.style.cssText = '';
     [el.yellow, el.framing, el.badge, el.selBg, el.hL, el.hR, el.toast, el.cursor, el.fl, el.ft, el.fr, el.fb, el.htl, el.htr, el.hbl, el.hbr].forEach(function (n) { n.style.cssText = ''; });
     sel.pl = sel.pr = sel.d = sel.jy = sel.cur = 0; yel.cur = 0; yel.anim = null;
   }
@@ -333,6 +336,17 @@
     for (k in lines) { lines[k].n = 0; lines[k].chars.forEach(function (c, i) { c.style.opacity = 0; c.textContent = lines[k].text[i]; }); }
     clearInline(); caret.classList.remove('on', 'blink'); caret.style.transform = ''; blinking = false; caretOn = false; cur = null;
     ev = compile(); evI = 0; anims = []; springs = []; t0 = 0; lastT = 0; lastOp = 0;
+    if (!reduced && TIME.enterDur > 0) {            // hero cluster entrance: rises from below and scales down, expo-out, starts with the intro (t = 0)
+      var cl = el.cluster, dur = TIME.enterDur, rise = TIME.enterRise, s0 = TIME.enterScale, fade = Math.max(1, TIME.enterFade);
+      var paint = function (p) {
+        var e = p >= 1 ? 1 : 1 - Math.pow(2, -10 * p), q = 1 - e;
+        if (p >= 1) { cl.style.transform = ''; cl.style.opacity = ''; return; }
+        cl.style.opacity = clamp(p * dur / fade, 0, 1).toFixed(3);
+        cl.style.transform = 'translate3d(0,' + (rise * q).toFixed(2) + 'px,0) scale(' + (1 + (s0 - 1) * q).toFixed(4) + ')';
+      };
+      cl.style.willChange = 'transform, opacity'; paint(0);
+      anims.push({ t0: 0, dur: dur, fn: paint, node: cl, will: 'transform, opacity' });
+    }
   }
   function run() { reset(); raf = requestAnimationFrame(tick); }
   dbg.restart = run;
@@ -349,7 +363,8 @@
     [['speed', 'Tốc độ chung (×)', .4, 3, .05], ['delay12', 'Gõ dòng 1–2: mỗi chữ (ms)', 15, 200, 1], ['delay3', 'Gõ dòng 3: mỗi chữ (ms)', 20, 300, 1],
      ['think', 'Ngập ngừng trước "Product" (ms)', 0, 1500, 10], ['drag', 'Kéo highlight tím (ms)', 200, 2500, 10], ['frame', 'Kéo khung xanh (ms)', 300, 3000, 10],
      ['backspace', 'Xoá mỗi chữ (ms)', 30, 300, 5], ['toastHold', 'Thời gian hiện thông báo (ms)', 400, 4000, 50], ['toastWait', 'Dừng trước khi xoá (ms)', 0, 2000, 10],
-     ['stampScale', 'Đóng dấu: phóng to ban đầu (×)', 1.2, 3, .1], ['stampFall', 'Đóng dấu: thời gian rơi (ms)', 80, 400, 10], ['stampShake', 'Đóng dấu: rung khi đập (px)', 0, 6, 1]].forEach(function (d) {
+     ['stampScale', 'Đóng dấu: phóng to ban đầu (×)', 1.2, 3, .1], ['stampFall', 'Đóng dấu: thời gian rơi (ms)', 80, 400, 10], ['stampShake', 'Đóng dấu: rung khi đập (px)', 0, 6, 1],
+     ['enterRise', 'Vào: quãng trượt lên (px)', 0, 400, 5], ['enterScale', 'Vào: phóng to ban đầu (×)', 1, 2, .01], ['enterDur', 'Vào: thời gian (ms)', 400, 3000, 50]].forEach(function (d) {
       var row = document.createElement('label'), name = document.createElement('div'), out = document.createElement('b'), inp = document.createElement('input');
       row.style.cssText = 'display:block;margin:4px 0';
       out.style.cssText = 'float:right;font-weight:600'; out.textContent = TIME[d[0]];
@@ -388,7 +403,7 @@
     if (/[?&]intro(?:[=&]|$)/.test(location.search)) scene.addEventListener('click', run);
   }
   var fontsReady = document.fonts && document.fonts.load ? Promise.all([
-    document.fonts.load('140px "Cal Sans"', 'AI Hi! I’m a'),
+    document.fonts.load('140px "Cal Sans"', 'AI Hi! I’m an'),
     document.fonts.load('500 140px "IBM Plex Mono"', '</Engineêể>')    // vietnamese subset for ê / ể
   ]) : Promise.resolve();
   Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]).then(boot, boot);

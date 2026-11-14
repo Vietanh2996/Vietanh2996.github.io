@@ -64,7 +64,7 @@ body::before {
 .thumb * { box-sizing: border-box; }
 .thumb img { display: block; max-width: none; }
 .thumb i { display: block; font-style: normal; }
-.thumb-stage > *:not(.cursor) { position: absolute; }
+.thumb-stage > *:not(.cursor), .hero-cluster > * { position: absolute; }
 .pill-left, .sidebar-right, .zoom-help, .toolbar { position: fixed; pointer-events: none; }
 /* FigJam chrome: fixed to the viewport edges, sized by --stage-scale.
    z 3 at rest: above the page (stage z 2). Spotlight open: z 0, so .dim-overlay (z 1) dims it and the stage (z 2) sits on top.
@@ -72,10 +72,13 @@ body::before {
 .pill-left, .sidebar-right, .zoom-help, .toolbar { --s: var(--stage-scale, 1); scale: var(--s); z-index: 3; transition: z-index 0s linear 180ms; }
 body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotlight .zoom-help, body.is-spotlight .toolbar { z-index: 0; transition: z-index 0s; }
 
+/* hero text cluster: transparent wrapper (same box as the stage); only the intro entrance transforms it */
+.hero-cluster { left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 458px; pointer-events: none; }
+
 /* ---------- headline ---------- */
 .headline { margin: 0; font-weight: 400; inset: 0; pointer-events: none; }
 .headline span { position: absolute; white-space: pre; color: #000; font-size: 140px; }
-.hl-hi { font-family: "Cal Sans", sans-serif; left: 693.05px; top: 205px; line-height: normal; }
+.hl-hi { font-family: "Cal Sans", sans-serif; left: 653.55px; top: 205px; line-height: normal; }
 .hl-ai { font-family: "Cal Sans", sans-serif; left: 401px; top: 375px; line-height: .9; letter-spacing: -2.8px; }
 .hl-eng { font-family: "IBM Plex Mono", monospace; font-weight: 500; left: 584.05px; top: 543.14px; line-height: .9; letter-spacing: -15.4px; }
 .hl-yellow { left: 727px; top: 548.77px; width: 555.949px; height: 131px; background: var(--engineer-highlight); }
