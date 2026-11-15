@@ -1,3 +1,16 @@
 .DS_Store
 _source/
 assets/photo/src/
+design/home/
+design/**/export/
+design/**/gif/
+design/**/backup/
+design/_unused/
+ref/*.mp4
+.DS_Store
+
+# Local only, not published
+design/
+ref/
+scripts/
+.claude/

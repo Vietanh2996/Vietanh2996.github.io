@@ -1,0 +1,24 @@
+<svg width="87" height="113" viewBox="-4 -4 87 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>.s{animation:u 1s step-end infinite}.s:nth-of-type(2){animation-delay:-.8s}.s:nth-of-type(3){animation-delay:-.6s}.s:nth-of-type(4){animation-delay:-.4s}.s:nth-of-type(5){animation-delay:-.2s}@keyframes u{0%{transform:translateY(-3px)}20%{transform:none}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<g id="Skill icon">
+<rect x="-16.3984" y="-18.3227" width="1259" height="139" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+<g id="Skill=Figma MCP" filter="url(#filter0_d_3783_37887)">
+<g class="s"><path id="Vector" d="M18.535 84.9186C16.4878 77.1767 21.1043 69.2408 28.8463 67.1936L42.8645 63.4867L46.5713 77.5049C48.6186 85.2469 44.002 93.1827 36.26 95.2299C28.518 97.2772 20.5822 92.6606 18.535 84.9186Z" fill="#24CB71" stroke="white" stroke-width="5"/></g>
+<g class="s"><path id="Vector_2" d="M28.0371 7.41362L35.4508 35.45L49.469 31.7431C57.2109 29.6959 61.8275 21.76 59.7803 14.0181C57.7331 6.27613 49.7972 1.65954 42.0553 3.70676L28.0371 7.41362Z" fill="#FF7237" stroke="white" stroke-width="5"/></g>
+<g class="s"><path id="Vector_3" d="M56.8831 59.7797C64.6251 57.7325 69.2416 49.7967 67.1944 42.0547C65.1471 34.3127 57.2114 29.6961 49.4693 31.7434C41.7273 33.7906 37.1108 41.7264 39.158 49.4684C41.2053 57.2104 49.141 61.827 56.8831 59.7797Z" fill="#00B6FF" stroke="white" stroke-width="5"/></g>
+<g class="s"><path id="Vector_4" d="M3.70685 28.8459C5.75407 36.5878 13.6899 41.2044 21.4319 39.1572L35.4501 35.4503L28.0364 7.41397L14.0182 11.1208C6.27622 13.168 1.65963 21.1039 3.70685 28.8459Z" fill="#FF3737" stroke="white" stroke-width="5"/></g>
+<g class="s"><path id="Vector_5" d="M11.1209 56.882C13.1681 64.6239 21.104 69.2405 28.8459 67.1933L42.8641 63.4865L35.4504 35.4501L21.4322 39.157C13.6903 41.2042 9.0737 49.14 11.1209 56.882Z" fill="#874FFF" stroke="white" stroke-width="5"/></g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_3783_37887" x="-4" y="-3.99996" width="86.3145" height="112.937" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3783_37887"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3783_37887" result="shape"/>
+</filter>
+</defs>
+</svg>

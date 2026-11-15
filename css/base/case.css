@@ -1,0 +1,175 @@
+@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/Uxum-Regular.otf") format("opentype"); }
+/* ==========================================================================
+   Case study frame (shared by every work/<case>.html).
+   Load after css/base/type.css. Source: Figma file L019S5a1cfWPNCtASIazaY, frame 1828:9464 (OneU).
+
+   Scale: design is 1920 wide, content column 250 -> 1670 (1420). From 1024px up everything is sized in
+   "design units": 1u = min(100vw, 1920px) / 1920 (so it shrinks with the viewport, never grows past 1920).
+   Below 1024px the layout becomes one column at real px (target 390).
+
+   PAGE SHELL
+     body.case            page: dot background, base font, no horizontal scroll
+     main.case-main       column 1420u wide, centered
+     section.case-s       one section (id="sNN"). Vertical gap between sections = 106u (hero -> overview in Figma)
+       .case-s--tight       smaller gap below this section (47u, used header -> hero)
+       .case-s--first       top padding of the page (131u, logo y in Figma). Put on the first section only
+
+   GRIDS (put on a div inside .case-s)
+     .case-row            title left 460u | content right 939u, gap 20u   (Overview frame 1829:9607)
+     .case-cols3          3 equal columns 460u, gap 20u (x = 251 / 731 / 1211)
+     .case-read           narrow reading column 939u, offset 480u (aligned with right column of .case-row)
+       .case-read--left     no offset (starts at the left edge)
+     .case-meta           5-column meta row (Domain / Team / Contribution / Scope / Year)
+       .case-meta__item     one column: .case-label + .case-value
+
+   TEXT
+     .case-title          page title h1        56u / 1.2  Cal Sans 400   (Figma Uxum Regular 56)
+     .case-h2             section heading      40u / 1.2  Cal Sans 400   (Figma Uxum Bold 40)
+     .case-p              body paragraph       22u / 32u  BDO 400, -0.01em       (Figma Darker Grotesque Medium 32)
+       .case-p--strong      bold paragraph                BDO 500        (Figma Darker Grotesque Bold 32)
+     .case-list           bullet list (ul), same size as .case-p
+     .case-label          meta label           19u / 24u  BDO 400, #b3b3b3
+     .case-value          meta value           19u / 24u  BDO 400, #000; each line is a <span> (block, 8u apart)
+     .case-logo           brand logo img (svg has glow padding: sized to its natural box, nudged to align)
+
+   FIGURES
+     .case-fig            image block, full column width, img keeps its own ratio
+       .case-fig--card      rounded card (radius 64u, gradient #f9f9f9 -> #fff), image inside
+       .case-fig--hero      aspect-ratio 1419/829 (OneU hero); copy this pattern for other fixed ratios
+       .case-fig--bleed     full viewport width, break out of the 1420 column
+
+   Tokens: --case-u, --case-font-*, --case-*-size/lh, --case-gap. Defined here from --type-family-* (type.css untouched).
+   ========================================================================== */
+
+:root {
+  --case-u: calc(min(100vw, 1920px) / 1920);
+  --case-w: calc(1420 * var(--case-u));
+  --case-gap: calc(106 * var(--case-u));
+  --case-col-gap: calc(20 * var(--case-u));
+
+  --case-font-display: "Uxum", var(--type-family-cal);   /* TEST: Uxum Regular (Figma font); revert to var(--type-family-cal) */
+  --case-font-text: var(--type-family-bdo);
+
+  --case-title-size: max(34px, calc(56 * var(--case-u)));
+  --case-h2-size: max(26px, calc(40 * var(--case-u)));
+  --case-p-size: 16px;   /* body text: fixed 16 (user: 17-20 read too big) */
+  --case-p-lh: calc(32 / 22);
+  --case-p-ls: -0.01em;
+  --case-meta-size: max(13px, calc(19 * var(--case-u)));
+  --case-meta-lh: calc(24 / 19);
+
+  --case-ink: #000;
+  --case-ink-soft: #b3b3b3;
+  --case-card-bg: linear-gradient(180deg, #f9f9f9, #fff);
+  --case-card-radius: calc(64 * var(--case-u));
+}
+
+/* ---------- light reset ---------- */
+.case, .case *, .case *::before, .case *::after { box-sizing: border-box; }
+:where(.case) :where(h1, h2, h3, p, ul, ol, figure) { margin: 0; padding: 0; }
+:where(.case) :where(ul, ol) { list-style: none; }
+:where(.case) :where(img, svg) { display: block; max-width: 100%; }
+
+/* ---------- page: dot background (Figma Background 3750:31824: #f8f8f8 + 2x2 #ddd dot every 16px) ---------- */
+.case {
+  margin: 0;
+  color: var(--case-ink);
+  font-family: var(--case-font-text);
+  font-weight: 400;
+  background-color: #fff;
+  /* dot grid removed (user, 2026-11-15): plain white (#fff) */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.case-main { width: var(--case-w); margin: 0 0 0 calc((100vw - var(--case-w)) / 2); }   /* centered on 100vw like the 1920 frame, ignores scrollbar width */
+
+/* ---------- sections ---------- */
+.case-s { margin-bottom: var(--case-gap); }
+.case-s--tight { margin-bottom: calc(47 * var(--case-u)); }
+.case-s--first { padding-top: calc(131 * var(--case-u)); }
+.case-s:last-child { margin-bottom: 0; padding-bottom: var(--case-gap); }
+
+/* ---------- grids ---------- */
+.case-row { display: grid; grid-template-columns: calc(460 * var(--case-u)) calc(939 * var(--case-u)); column-gap: var(--case-col-gap); align-items: start; }
+.case-cols3 { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: var(--case-col-gap); align-items: start; }
+.case-read { width: calc(939 * var(--case-u)); margin-left: calc(480 * var(--case-u)); }
+.case-read--left { margin-left: 0; }
+
+.case-meta { display: grid; grid-template-columns: calc(314 * var(--case-u)) calc(323 * var(--case-u)) calc(323 * var(--case-u)) calc(240 * var(--case-u)) 1fr; }
+.case-meta__item { min-width: 0; }
+
+/* ---------- text ---------- */
+.case-title { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-title-size); line-height: 1.2; letter-spacing: 0; text-wrap: balance; }
+.case-h2 { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-h2-size); line-height: 1.2; letter-spacing: 0; }
+.case-p, .case-list { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-p-size); line-height: var(--case-p-lh); letter-spacing: var(--case-p-ls); }
+.case-p + .case-p { margin-top: calc(32 * var(--case-u)); }
+.case-p--strong { font-weight: 500; }
+.case-list { list-style: disc; padding-left: 1.1em; }
+.case-list li + li { margin-top: calc(8 * var(--case-u)); }
+.case-label, .case-value { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-meta-size); line-height: var(--case-meta-lh); letter-spacing: 0; }
+.case-label { color: var(--case-ink-soft); margin-bottom: calc(9 * var(--case-u)); }
+.case-value { color: var(--case-ink); }
+.case-value > span { display: block; }
+.case-value > span + span { margin-top: calc(8 * var(--case-u)); }
+
+/* Title block spacing (logo -> title -> meta), Figma: logo 131, title 213, meta 336 */
+.case-logo { width: calc(229.815 * var(--case-u)); height: auto; max-width: none; margin: calc(-11 * var(--case-u)) 0 calc(28.2 * var(--case-u)) 0; }
+.case-title + .case-meta { margin-top: calc(56 * var(--case-u)); }
+
+/* ---------- figures ---------- */
+.case-fig img { width: 100%; height: auto; }
+.case-fig--card { background: var(--case-card-bg); border-radius: var(--case-card-radius); overflow: hidden; }
+.case-fig--hero { aspect-ratio: 1419 / 829; }   /* keeps the card size while the image is missing */
+.case-fig--bleed { width: 100vw; margin-left: calc(50% - 50vw); }
+.case-fig--bleed img { width: 100%; }
+
+/* ---------- mobile (390 target) ---------- */
+@media (max-width: 1023px) {
+  :root {
+    --case-u: 1px;
+    --case-w: 100%;
+    --case-gap: 64px;
+    --case-title-size: 34px;
+    --case-h2-size: 28px;
+    --case-p-size: 16px;
+    --case-p-lh: 1.45;
+    --case-meta-size: 14px;
+    --case-card-radius: 24px;
+  }
+  .case-main { width: auto; margin: 0; padding: 0 20px; }
+  .case-s--first { padding-top: 48px; }
+  .case-s--tight { margin-bottom: 32px; }
+  .case-row, .case-cols3 { grid-template-columns: 1fr; row-gap: 16px; }
+  .case-read, .case-read--left { width: auto; margin-left: 0; }
+  .case-p + .case-p { margin-top: 16px; }
+  .case-list li + li { margin-top: 6px; }
+  .case-logo { width: 150px; margin: -7px 0 16px 0; }
+  .case-title + .case-meta { margin-top: 32px; }
+  .case-meta { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+  .case-label { margin-bottom: 4px; }
+  .case-value > span + span { margin-top: 4px; }
+  .case-fig--bleed { width: calc(100% + 40px); margin-left: -20px; }
+}
+
+/* ===== .case-sprite : light frame-by-frame "GIF" (WebP strip stepped in CSS) =====
+   Static image is wrapped in a positioned box; the strip div overlays it at the GIF's place (all % of the static image).
+   Strip made by scripts/gif_to_sprite.py (frames side by side, @2x). Pause/play handled by js/base/case-sprite.js (.is-paused).
+   <div class="case-phone" style="position:relative">
+     <img src="assets/work/oneu/s08-order-a.webp" alt="">
+     <div class="case-sprite" style="--frames:10; left:2.046%; top:0.966%; width:95.908%; height:37.319%; --rx:11.2%; --ry:13.59%" aria-hidden="true">
+       <div class="case-sprite__strip" style="background-image:url(assets/work/oneu/s08-order-a-strip.webp)"></div>
+     </div>
+   </div>
+   Vars: --frames (count, required), --dur (loop, default frames/5 s = 5 fps), --rx/--ry (corner radius, % of box; optional). */
+.case-sprite { position: absolute; overflow: hidden; pointer-events: none; border-radius: var(--rx, 0) / var(--ry, 0); mix-blend-mode: multiply; /* Figma has the GIF BEHIND the title/amount/alert text; the static image already holds that text, so multiply (GIF is white-based) keeps it visible */ }
+.case-sprite__strip { position: absolute; left: 0; top: 0; height: 100%; width: calc(var(--frames) * 100%); background-size: 100% 100%; background-repeat: no-repeat; animation: case-sprite var(--dur, calc(var(--frames) * 0.2s)) steps(var(--frames)) infinite; }
+.case-sprite.is-paused .case-sprite__strip { animation-play-state: paused; }
+@keyframes case-sprite { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .case-sprite__strip { animation: none; } }
+
+/* ===== Fade utilities (CSS mask): the element itself fades to transparent, so any background behind it (dot grid, images) stays visible. Tune with --fade (length of the fade). ===== */
+.fade-bottom { -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 30%)), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - var(--fade, 30%)), transparent); }
+.fade-top    { -webkit-mask-image: linear-gradient(to top, #000 calc(100% - var(--fade, 30%)), transparent); mask-image: linear-gradient(to top, #000 calc(100% - var(--fade, 30%)), transparent); }
+.fade-x      { -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade, 10%), #000 calc(100% - var(--fade, 10%)), transparent); mask-image: linear-gradient(to right, transparent, #000 var(--fade, 10%), #000 calc(100% - var(--fade, 10%)), transparent); }
+.fade-y      { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--fade, 10%), #000 calc(100% - var(--fade, 10%)), transparent); mask-image: linear-gradient(to bottom, transparent, #000 var(--fade, 10%), #000 calc(100% - var(--fade, 10%)), transparent); }

@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Type system. One token set per Figma text style, same names as Figma.
+   Load this file FIRST (before spotlight / thumb / about / work), in index.html and work/oneu.html.
+
+   Per style:
+     --type-<style>-font  shorthand for the `font` property (weight size/line-height family)
+     --type-<style>-ls    letter-spacing
+     .t-<style>           utility class that applies both
+
+   Figma style       token             font                          letter-spacing   used for
+   ----------------  ----------------  ----------------------------  ---------------  ------------------------------------------------
+   Display/Hero      display-hero      Cal Sans 400 140 / normal     -2%              hero "Hi! I'm an", "AI Product Design"
+   Display/Code      display-code      IBM Plex Mono 500 140 / .9    -15.4px          hero </Engineer>, typing caret glyph
+   Heading/H1        heading-h1        BDO Grotesk 500 48 / .9       -2%              About sentence, skill chip labels
+   Heading/Title     heading-title     Cal Sans 400 24 / 31          0                Work card title, Work spotlight title line 1, contact card title
+   Heading/Tagline   heading-tagline   Cal Sans 400 22 / normal      0                avatar spotlight pill "#Human Taste, AI Speed"
+   Body/L            body-l            BDO Grotesk 400 18 / 24       -2%              Work spotlight title line 2, contact items
+   Body/M            body-m            BDO Grotesk 400 16 / 20       0                Work card description
+   Note/Handwritten  note-handwritten  Caveat 700 32 / 37            0                handwritten notes (avatar note, Work note)
+   Label/Glyph       label-glyph       BDO Grotesk 500 20 / 1        -2%              letter fallback in chip icon tiles
+   Figma/Regular     figma-regular     Inter 400 13 / 22             0                fake Figma page name
+   Figma/Strong      figma-strong      Inter 600 13 / 22             0                fake Figma file name
+   Figma/Small       figma-small       Inter 500 11 / 16             .5%              cursor name chips, share button, image selection labels
+   Figma/Toast       figma-toast       Inter 500 15 / 22             0                toast
+   Fun/Badge         fun-badge         Bangers 400 80 / 1.1          0                [VIbecode] sticker
+   Figma/Cursor      figma-cursor      Cal Sans 400 24 / 32          0                cursor name chips ("Việt Anh", "Subagent-chan", "You")
+   Display/Marquee   display-marquee   BDO Grotesk 500 160 / .9      -2%              marquee "Think first, design after" text
+   Display/Asterisk  display-asterisk  Cal Sans 400 160 / .9         -2%              marquee asterisk
+
+   Families are tokens too, for containers that only set a family.
+   BDO Grotesk is not on Google Fonts: its OTFs are served from assets/shared/fonts.
+   ========================================================================== */
+
+@font-face { font-family: "BDO Grotesk"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Regular.otf") format("opentype"); }
+@font-face { font-family: "BDO Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Medium.otf") format("opentype"); }
+
+:root {
+  /* families */
+  --type-family-bdo: "BDO Grotesk", "Inter", system-ui, sans-serif;
+  --type-family-cal: "Cal Sans", sans-serif;
+  --type-family-plex: "IBM Plex Mono", monospace;
+  --type-family-inter: "Inter", system-ui, sans-serif;
+  --type-family-caveat: "Caveat", cursive;
+  --type-family-bangers: "Bangers", cursive;
+
+  /* Display/Hero */
+  --type-display-hero-font: 400 140px/normal var(--type-family-cal);
+  --type-display-hero-ls: -0.02em;
+  /* Display/Code */
+  --type-display-code-font: 500 140px/.9 var(--type-family-plex);
+  --type-display-code-ls: -15.4px;
+  /* Heading/H1 */
+  --type-heading-h1-font: 500 48px/.9 var(--type-family-bdo);
+  --type-heading-h1-ls: -0.02em;
+  /* Heading/Title */
+  --type-heading-title-font: 400 24px/31px var(--type-family-cal);
+  --type-heading-title-ls: 0;
+  /* Heading/Tagline */
+  --type-heading-tagline-font: 400 22px/normal var(--type-family-cal);
+  --type-heading-tagline-ls: 0;
+  /* Body/L */
+  --type-body-l-font: 400 18px/24px var(--type-family-bdo);
+  --type-body-l-ls: -0.02em;
+  /* Body/M */
+  --type-body-m-font: 400 16px/20px var(--type-family-bdo);
+  --type-body-m-ls: 0;
+  /* Note/Handwritten */
+  --type-note-handwritten-font: 700 32px/37px var(--type-family-caveat);
+  --type-note-handwritten-ls: 0;
+  /* Label/Glyph */
+  --type-label-glyph-font: 500 20px/1 var(--type-family-bdo);
+  --type-label-glyph-ls: -0.02em;
+  /* Figma/Regular */
+  --type-figma-regular-font: 400 13px/22px var(--type-family-inter);
+  --type-figma-regular-ls: 0;
+  /* Figma/Strong */
+  --type-figma-strong-font: 600 13px/22px var(--type-family-inter);
+  --type-figma-strong-ls: 0;
+  /* Figma/Small */
+  --type-figma-small-font: 500 11px/16px var(--type-family-inter);
+  --type-figma-small-ls: .005em;
+  /* Figma/Toast */
+  --type-figma-toast-font: 500 15px/22px var(--type-family-inter);
+  --type-figma-toast-ls: 0;
+  /* Fun/Badge */
+  --type-fun-badge-font: 400 80px/1.1 var(--type-family-bangers);
+  --type-fun-badge-ls: 0;
+  /* Figma/Cursor */
+  --type-figma-cursor-font: 400 24px/32px var(--type-family-cal);
+  --type-figma-cursor-ls: 0;
+  /* Display/Marquee */
+  --type-display-marquee-font: 500 160px/.9 var(--type-family-bdo);
+  --type-display-marquee-ls: -0.02em;
+  /* Display/Asterisk */
+  --type-display-asterisk-font: 400 160px/.9 var(--type-family-cal);
+  --type-display-asterisk-ls: -0.02em;
+}
+
+.t-display-hero { font: var(--type-display-hero-font); letter-spacing: var(--type-display-hero-ls); }
+.t-display-code { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); }
+.t-heading-h1 { font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls); }
+.t-heading-title { font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); }
+.t-heading-tagline { font: var(--type-heading-tagline-font); letter-spacing: var(--type-heading-tagline-ls); }
+.t-body-l { font: var(--type-body-l-font); letter-spacing: var(--type-body-l-ls); }
+.t-body-m { font: var(--type-body-m-font); letter-spacing: var(--type-body-m-ls); }
+.t-note-handwritten { font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); }
+.t-label-glyph { font: var(--type-label-glyph-font); letter-spacing: var(--type-label-glyph-ls); }
+.t-figma-regular { font: var(--type-figma-regular-font); letter-spacing: var(--type-figma-regular-ls); }
+.t-figma-strong { font: var(--type-figma-strong-font); letter-spacing: var(--type-figma-strong-ls); }
+.t-figma-small { font: var(--type-figma-small-font); letter-spacing: var(--type-figma-small-ls); }
+.t-figma-toast { font: var(--type-figma-toast-font); letter-spacing: var(--type-figma-toast-ls); }
+.t-fun-badge { font: var(--type-fun-badge-font); letter-spacing: var(--type-fun-badge-ls); }
+.t-figma-cursor { font: var(--type-figma-cursor-font); letter-spacing: var(--type-figma-cursor-ls); }
+.t-display-marquee { font: var(--type-display-marquee-font); letter-spacing: var(--type-display-marquee-ls); }
+.t-display-asterisk { font: var(--type-display-asterisk-font); letter-spacing: var(--type-display-asterisk-ls); }

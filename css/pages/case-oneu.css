@@ -1,0 +1,289 @@
+/* CSS riêng trang OneU (work/oneu.html): s03-s15 + .case-compare. Load sau css/base/case.css. */
+
+/* s03 overview: rows 64u apart; blocks inside a row 32u apart (Figma 1829:9607) */
+.oneu-s03 .case-row + .case-row { margin-top: calc(64 * var(--case-u)); }
+.oneu-s03__body > * + * { margin-top: calc(32 * var(--case-u)); }
+.oneu-s03__body > .case-p + .case-p { margin-top: calc(32 * var(--case-u)); }
+.oneu-s03__body > .case-p--strong + .case-list { margin-top: 0; }
+
+/* s04 photo: full-bleed photo (1921x1280), phone mockup overlaid at x1336 y234 size 375x812 (% of the photo) */
+.oneu-s04__fig { position: relative; }
+.oneu-s04__fig .oneu-s04__photo { display: block; width: 100%; height: auto; }
+.oneu-s04__fig .oneu-s04__phone { position: absolute; left: 72.06%; top: 26.44%; width: 14.5%; height: 47.12%; /* shrunk ~0.74x around same centre (user, 2026-11-15): sprite frames are only 560px wide */ max-width: none; }
+/* s04 phone = 5-frame sprite (Figma "Home OneU" variants: OneU / Techcombank / Inspire / Priority / Private, 0.8s each); normal blend (not the multiply used by the s08 GIFs), soft fade on the bottom edge */
+.oneu-s04__fig .oneu-s04__phone { mix-blend-mode: normal; overflow: hidden; }
+
+@media (max-width: 1023px) {
+  .oneu-s03 .case-row + .case-row { margin-top: 32px; }
+  .oneu-s03__body > * + * { margin-top: 16px; }
+}
+
+/* OneU case, sections s05-s07. Load after css/base/case.css. Needs Google Font "Caveat" (wght 700) for .oneu-s07__caption:
+   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> (also add to work/oneu.html head). */
+
+/* ---------- s05 ---------- */
+.oneu-s05 { margin-bottom: calc(233 * var(--case-u)); }               /* Figma: diagram bottom 5678 -> s06 heading 5911 */
+.oneu-s05__cols { margin-top: calc(70 * var(--case-u)); }
+.oneu-s05__p { margin-top: calc(39 * var(--case-u)); max-width: calc(359 * var(--case-u)); }
+.oneu-s05__cols .case-h2 { line-height: 1.2; }
+
+.oneu-s05__diagram { position: relative; margin-top: calc(187 * var(--case-u)); aspect-ratio: 1420 / 651; }
+/* art box = Figma x383-1540 (of 250-1670), full height. The image is 1506x965 design px: the 1157x651 composition plus the blur spill (~175px sides, ~157px top/bottom), so it overflows the box centred on it. */
+.oneu-s05__art { position: absolute; left: 9.366%; width: 81.479%; top: 0; height: 100%; overflow: visible; }
+.oneu-s05__art img { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 130.16%; max-width: none; height: auto; pointer-events: none; }
+/* Crisp vector logo ("one" + smile) overlaid on the blobs raster (which holds only the blobs + soft glow). % of the 1157x651 art box; box origin = canvas (174.5,157.5) of the 1506x966 raster. */
+.oneu-s05__art .oneu-s05__logo { left: 36.165%; top: 34.404%; translate: none; width: 27.834%; height: 38.888%; }
+
+.oneu-s05__pillar { position: absolute; z-index: 1; transform: translateX(-50%); text-align: center; }
+.oneu-s05__name { font-family: var(--case-font-text); font-weight: 500; font-size: calc(60 * var(--case-u)); line-height: 1.1; letter-spacing: -0.04em; white-space: nowrap; }
+.oneu-s05__desc { font-family: var(--case-font-text); font-weight: 500; font-size: var(--case-meta-size); line-height: var(--case-meta-lh); margin: calc(32 * var(--case-u)) auto 0; }
+/* center x / top (name box) in % of 1420x651; description width as in Figma */
+.oneu-s05__pillar--dynamic      { left: 15.387%; top: 6.5%;  width: calc(413 * var(--case-u)); }
+.oneu-s05__pillar--benefit      { left: 83.063%; top: 6.5%;  width: calc(413 * var(--case-u)); }
+.oneu-s05__pillar--trendy       { left: 15.387%; top: 70.5%; width: calc(520 * var(--case-u)); }
+.oneu-s05__pillar--personalized { left: 83.063%; top: 72.2%; width: calc(520 * var(--case-u)); }
+
+/* ---------- s06 ---------- (Figma: block x370-1430, number col 80 + gap 40, body x490 w939) */
+.oneu-s06__inner { width: calc(1060 * var(--case-u)); margin-left: calc(120 * var(--case-u)); }
+.oneu-s06__head { display: flex; gap: calc(40 * var(--case-u)); }
+.oneu-s06__num, .oneu-s06__title { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-title-size); line-height: 1.2; letter-spacing: 0; }
+.oneu-s06__num { flex: 0 0 calc(80 * var(--case-u)); color: #666; }
+.oneu-s06__body { width: calc(939 * var(--case-u)); margin: calc(57 * var(--case-u)) 0 0 calc(120 * var(--case-u)); }
+.oneu-s06__body .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
+.oneu-s06__body strong { font-weight: 500; }
+
+/* ---------- s07 ---------- */
+.oneu-s07__fig { position: relative; container-type: inline-size; }
+.oneu-s07__label { position: absolute; top: 25.7%; transform: translateX(-50%); margin: 0; white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(10px, 1.667cqw); line-height: 1; color: #666; }  /* Figma 32/28 on a 1920 canvas */
+.oneu-s07__label--before { left: 25.1%; }
+.oneu-s07__label--after { left: 73.85%; }
+.oneu-s07__caption { margin-top: calc(24 * var(--case-u)); text-align: center; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: #666; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 1023px) {
+  .oneu-s05 { margin-bottom: 64px; }
+  .oneu-s05__cols { margin-top: 32px; row-gap: 32px; }
+  .oneu-s05__p { margin-top: 12px; max-width: none; }
+  .oneu-s05__diagram { margin-top: 40px; aspect-ratio: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 16px; }
+  .oneu-s05__art { position: static; grid-column: 1 / -1; width: 100%; aspect-ratio: 1157 / 651; }
+  .oneu-s05__art { position: relative; }
+  .oneu-s05__art img { position: static; translate: none; width: 100%; height: 100%; object-fit: contain; }
+  /* raster is "contain"ed (scaled 651/966, centred), so the logo % differ from desktop */
+  .oneu-s05__art .oneu-s05__logo { position: absolute; left: 40.677%; top: 39.489%; width: 18.758%; height: 26.207%; }
+  .oneu-s05__pillar { position: static; transform: none; width: auto; }
+  .oneu-s05__name { font-size: 24px; letter-spacing: -0.03em; }
+  .oneu-s05__desc { font-size: 14px; line-height: 1.35; margin-top: 8px; }
+  .oneu-s05__pillar--dynamic { order: 1; } .oneu-s05__pillar--benefit { order: 2; }
+  .oneu-s05__pillar--trendy { order: 3; } .oneu-s05__pillar--personalized { order: 4; }
+
+  .oneu-s06__inner { width: auto; margin-left: 0; }
+  .oneu-s06__head { flex-direction: column; gap: 4px; }
+  .oneu-s06__num { flex: none; }
+  .oneu-s06__body { width: auto; margin: 24px 0 0; }
+  .oneu-s06__body .case-p + .case-p { margin-top: 16px; }
+  .oneu-s07__caption { margin-top: 12px; font-size: 18px; line-height: 1.2; }
+}
+
+/* s09-s11 of the OneU case. Needs Caveat (Google Fonts): <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> (Cal Sans link already in oneu.html).
+   Figma: s09 text x490 w939 (=240u from column), CTA x477 y9883, s10 grid y9978 h2162, caption overlay y12045, s11 head x370 y12187, image y12565 */
+
+/* ---- s09 ---- */
+.oneu-s09 { margin-bottom: calc(21 * var(--case-u)); }   /* CTA bottom 9957 -> grid 9978 */
+.oneu-s09__read { width: calc(939 * var(--case-u)); margin-left: calc(240 * var(--case-u)); }
+.oneu-s09__read .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
+.oneu-s09__cta {
+  display: flex; align-items: flex-end; gap: calc(8 * var(--case-u)); width: fit-content; max-width: 100%;
+  margin: calc(56 * var(--case-u)) 0 0 calc(227 * var(--case-u));
+  padding: calc(16 * var(--case-u)) calc(32 * var(--case-u));
+  background: #f6f8ff; border-radius: calc(28 * var(--case-u));
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  box-shadow: 1px 1px .5px rgba(0,0,0,.25);
+  transform: rotate(-.5deg); transform-origin: left center;
+  cursor: default; user-select: none;
+}
+.oneu-s09__cta-text { font-family: var(--case-font-display); font-size: max(16px, calc(28 * var(--case-u))); line-height: 1.2; color: #000; white-space: nowrap; }
+.oneu-s09__cta-note { font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1.1; color: #0d5eff; white-space: nowrap; }
+
+/* ---- s10 ---- */
+.oneu-s10__fig { position: relative; }
+.oneu-s10__cap {
+  position: absolute; left: 0; right: 0; bottom: 3.1%; text-align: center; padding: 0 20px;
+  font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; color: #666;
+}
+
+/* ---- s11 ---- */
+.oneu-s11__head { display: grid; grid-template-columns: calc(80 * var(--case-u)) 1fr; column-gap: calc(40 * var(--case-u)); margin-left: calc(120 * var(--case-u)); font-family: var(--case-font-display); font-weight: 400; font-size: max(26px, calc(56 * var(--case-u))); line-height: 1.2; }
+.oneu-s11__num { color: #666; }
+.oneu-s11__title { color: #000; }
+.oneu-s11__read { width: calc(939 * var(--case-u)); margin: calc(48 * var(--case-u)) 0 0 calc(240 * var(--case-u)); }
+.oneu-s11__read .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
+.oneu-s11__read strong { font-weight: 500; }
+.oneu-s11__fig { margin-top: calc(88 * var(--case-u)); position: relative; padding-bottom: calc(159 * var(--case-u)); }  /* image is cropped at Figma y830; captions sit at y894 of the 989 frame */
+.oneu-s11__cap { position: absolute; top: calc(894 * var(--case-u)); transform: translateX(-50%); white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-size: max(10px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: #666; }
+
+@media (max-width: 1023px) {
+  .oneu-s09 { margin-bottom: 32px; }
+  .oneu-s09__read, .oneu-s11__read { width: auto; margin-left: 0; }
+  .oneu-s09__cta { margin: 24px 0 0 0; padding: 12px 20px; border-radius: 20px; flex-wrap: wrap; row-gap: 0; transform: rotate(-.5deg); }
+  .oneu-s09__cta-text { white-space: normal; }
+  .oneu-s10__cap { bottom: 2%; }
+  .oneu-s11__head { margin-left: 0; grid-template-columns: 36px 1fr; column-gap: 10px; font-size: 26px; }
+  .oneu-s11__read { margin-top: 20px; }
+  .oneu-s11__fig { margin-top: 32px; }
+}
+
+/* oneu s13-s15 + shared .case-compare. Uses case.css tokens (--case-u etc). Mobile breakpoint 1023px like case.css. */
+
+/* shared "03 Title" heading: number 80u + gap 40u, block x370 (120u from the column), body x491 */
+.oneu-head { display: flex; gap: calc(40 * var(--case-u)); margin-left: calc(120 * var(--case-u)); font-family: var(--case-font-display); font-size: var(--case-title-size); line-height: 1.2; font-weight: 400; }
+.oneu-head__num { width: calc(80 * var(--case-u)); flex: none; color: #666; }
+.oneu-head__title { margin: 0; font: inherit; color: #000; }
+.oneu-p24 { width: calc(939 * var(--case-u)); margin: 0 0 0 calc(241 * var(--case-u)); font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-p-size); line-height: var(--case-p-lh); letter-spacing: var(--case-p-ls); }
+
+/* ---------- s13 ---------- */
+.oneu-s13__text { width: calc(939 * var(--case-u)); margin-left: calc(241 * var(--case-u)); }
+.oneu-s13__cta { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: calc(var(--oneu-s13-cta-gap, 30) * var(--case-u)) auto 0; padding: calc(16 * var(--case-u)) calc(32 * var(--case-u)); background: #f6f8ff; border-radius: calc(28 * var(--case-u)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); filter: drop-shadow(1px 1px .5px rgba(0,0,0,.25)); cursor: default; }
+.oneu-s13__cta-text { font-family: var(--case-font-display); font-size: max(17px, calc(28 * var(--case-u))); line-height: normal; white-space: nowrap; }
+.oneu-s13__cta-note { font-family: var(--type-family-caveat, "Caveat", cursive); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: normal; color: #0d5eff; text-decoration: underline; text-decoration-skip-ink: none; white-space: nowrap; }
+.oneu-s13__banners { margin-top: calc(81 * var(--case-u)); }
+
+/* ---------- s14 ---------- */
+.oneu-s14__p1 { margin-top: calc(48 * var(--case-u)); }
+.oneu-s14 .case-compare { margin-top: calc(77 * var(--case-u)); }
+.oneu-s14__p2 { margin-top: calc(80 * var(--case-u)); }
+
+/* ---------- case-compare (reusable before/after slider; see js/pages/case-compare.js) ----------
+   <div class="case-compare" data-compare> stage (2 layers, bar, range) + labels. Full-bleed 1920u; both images 2562x1607, stage uses the same ratio so before/after match pixel for pixel.
+   --hr on each img = its height relative to the stage (1 when both images share one ratio). */
+.case-compare { width: 100vw; margin-left: calc(50% - 50vw); --pos: 50%; }
+.case-compare__stage { position: relative; width: 100%; aspect-ratio: 2562 / 1607; overflow: hidden; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.case-compare__layer { position: absolute; inset: 0; }
+.case-compare__layer--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.case-compare__img { position: absolute; top: 0; left: 50%; width: 100%; height: auto; max-width: none; transform: translateX(-50%); -webkit-user-drag: none; pointer-events: none; }
+/* handle from Figma 3794:108133 (1x = 1920 design): 2px #FFCD29 line, gap, 39x27 pill (2px #FFCD29 ring r8, 2px clear gap, 31x19 white r6, three 1x7 #D9D9D9 grips at x10/15/20). No shadows. --s = px per Figma unit (min 1px) */
+.case-compare__bar { --s: max(var(--case-u), 1px); --ks: calc(1.35 * var(--s)); --line: calc(3 * var(--s)); --half: calc(9.5 * var(--ks) + var(--line)); position: absolute; top: 0; bottom: 0; left: var(--pos); width: var(--line); margin-left: calc(var(--line) / -2); background: linear-gradient(#007be5, #007be5) top / 100% calc(50% - var(--half)) no-repeat, linear-gradient(#007be5, #007be5) bottom / 100% calc(50% - var(--half)) no-repeat; pointer-events: none; }   /* Figma 3794:108134: blue #007be5 line, same thickness as the pill ring (--line, user), meets the ring */
+.case-compare__knob { position: absolute; top: 50%; left: 50%; box-sizing: border-box; width: calc(31 * var(--ks)); height: calc(19 * var(--ks)); margin: calc(-9.5 * var(--ks)) 0 0 calc(-15.5 * var(--ks)); border: calc(2 * var(--ks)) solid transparent; border-radius: calc(4 * var(--ks)); background: linear-gradient(#f2f2f4, #fff) padding-box, linear-gradient(#fff, #f2f2f4) border-box; box-shadow: 0 0 0 var(--line) #0d99ff, 0 calc(2 * var(--ks)) calc(6 * var(--ks)) rgba(0,0,0,.4); }   /* pill 31x19 r4: fill #f2f2f4->#fff, 2px inside stroke #fff->#f2f2f4, 3px outside ring #0d99ff, scaled 1.35x (user: bigger), shadow stronger than Figma (0 2 6 40%, user) */
+.case-compare__knob::before { content: ""; position: absolute; inset: calc(-2 * var(--ks)); background: linear-gradient(#007be5, #007be5) calc(8.5 * var(--ks)) calc(6 * var(--ks)) / calc(2 * var(--ks)) calc(7 * var(--ks)) no-repeat, linear-gradient(#007be5, #007be5) calc(14.5 * var(--ks)) calc(6 * var(--ks)) / calc(2 * var(--ks)) calc(7 * var(--ks)) no-repeat, linear-gradient(#007be5, #007be5) calc(20.5 * var(--ks)) calc(6 * var(--ks)) / calc(2 * var(--ks)) calc(7 * var(--ks)) no-repeat; }   /* 3 grips 2x7 #007be5 (Figma var, same blue as the line) at x 8.5/14.5/20.5 */
+.case-compare__range { position: absolute; left: 0; bottom: 0; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.case-compare__stage:has(.case-compare__range:focus-visible) .case-compare__knob { outline: 3px solid #0d5eff; outline-offset: 3px; }
+.case-compare__labels { display: flex; justify-content: space-between; gap: 16px; width: var(--case-w); margin: calc(24 * var(--case-u)) auto 0; }
+.case-compare__labels .case-p { margin: 0; }
+.case-compare__labels .case-p--strong { font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); letter-spacing: 0; color: #666; }   /* Figma 2181:65569 / 2185:66430: Caveat Bold 32/28 #666, same as .oneu-s07__caption */
+
+/* ---------- s15 ---------- */
+.oneu-s15__stats { display: flex; justify-content: space-between; width: calc(939 * var(--case-u)); margin: calc(48 * var(--case-u)) 0 0 calc(241 * var(--case-u)); }
+.oneu-stat { width: calc(292 * var(--case-u)); }
+.oneu-stat p { margin: 0; }
+.oneu-stat__kicker { font-family: var(--case-font-display); font-size: var(--case-p-size); line-height: var(--case-p-lh); color: #e60a32; }
+.oneu-stat__num { display: flex; align-items: center; gap: calc(4 * var(--case-u)); margin-top: calc(8 * var(--case-u)) !important; font-family: var(--case-font-display); color: #000; white-space: nowrap; }
+.oneu-stat__sym { font-size: max(30px, calc(48 * var(--case-u))); line-height: 1.2; }
+.oneu-stat__val { font-size: max(48px, calc(72 * var(--case-u))); line-height: calc(80 / 72); }
+.oneu-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); color: #666; }
+
+@media (max-width: 1023px) {
+  .oneu-head { margin-left: 0; gap: 16px; }
+  .oneu-head__num { width: auto; }
+  .oneu-p24, .oneu-s13__text, .oneu-s15__stats { width: auto; margin-left: 0; }
+  .oneu-s13__cta { flex-wrap: wrap; padding: 12px 22px; border-radius: 28px; margin-top: 32px; gap: 4px 8px; }
+  .oneu-s13__cta-text { white-space: normal; text-align: center; font-size: 18px; }
+  .oneu-s13__cta-note { font-size: 22px; }
+  .oneu-s13__banners { margin-top: 32px; }
+  .oneu-s14__p1 { margin-top: 20px; }
+  .oneu-s14 .case-compare { margin-top: 32px; width: calc(100% + 40px); margin-left: -20px; }
+  .oneu-s14__p2 { margin-top: 24px; }
+  /* phone: taller box, images sized by height, centered, so the phone stays readable */
+  .case-compare__stage { aspect-ratio: auto; height: 118vw; }
+  .case-compare__img { width: auto; height: calc(var(--hr, 1) * 100%); }
+  .case-compare__bar { --s: 1.25px; }
+  .case-compare__labels { flex-direction: column; gap: 8px; margin: 16px 20px 0; width: auto; }
+  .oneu-s15__stats { flex-direction: column; gap: 32px; margin-top: 32px; }
+  .oneu-stat { width: auto; }
+  .oneu-stat__kicker { line-height: 1.3; }
+  .oneu-stat__val { font-size: 56px; }
+  .oneu-stat__sym { font-size: 34px; }
+}
+
+/* ---------- s08: 3 phones x104/523/942 (of 250), 375u wide, 44u gap; bottom fade = .fade-bottom on the row (row ~822u tall, fade over last 451u) ---------- */
+.oneu-s08 { position: relative; }
+/* image 750x1588 = phone frame 375x812 + 8u bezel on every side -> 391x828u; frame x = 354/773/1192, so the image box starts 8u earlier */
+/* padding-top 8u + margin-top -8u: the 8u bezel above the frame stays INSIDE the row box, otherwise the .fade-bottom mask clips it */
+.oneu-s08__row { display: flex; gap: calc(28 * var(--case-u)); margin-top: calc(-8 * var(--case-u)); padding: calc(8 * var(--case-u)) 0 calc(2 * var(--case-u)) calc(96 * var(--case-u)); }
+.oneu-s08__row.fade-bottom { /* fully gone just below the star row (user, 2026-11-15) */ -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 420 * var(--case-u)), transparent calc(100% - 120 * var(--case-u))); mask-image: linear-gradient(to bottom, #000 calc(100% - 420 * var(--case-u)), transparent calc(100% - 120 * var(--case-u))); }
+.oneu-s08__phone { position: relative; flex: 0 0 calc(391 * var(--case-u)); aspect-ratio: 750 / 1588; }
+.oneu-s08__phone > img { display: block; width: 100%; height: 100%; }
+
+/* ---------- s12 ---------- */
+.oneu-s12__text { width: calc(939 * var(--case-u)); margin-left: calc(241 * var(--case-u)); }
+.oneu-s12__text .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
+.oneu-s12__text strong { font-weight: 500; }
+.oneu-s12__fig { margin-top: calc(90 * var(--case-u)); }
+/* s12 membership tiers: dropdown header + arrow nudge, rebuilt from the Figma prototype (Smart Animate).
+   Stage = 1920x1118 canvas; every overlay is positioned in % of the canvas.
+   Header "Frame 1000002717": x1059 y260 375x88. Arrow "Frame 1000002716": x937 y488 45x65. */
+.oneu-s12__stage { position: relative; }
+.oneu-s12__base { display: block; width: 100%; height: auto; }
+
+/* Phone (Figma "Home OneU" x1478 y84.06 375x812; image incl. 8u bezel = x1470 y76.06 391x828): same 5-tier sprite as s04, laid exactly over the phone in s12-base.webp. % of the 1920x1118 canvas = Figma coords. */
+.oneu-s12__phone { position: absolute; left: 76.5625%; top: 6.8032%; width: 20.3646%; height: 74.0608%; mix-blend-mode: normal; }
+
+/* Dropdown: header stays, 4 tier cards slide out from under it (0 -> 100/200/300/400 px), 0.4s ease-in.
+   Loop 6.6s = 0.8 wait + 0.4 open + 5 hold + 0.4 close. */
+.oneu-s12__tiers { position: absolute; left: 55.15625%; top: 23.2558%; width: 19.53125%; aspect-ratio: 375 / 88; }
+.oneu-s12__cards { position: absolute; inset: 0; }
+.oneu-s12__card {
+  position: absolute; inset: 0; opacity: 0;
+  background: url("../../assets/work/oneu/s12-tier-cards.webp") 0 calc((var(--k) - 1) * 100% / 3) / 100% 400% no-repeat;
+  z-index: calc(5 - var(--k));                       /* card 1 on top, like the Figma stack */
+  animation: oneu-s12-drop 6.6s infinite;
+}
+.oneu-s12__hdr { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; }
+@keyframes oneu-s12-drop {
+  0%, 12.1%   { opacity: 0; transform: translateY(0); animation-timing-function: cubic-bezier(.42, 0, 1, 1); }
+  12.2%       { opacity: 1; transform: translateY(0); animation-timing-function: cubic-bezier(.42, 0, 1, 1); }
+  18.18%      { opacity: 1; transform: translateY(calc(var(--k) * 113.6364%)); }
+  93.94%      { opacity: 1; transform: translateY(calc(var(--k) * 113.6364%)); animation-timing-function: cubic-bezier(.42, 0, 1, 1); }
+  99.9%       { opacity: 1; transform: translateY(0); }
+  100%        { opacity: 0; transform: translateY(0); }
+}
+
+/* Arrow: static grey #b3b3b3 chevron, no animation. */
+.oneu-s12__arrow { position: absolute; left: 48.802%; top: 43.649%; width: 2.34375%; aspect-ratio: 45 / 65; }
+.oneu-s12__arrow svg {
+  position: absolute; left: 44.84%; top: 24.29%; width: 42.78%; height: 51.74%; overflow: visible;
+}
+
+/* Reduced motion: hold the best-looking state, dropdown open. */
+@media (prefers-reduced-motion: reduce) {
+  .oneu-s12__card { animation: none; opacity: 1; transform: translateY(calc(var(--k) * 113.6364%)); }
+}
+
+/* Off-screen: js/base/case-sprite.js adds .is-paused */
+.oneu-s12__stage.is-paused *, .oneu-s12__stage.is-paused { animation-play-state: paused; }
+
+@media (max-width: 1023px) {
+  .oneu-s08__row { margin-top: 0; padding: 0; gap: 12px; overflow-x: auto; }
+  .oneu-s08__phone { flex: 0 0 62vw; margin-top: 0; }
+  .oneu-s08__row.fade-bottom { -webkit-mask-image: none; mask-image: none; }
+  .oneu-s12__text { width: auto; margin-left: 0; }
+  .oneu-s12__fig { margin-top: 24px; }
+}
+
+/* ---------- vertical rhythm (desktop): section start y = Figma frame 1828:9464 (1920u).
+   margin-bottom = Figma next-section y - this section y - web section height.
+   s14 -> s15 is NOT pinned to Figma (19556): Figma stacks 2 images, web uses one 2562:1607 slider (1204u at 1920). ---------- */
+@media (min-width: 1024px) {
+  #s01 { margin-bottom: calc(71 * var(--case-u)); }
+  #s02 { margin-bottom: calc(105 * var(--case-u)); }
+  .oneu-s03 { margin-bottom: calc(381 * var(--case-u)); }
+  .oneu-s04 { margin-bottom: calc(149 * var(--case-u)); }
+  .oneu-s05 { margin-bottom: calc(313 * var(--case-u)); }
+  .oneu-s06 { margin-bottom: calc(353 * var(--case-u)); }
+  .oneu-s07 { margin-bottom: calc(153 * var(--case-u)); }
+  .oneu-s08 { margin-bottom: calc(63 * var(--case-u)); }
+  .oneu-s09 { margin-bottom: calc(40 * var(--case-u)); }   /* CTA removed (user, 2026-11-15): image pulled up to the text */
+  .oneu-s10 { margin-bottom: calc(47 * var(--case-u)); }
+  .oneu-s11 { margin-bottom: calc(73 * var(--case-u)); }
+  .oneu-s12 { margin-bottom: calc(138 * var(--case-u)); }
+  .oneu-s13 { margin-bottom: calc(179 * var(--case-u)); }
+  .oneu-s14 { margin-bottom: calc(124 * var(--case-u)); }
+}

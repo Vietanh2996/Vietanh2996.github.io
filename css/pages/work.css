@@ -1,0 +1,70 @@
+/* Work section (demo): two OneU folder cards, A = spotlight without the folder, B = spotlight that keeps it.
+   Figma Web: _Folder 3794:45309, spotlight A 3794:45368, spotlight B 3794:45369. Same 1920 stage / scale as About (.about-fit + .a-canvas from about.css).
+   The cards are drawn by js/pages/work.js inside .work-sp (above the dim overlay); the <a class="work-card"> in the page stage is only the hover/focus/click slot. */
+.stage-section.work { position: relative; margin: 0; }
+.work-stage { font-family: var(--type-family-bdo); color: #000; }
+.work-stage * { box-sizing: border-box; }
+.work-sp { z-index: 2; pointer-events: none; }
+
+.work-card {
+  text-decoration: none;
+  position: absolute; display: block; width: 315px; height: 309px;   /* 360x353 design px at 0.875 */
+  border-radius: 28px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.work-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 10px; }
+
+/* ---------- composition (design px of the resting card: 360x353) ---------- */
+.work-comp { width: 360px; height: 353px; }
+.work-comp.is-open { z-index: 3; }
+.w-part {
+  position: absolute; left: 0; top: 0; transform-origin: 0 0; margin: 0;
+  pointer-events: none; backface-visibility: hidden; will-change: transform, opacity;
+  font-family: var(--type-family-bdo); user-select: none; -webkit-user-drag: none;
+}
+.work-comp.is-open .w-part { pointer-events: auto; cursor: pointer; }
+img.w-part { display: block; max-width: none; }
+.w-papers { position: absolute; left: 0; top: 0; width: 360px; height: 353px; z-index: 2; pointer-events: none; clip-path: inset(-600px -600px 126px -600px); }
+.w-papers > .w-part { z-index: auto; }
+.w-back { z-index: 1; transform-origin: 50% 50%; }
+
+.w-front { z-index: 6; transform-origin: 50% 50%; }
+.w-flap {
+  position: absolute; left: 0; top: 0; width: 360px; height: 126px; border-radius: 28px;
+  background: linear-gradient(180deg, #EB445F 0%, #E20A88 100%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .7);
+}
+.w-title, .w-desc, .w-title2 { position: absolute; margin: 0; white-space: normal; }
+.w-title { width: 328px; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: #fff; }
+.w-desc { width: 328px; font: var(--type-body-m-font); letter-spacing: var(--type-body-m-ls); color: rgba(255,255,255,.8); }
+.w-title2 { z-index: 7; width: 422px; text-align: center; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: #000; opacity: 0; }
+.w-title2 .w-t1, .w-title2 .w-t2 { display: block; }
+.w-title2 .w-t2 { font: var(--type-body-l-font); letter-spacing: var(--type-body-l-ls); margin-top: 2px; color: rgba(0,0,0,.55); }
+.w-note {
+  z-index: 8; text-align: center; font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); opacity: 0; visibility: hidden;
+}
+.w-note--a { color: rgba(0,0,0,.55); }
+
+@media (prefers-reduced-motion: reduce) { .w-part { will-change: auto; } }
+/* phone bezel: Figma rectangle stroke 2.4-2.7px outside (#212121 -> #616161 gradient), radius 12.7 / 14.3 */
+.w-p1 { border-radius: 12.7px; box-shadow: 0 0 0 2.4px #2e2e2e; }
+.w-p2 { border-radius: 14.3px; box-shadow: 0 0 0 2.7px #2e2e2e; }
+
+/* card B (Dynamic Engagement Content): brown folder label, SVG front, screenshot-style images (no bezel) */
+.work-comp--b .w-title { width: 304px; color: rgba(92, 61, 48, .75); }
+.work-comp--b .w-desc { width: 304px; color: rgba(92, 61, 48, .48); }
+.w-note--b { color: rgba(0,0,0,.5); }
+img.w-flap-img { pointer-events: none; }
+
+/* GIF parts (card B, Card Link): static body PNG + the GIF as a stepped sprite overlaid at its Figma box */
+.w-gifpart { z-index: auto; }
+.w-gifpart .w-wbody { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.w-gifpart .w-gif { position: absolute; overflow: hidden; }
+.w-gifpart .w-strip { position: absolute; left: 0; top: 0; height: 100%; background-size: 100% 100%; background-repeat: no-repeat; animation: w-strip 2s steps(var(--n)) infinite; }
+.work-comp:not(.is-open) .w-strip { animation-play-state: paused; }
+@keyframes w-strip { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .w-gifpart .w-strip { animation: none; } }
+.work-comp--b .w-papers img { object-fit: cover; }
+
+/* Work section height: cards sit 180 stage px under the marquee glyphs and only ~180 above the section end (card bottom at 362), instead of the full 900px canvas.
+   The canvas (900px) simply overhangs the section bottom; the spotlight geometry is unchanged. */
+.stage-section.work .work-fit { height: calc(542px * var(--stage-scale, 1)); }

@@ -1,0 +1,128 @@
+/* About section (Figma Web / Thumb 3783:37914, y ~1200-1800): "Watchout! [Việt Anh] is coming!!", skill sentence with 3 rotating chips, intro.
+   Same 1920-wide stage and scale as the hero (--stage-scale from fit-stage.js), so type sizes match.
+   Spotlight (blur + layers) comes from css/pages/spotlight.css; this file only has the page text, the pill, the chips and the chip clusters. */
+
+:root {
+  /* Figma "AID Slide" variables (accent/<c>/subtle + accent/<c>/text, bg/alpha/black-10, text/secondary) */
+  --accent-blue-subtle: #e5f4ff;   --accent-blue-text: #007be5;
+  --accent-red-subtle: #ffe2e0;    --accent-red-text: #dc3412;
+  --accent-green-subtle: #daecdf;  --accent-green-text: #009951;
+  --accent-pink-subtle: #ffe0fc;
+  --accent-yellow-subtle: #fff1c2; --accent-yellow-text: #b37400;
+  --accent-orange-subtle: #ffe6c7; --accent-orange-text: #c25e00;
+  --bg-alpha-black-10: rgba(0, 0, 0, .1);
+  --text-secondary: rgba(0, 0, 0, .5);
+}
+
+/* ---------- section + canvases ---------- */
+/* Spacing: the hero stage is cropped/letterboxed by the window, so its last image ends (50svh - 401 stage px) above the hero's bottom edge, and the sentence block starts
+   335 stage px into the 900px canvas. margin-top pulls About up so the sentence starts 190 stage px under the hero's last image at every window size
+   (gap = 50svh - 66s + M = 190s -> M = 256s - 50svh).
+   Height: when "Watch out" is 145px under the viewport top (About fully in view) the marquee glyph tops must sit exactly at the viewport bottom edge.
+   Watch out is 335s below the About top; the glyphs are ~(120s padding + ~25s inset) below the section top. The 145px offset is unscaled while the rest scales, so H = 100svh + 232s - 145px (fitted on measurements at 1280x800, 1440x900, 2000x1100: all within 0.5px).
+   (the 900px canvas simply overhangs the section bottom, empty; spotlight geometry is unchanged). */
+.stage-section.about {
+  --about-scale: calc(var(--stage-scale, 1) * .8);   /* About renders at 80% of the shared stage scale (Work keeps the full scale) */
+  position: relative;
+  /* margin-top: gap hero last image -> "Watch out" = 190 About-stage px: (50svh - 401s) + M + 335a = 190a, a = .7s -> M = 401s - 145a - 50svh */
+  margin: calc(var(--stage-scale, 1) * 401px - var(--about-scale) * 145px - 50svh) 0 0;
+  /* height: when the About block (232a tall, starting 335a into the section) is vertically centred in the viewport, the marquee glyph top sits at the viewport bottom:
+     (100svh - 232a)/2 - 335a + H + 113.44s = 100svh -> H = 50svh + 451a - 113.44s (113.44s = marquee padding 120s minus the 6.56s the ascender rises above the line box, unchanged) */
+  height: calc(50svh + var(--about-scale) * 451px - var(--stage-scale, 1) * 113.44px);
+}   /* no z-index: the page text must stay under .dim-overlay; only .about-sp (z 2) sits above it */
+.about-fit {
+  position: relative; flex: none;
+  width: 100%;
+  height: calc(900px * var(--stage-scale, 1));
+  overflow-x: clip;
+}
+.a-canvas {
+  box-sizing: border-box;
+  position: absolute;
+  left: calc(50% - 960px * var(--stage-scale, 1));
+  top: 0;
+  width: 1920px; height: 900px;
+  transform-origin: 0 0;
+  scale: var(--stage-scale, 1);
+}
+.stage-section.about .about-fit { height: calc(900px * var(--about-scale)); }
+.stage-section.about .a-canvas { left: calc(50% - 960px * var(--about-scale)); scale: var(--about-scale); }
+.about-sp { z-index: 2; pointer-events: none; }
+.about-stage {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--type-family-bdo);
+  color: #000;
+}
+.about-stage * { box-sizing: border-box; }
+.about-block { display: flex; flex-direction: column; align-items: center; }
+
+/* ---------- type ---------- */
+.ab-t { font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls); white-space: pre; color: #000; }
+.ab-t--skill { color: rgba(0, 0, 0, .9); }
+.about-hello { display: flex; align-items: center; gap: 12px; }
+.about-skill {
+  width: 1600px; margin: 20px 0 0;   /* widest row 1 (End-to-end products + Production-ready UI) is ~1509px; 160px side margin on the 1920 stage */
+    /* Watchout bottom -> sentence top = the sentence's own row gap, so all 3 lines are evenly spaced */
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.skill-row { display: flex; align-items: center; justify-content: center; gap: 12px; }
+
+/* ---------- Việt Anh pill: fixed, never rotates ---------- */
+.who-pill {
+  position: relative; flex: none;
+  display: flex; align-items: center; gap: 8px;
+  height: 64px; padding: 0 16px 0 13px;   /* 13 = 8px sliver of pill left of the avatar's visible edge + the 5px white ring that hangs outside the 79px slot */
+  border-radius: 100px; background: var(--bg-alpha-black-10);
+}
+/* the avatar itself is drawn by the spotlight engine (js/pages/about.js, .about-sp); this transparent button is its slot: hover/focus/click target.
+   Pill 64px like the skill chips; avatar 79px (Figma's 93px scaled by 64/75), still overflowing the pill; margin-right 13.3 = Figma's 15.61 die-cut overhang scaled. */
+.who-avatar {
+  flex: none; width: 79px; height: 79px; margin: 0 9px 0 0; padding: 0; border: 0;   /* 9 + 8 flex gap - 5 ring = 12px visible gap to the name */
+ 
+  border-radius: 50%; background: transparent; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.who-avatar:focus-visible { outline: 3px solid var(--blue); outline-offset: 10px; }
+
+/* ---------- skill chip (Figma component "Skill chip" 3789:32183) ---------- */
+.skill-chip {
+  flex: none; display: inline-flex; align-items: center; gap: 12px;
+  height: 64px; padding: 0 20px 0 8px; margin: 0; border: 0;
+  border-radius: 100px; background: var(--bg-alpha-black-10);
+  font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls);
+  color: rgba(0, 0, 0, .9); white-space: nowrap; text-align: left;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.skill-chip:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.sc-icon { flex: none; display: grid; width: 48px; height: 48px; border-radius: 14px; overflow: hidden;
+  /* avatar ring (6px on 79px) scaled by 48/79: white stroke outside + the same two soft shadows */
+  box-shadow: 0 0 0 3.6px #fff, 0 .6px 1.8px 3.6px rgba(0,0,0,.15), 0 0 .3px 3.6px rgba(0,0,0,.3); }
+.sc-ico {
+  grid-area: 1 / 1; display: grid; place-items: center;
+  background: var(--tint, var(--accent-blue-subtle)); color: var(--ink, var(--accent-blue-text));
+  font: var(--type-label-glyph-font); letter-spacing: var(--type-label-glyph-ls);
+}
+.sc-ico img { width: 28px; height: 28px; display: block; }
+/* gap: js sets margin-right per icon (= how far the centred sticker hangs past the 48px slot), so with the 12px flex gap the visible sticker edge sits 12px from the label */
+.sc-icon:has(.sc-ico > img) { box-shadow: none; border-radius: 0; overflow: visible; }
+.sc-ico:has(> img) { background: none; }
+/* die-cut sticker: outline is drawn in the SVG, shadow follows the silhouette */
+.sc-ico:has(> img) { position: relative; }
+/* sticker ~79px incl. outline (12.4 of 14 viewBox units) like the avatar, centred on the 48px slot, overflowing the 64px chip */
+/* Figma stickers keep their natural SVG size (width/height attributes), left-aligned in the slot (js offsets it so the visible left edge is at the slot edge) */
+.sc-ico:has(> img) img { position: absolute; left: 0; top: 50%; width: auto; height: auto; max-width: none; transform: translateY(-50%); }
+/* the Claude sprite stays at its fixed 89px */
+.sc-ico:has(> img) img[src$="claude-code.svg"] { width: 89px; height: 89px; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .1)); }   /* same hard shadow as the Figma stickers (0 6px 0, 10%) */
+/* label: words stack in one grid cell; js sets the track width (spring) and slides the words.
+   The clip lets the old/new word hang 16px into the chip's right padding, so a width spring dip never cuts letters. */
+.sc-label { display: grid; clip-path: inset(-14px -16px -14px 0); }
+.sc-word { grid-area: 1 / 1; justify-self: start; display: block; }
+
+/* ---------- chip spotlight composition ---------- */
+.sp-comp--chip { width: 1920px; height: 900px; }
+.sp-clone {
+  position: absolute; visibility: hidden; z-index: 5; pointer-events: none;
+  transform-origin: 50% 50%; will-change: transform;
+}
+.sp-opt { z-index: 1; width: max-content; }
+.skill-chip--opt { width: max-content; transform: rotate(var(--rot, 0deg)); cursor: default; }

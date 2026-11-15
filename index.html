@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Việt Anh, AI Product Design Engineer</title>
+<title>VietAnh - an AI Product Design &lt;/Engineer&gt;</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/shared/favicon.png">
 <script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("intro-on")</script>
-<link rel="preload" as="image" href="assets/img/avatar-cutout.png">
-<link rel="preload" as="font" type="font/otf" href="assets/fonts/uxum-bold.otf" crossorigin>
+<link rel="preload" as="image" href="assets/home/avatar/avatar-cutout.png">
+<link rel="preload" as="font" type="font/otf" href="assets/shared/fonts/BDOGrotesk-Medium.otf" crossorigin>
+<link rel="preload" as="font" type="font/otf" href="assets/shared/fonts/BDOGrotesk-Regular.otf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@600&family=Bangers&family=Cal+Sans&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500&family=DM+Sans:wght@600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/spotlight.css">
-<link rel="stylesheet" href="css/thumb.css">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cal+Sans&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base/type.css">
+<link rel="stylesheet" href="css/pages/spotlight.css">
+<link rel="stylesheet" href="css/pages/thumb.css">
+<link rel="stylesheet" href="css/pages/about.css">
+<link rel="stylesheet" href="css/pages/work.css">
+<link rel="stylesheet" href="css/pages/marquee.css">
 </head>
 <body>
 <div class="dim-overlay" aria-hidden="true"></div>
 <section class="thumb" data-stage-w="1920" data-stage-h="1080" data-fit="contain" data-section-name="Hero">
   <div class="thumb-stage">
+   <div class="hero-img hero-img--apps" data-fx="apps"><img src="assets/home/hero/apps.jpg" alt="" decoding="async"></div>
+   <div class="hero-img hero-img--street" data-fx="street"><img src="assets/home/hero/street.jpg" alt="" decoding="async"></div>
+   <div class="hero-img hero-img--dark" data-fx="dark"><img src="assets/home/hero/dark.jpg" alt="" decoding="async"></div>
+   <div class="hero-img hero-img--moto" data-fx="moto"><img src="assets/home/hero/moto.jpg" alt="" decoding="async"></div>
+   <div class="hero-pos"><div class="hero-fx">
    <div class="hero-cluster">
     <div class="hl-yellow" aria-hidden="true"></div>
     <div class="framing" aria-hidden="true"><i class="fr-l"></i><i class="fr-t"></i><i class="fr-r"></i><i class="fr-b"></i><i class="fr-h fr-h--tl"></i><i class="fr-h fr-h--tr"></i><i class="fr-h fr-h--bl"></i><i class="fr-h fr-h--br"></i></div>
@@ -27,38 +38,39 @@
     </h1>
     <div class="select" aria-hidden="true">
       <div class="select-bg"></div>
-      <div class="handle handle--l"><img src="assets/thumb/handle.svg" alt=""><i></i></div>
-      <div class="handle handle--r"><img src="assets/thumb/handle.svg" alt=""><i></i></div>
+      <div class="handle handle--l"><img src="assets/home/thumb/handle.svg" alt=""><i></i></div>
+      <div class="handle handle--r"><img src="assets/home/thumb/handle.svg" alt=""><i></i></div>
     </div>
 
-    <img class="intro-cursor" src="assets/thumb/cursor-black-move-h.svg" alt="" aria-hidden="true">
+    <img class="intro-cursor" src="assets/home/thumb/cursor-black-move-h.svg" alt="" aria-hidden="true">
     <div class="badge-vibe"><span>[VIbecode]</span></div>
    </div>
+   </div></div>
 
   </div>
   <div class="toast" role="status" aria-live="polite"></div>
   <div class="pill-left">
-    <button class="pl-menu" type="button" aria-haspopup="menu" aria-label="Figma menu"><span class="pl-logo"><img src="assets/thumb/figma.svg" alt=""></span><img class="pl-chev" src="assets/thumb/chevron.svg" alt=""></button>
+    <button class="pl-menu" type="button" aria-haspopup="menu" aria-label="Figma menu"><span class="pl-logo"><img src="assets/home/thumb/figma.svg" alt=""></span><img class="pl-chev" src="assets/shared/icons/chevron.svg" alt=""></button>
     <span class="pl-file">Home</span>
     <span class="pl-div"></span>
-    <span class="pl-page"><img src="assets/thumb/pages.svg" alt=""><span class="pl-track" id="pl-track" aria-live="polite"><span class="pl-item">Hero</span></span></span>
+    <span class="pl-page"><img src="assets/shared/icons/pages.svg" alt=""><span class="pl-track" id="pl-track" aria-live="polite"><span class="pl-item">Hero</span></span></span>
   </div>
 
   <div class="sidebar-right">
-    <div class="sr-avatar"><img src="assets/thumb/avatar.svg" alt=""><img class="sr-chev" src="assets/thumb/chevron.svg" alt=""></div>
-    <button class="sr-share" type="button">Not allow to <s>Share</s></button>
+    <div class="sr-avatar"><img class="sr-av" src="assets/shared/avatars/avatar-1.png" alt=""><img class="sr-av" src="assets/shared/avatars/avatar-2.png" alt=""><img class="sr-av" src="assets/shared/avatars/avatar-you.png" alt=""><img class="sr-chev" src="assets/shared/icons/chevron.svg" alt=""></div>
+    <button class="sr-share" type="button">Share</button>
   </div>
 
   <div class="zoom-help">
-    <div class="zoom"><div class="zoom-minus"><i></i></div><img class="zoom-plus" src="assets/thumb/zoom-plus.svg" alt=""></div>
-    <div class="help"><img src="assets/thumb/help-bubble.svg" alt=""></div>
+    <div class="zoom"><div class="zoom-minus"><i></i></div><img class="zoom-plus" src="assets/home/thumb/zoom-plus.svg" alt=""></div>
+    <div class="help"><img src="assets/home/thumb/help-bubble.svg" alt=""></div>
   </div>
 
   <div class="toolbar">
-    <div class="tb-move"><img src="assets/thumb/move.svg" alt=""><img src="assets/thumb/hand.svg" alt=""></div>
+    <div class="tb-move"><img src="assets/home/thumb/move.svg" alt=""><img src="assets/home/thumb/hand.svg" alt=""></div>
     <span class="tb-div"></span>
     <div class="tb-objects">
-      <div class="tb-marker"><img src="assets/thumb/marker.svg" alt=""></div>
+      <div class="tb-marker"><img src="assets/home/thumb/marker.svg" alt=""></div>
       <div class="tb-sticky">
         <div class="stack">
           <i class="sq sq3"></i>
@@ -67,93 +79,138 @@
             <div class="curly-clip">
               <i class="curly-fill"></i>
               <i class="curly-shadow"></i>
-              <img class="curl curl--c" src="assets/thumb/curl-color.svg" alt="">
-              <img class="curl curl--g" src="assets/thumb/curl-glare.svg" alt="">
+              <img class="curl curl--c" src="assets/home/thumb/curl-color.svg" alt="">
+              <img class="curl curl--g" src="assets/home/thumb/curl-glare.svg" alt="">
             </div>
           </div>
         </div>
       </div>
-      <img class="tb-shapes" src="assets/thumb/shapes.svg" alt="">
+      <img class="tb-shapes" src="assets/home/thumb/shapes.svg" alt="">
     </div>
     <span class="tb-div"></span>
     <div class="tb-flat">
-      <span class="fi fi--1"><img src="assets/thumb/icon-1.svg" alt=""></span>
-      <span class="fi fi--2"><img src="assets/thumb/icon-2.svg" alt=""></span>
-      <span class="fi fi--3"><img src="assets/thumb/icon-3.svg" alt=""></span>
-      <span class="fi fi--4"><img src="assets/thumb/icon-4.svg" alt=""></span>
+      <span class="fi fi--1"><img src="assets/home/thumb/icon-1.svg" alt=""></span>
+      <span class="fi fi--2"><img src="assets/home/thumb/icon-2.svg" alt=""></span>
+      <span class="fi fi--3"><img src="assets/home/thumb/icon-3.svg" alt=""></span>
+      <span class="fi fi--4"><img src="assets/home/thumb/icon-4.svg" alt=""></span>
     </div>
     <span class="tb-div"></span>
     <div class="tb-insert">
-      <span class="ins ins--align"><img src="assets/thumb/alignment.svg" alt=""></span>
-      <span class="ins ins--alert"><img src="assets/thumb/alert.svg" alt=""></span>
-      <span class="ins ins--laugh"><span><img src="assets/thumb/laugh.svg" alt=""></span></span>
-      <span class="ins ins--booth"><span><img src="assets/thumb/photobooth.png" alt=""></span></span>
-      <span class="ins-plus"><i></i><img src="assets/thumb/plus32.svg" alt=""></span>
+      <span class="ins ins--align"><img src="assets/home/thumb/alignment.svg" alt=""></span>
+      <span class="ins ins--alert"><img src="assets/home/thumb/alert.svg" alt=""></span>
+      <span class="ins ins--laugh"><span><img src="assets/home/thumb/laugh.svg" alt=""></span></span>
+      <span class="ins ins--booth"><span><img src="assets/home/thumb/photobooth.png" alt=""></span></span>
+      <span class="ins-plus"><i></i><img src="assets/home/thumb/plus32.svg" alt=""></span>
     </div>
   </div>
 </section>
 
-<main class="page">
-  <section class="stage-section" data-section-name="Contact">
-    <div class="stage-fit" id="stage-fit" data-stage-w="820" data-stage-h="550">
-      <div class="stage" id="stage">
-        <div class="layer layer--badge">
+<section class="stage-section about" data-section-name="About">
+  <div class="about-fit">
+    <!-- the page text: 1920-wide stage, same scale as the hero. Sits below the dim overlay, so it blurs with the rest of the page. -->
+    <div class="a-canvas about-stage" id="about-stage">
+      <div class="about-block">
+        <div class="about-hello">
+          <span class="ab-t">Watch out,</span>
+          <span class="who-pill"><button class="who-avatar" id="who-avatar" type="button" aria-label="Show contact info" aria-expanded="false"></button><span class="ab-t">Việt Anh</span></span>
+          <span class="ab-t">is coming!!</span>
+        </div>
+        <p class="about-skill" id="about-skill">
+          <span class="skill-row">
+            <span class="ab-t ab-t--skill">I design</span>
+            <button class="skill-chip" type="button" data-slot="0"></button>
+            <span class="ab-t ab-t--skill">I build</span>
+            <button class="skill-chip" type="button" data-slot="1"></button>
+          </span>
+          <span class="skill-row">
+            <span class="ab-t ab-t--skill">and ship with</span>
+            <button class="skill-chip" type="button" data-slot="2"></button>
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- spotlight layers: same canvas geometry, above the dim overlay (z 2). The avatar composition lives here and is always drawn;
+         the chip compositions (one per slot) are built by js/pages/about.js. -->
+    <div class="a-canvas about-sp" id="about-sp">
+      <div class="sp-comp sp-comp--avatar" id="avatar-comp">
+        <div class="sp-layer layer--badge">
           <div class="badge-wrap">
-            <div class="badge">
-              <div class="badge-circle"></div>
-              <div class="badge-shine"></div>
-              <div class="badge-glyph"><img src="assets/icons/badge-glyph.svg" alt=""></div>
-              <div class="badge-asterisk"><img src="assets/icons/badge-asterisk.svg" alt=""></div>
-            </div>
+            <div class="badge"><img src="assets/home/icons/badge.png" alt=""></div>
           </div>
         </div>
 
-        <div class="layer layer--tagline">
+        <div class="sp-layer layer--tagline">
           <div class="pill"><span>#Human Taste, AI Speed</span></div>
         </div>
 
-        <div class="layer layer--card">
+        <div class="sp-layer layer--card">
           <div class="card">
             <h2>Feel free to connect!</h2>
             <div class="card-row">
               <div class="col col--left">
-                <a class="item" href="tel:+84333442129"><img src="assets/icons/phone.svg" alt=""><span>(+84) 333.44.2129</span></a>
-                <a class="item" href="mailto:vietanh.ngx29@gmail.com"><img src="assets/icons/email.svg" alt=""><span>vietanh.ngx29@gmail.com</span></a>
+                <a class="item" href="tel:+84333442129"><img src="assets/home/icons/phone.svg" alt=""><span>(+84) 333.44.2129</span></a>
+                <a class="item" href="mailto:vietanh.ngx29@gmail.com"><img src="assets/home/icons/email.svg" alt=""><span>vietanh.ngx29@gmail.com</span></a>
               </div>
               <div class="col col--right">
-                <a class="item item--social" href="https://www.linkedin.com/in/vitan2911/" target="_blank" rel="noopener"><img src="assets/icons/linkedin.svg" alt=""><span>/vitan2911</span></a>
-                <a class="item item--social item--two" href="https://www.behance.net/vitan2911" target="_blank" rel="noopener"><img src="assets/icons/behance.svg" alt=""><img src="assets/icons/dribbble.svg" alt=""><span>/vitan2911</span></a>
+                <a class="item item--social" href="https://www.linkedin.com/in/vitan2911/" target="_blank" rel="noopener"><img src="assets/home/icons/linkedin.svg" alt=""><span>/vitan2911</span></a>
+                <a class="item item--social item--two" href="https://www.behance.net/vitan2911" target="_blank" rel="noopener"><img src="assets/home/icons/behance.svg" alt=""><img src="assets/home/icons/dribbble.svg" alt=""><span>/vitan2911</span></a>
               </div>
             </div>
           </div>
         </div>
 
+        <div class="sp-layer layer--note">
+          <p class="note">Currently, I am a Lead Design Engineer with 9+ years in design, 5+ of them in Product Design. I build AI-native design systems and team workflows that turn design into production-ready code.</p>
+        </div>
+
         <div class="avatar-group" id="avatar-group">
-          <div class="avatar-photo" id="avatar-photo"><img src="assets/img/avatar-circle.jpg" alt="" decoding="async"></div>
+          <div class="avatar-photo" id="avatar-photo"><img src="assets/home/avatar/avatar-circle.jpg" alt="" decoding="async"></div>
           <div class="person" id="person">
-            <img src="assets/img/avatar-cutout.png" alt="" width="733" height="1100" decoding="async">
+            <img src="assets/home/avatar/avatar-cutout.png" alt="" width="733" height="1100" decoding="async">
           </div>
           <div class="avatar-ring" id="avatar-ring"></div>
         </div>
-
-        <button class="avatar-btn" id="avatar-btn" type="button" aria-label="Show contact info" aria-expanded="false"></button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
+<section class="stage-section marquee" data-section-name="Work" aria-label="Think first, design after">
+  <div class="m-viewport" aria-hidden="true"><div class="m-scale"><div class="m-track">
+    <div class="m-group"><span class="m-item"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span><span class="m-item" aria-hidden="true"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span></div>
+    <div class="m-group" aria-hidden="true"><span class="m-item"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span><span class="m-item" aria-hidden="true"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span></div>
+  </div></div></div>
+</section>
+
+<section class="stage-section work" data-section-name="Work" id="work">
+  <div class="about-fit work-fit">
+    <div class="a-canvas work-stage" id="work-stage">
+      <a class="work-card" id="work-card" role="link" tabindex="0" data-href="work/oneu.html" style="left:585px;top:53px" aria-label="OneU: The New Journey, from VinID to OneU"></a>
+      <a class="work-card" id="work-card-b" role="link" tabindex="0" data-href="work/dec.html" style="left:1020px;top:53px" aria-label="Dynamic Engagement Content: concept and UI design"></a>
+    </div>
+    <div class="a-canvas work-sp" id="work-sp"></div>
+  </div>
+</section>
+
+<main class="page">
   <section class="outro" data-section-name="Outro">
-    <p>Hover vào avatar để xem spotlight.</p>
   </section>
 </main>
 <div class="cursor-layer" id="cursor-layer" aria-hidden="true">
-  <div class="cursor cursor--pink"><img class="cursor-arrow" src="assets/thumb/cursor-pink.svg" alt=""><span class="cursor-chip">Việt Anh</span></div>
-  <div class="cursor cursor--yellow"><img class="cursor-arrow" src="assets/thumb/cursor-yellow.svg" alt=""><span class="cursor-chip">Subagent-chan</span></div>
-  <div class="cursor cursor--you" id="you-cursor"><img class="cursor-arrow" src="assets/thumb/cursor-green.svg" alt=""><span class="cursor-chip">You</span></div>
+  <div class="cursor cursor--pink"><img class="cursor-arrow" src="assets/home/thumb/cursor-pink.svg" alt=""><span class="cursor-chip">Việt Anh</span></div>
+  <div class="cursor cursor--yellow"><img class="cursor-arrow" src="assets/home/thumb/cursor-yellow.svg" alt=""><span class="cursor-chip">Subagent-chan</span></div>
+  <div class="cursor cursor--you" id="you-cursor"><img class="cursor-arrow" src="assets/home/thumb/cursor-green.svg" alt=""><span class="cursor-chip">You</span></div>
 </div>
-<script src="js/fit-stage.js"></script>
-<script src="js/thumb.js"></script>
-<script src="js/intro.js"></script>
-<script src="js/spotlight.js"></script>
-<script src="js/section-indicator.js"></script>
+<script src="js/pages/fit-stage.js"></script>
+<script src="js/pages/thumb.js"></script>
+<script src="js/pages/img-enter.js"></script>
+<script src="js/pages/intro.js"></script>
+<script src="js/pages/spotlight.js"></script>
+<script src="js/pages/about.js"></script>
+<script src="js/pages/work.js"></script>
+<script src="js/pages/marquee.js"></script>
+<script src="js/pages/scroll-fx.js"></script>
+<script src="js/pages/section-indicator.js"></script>
 </body>
 </html>

@@ -1,0 +1,53 @@
+/* Case-study top bar: FigJam chrome (pill left + avatar/Share right), fixed like the home page.
+   Figma L019S5a1cfWPNCtASIazaY: figjam.pill.left 3794:49893 (hover 3794:71635), Right Sidebar 3794:49860.
+   Same look/classes as css/pages/thumb.css (.pl-*, .sidebar-right, .sr-*), but home's thumb.css is not loaded here.
+   Scale: home uses --chrome-scale = min(viewport / 1920, .9); here the same, floored at .75 so it stays readable on phones. */
+.case-nav {
+  --s: clamp(.75, tan(atan2(100vw, 1920px)), .9);
+  --bg-white: #fff; --border-default: #e6e6e6; --text-default: rgba(0, 0, 0, .9);
+  --purple: #9747ff; --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1));
+}
+.pill-left, .sidebar-right {
+  position: fixed; z-index: 50; scale: var(--s); pointer-events: none; box-sizing: border-box;
+  top: calc(12px * var(--s)); display: flex; align-items: center;
+  background: var(--bg-white); filter: var(--chrome-drop);
+  font-family: var(--type-family-inter, "Inter", system-ui, sans-serif);
+}
+.pill-left {
+  left: calc(12px * var(--s)); transform-origin: 0 0; height: 48px; padding: 8px; border-radius: 13px;
+  max-width: calc(100vw / var(--s) - 137px - 40px);   /* never run under the sidebar: long page name ellipsizes */
+}
+.pl-back {
+  display: flex; align-items: center; flex: none; height: 32px; padding: 0 4px 0 0; border-radius: 5px;
+  color: var(--text-default); text-decoration: none; pointer-events: auto; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pl-back:focus-visible { outline: 2px solid #0d99ff; outline-offset: 0; }
+.pl-chev { width: 24px; height: 24px; margin-right: -3px; rotate: 90deg; flex: none; }
+.pl-file { display: flex; align-items: center; height: 32px; padding: 0 8px; }
+.pl-track {
+  display: grid; font: 600 13px/22px var(--type-family-inter, "Inter", system-ui, sans-serif); white-space: nowrap;
+}
+.pl-item { grid-area: 1 / 1; justify-self: start; }
+.pl-div { flex: none; width: 1px; height: 48px; margin: 0 8px; background: var(--border-default); }
+.pl-page { display: flex; align-items: center; min-width: 0; height: 32px; padding: 0 4px; }
+.pl-page img { width: 24px; height: 24px; flex: none; }
+.pl-name {
+  min-width: 0; margin: 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: 400 13px/22px var(--type-family-inter, "Inter", system-ui, sans-serif); color: #000;
+}
+.sidebar-right {
+  right: calc(12px * var(--s)); transform-origin: 100% 0; width: max-content; justify-content: flex-end; gap: 8px;
+  padding: 8px 8px 8px 12px; border-radius: 16px;
+}
+.sr-avatar { display: flex; align-items: center; }
+.sr-avatar > .sr-av { width: 32px; height: 32px; flex: none; display: block; border-radius: 50%; }
+.sr-avatar > .sr-av + .sr-av { margin-left: -8px; }
+.sr-chev { width: 16px; height: 16px; display: block; }
+.sr-share {
+  height: 32px; padding: 4px 12px; border: 0; border-radius: 8px; cursor: default;
+  background: var(--purple); color: #fff; font: 500 11px/16px var(--type-family-inter, "Inter", system-ui, sans-serif);
+  letter-spacing: .005em; white-space: nowrap;
+}
+/* room under the fixed bar for the first section */
+@media (max-width: 1023px) { .case .case-s--first { padding-top: 96px; } }

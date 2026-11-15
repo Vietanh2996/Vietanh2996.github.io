@@ -1,0 +1,31 @@
+/* Marquee: "Think first, design after" running text between About and Work.
+   Stage px (1920 wide) scaled by --stage-scale, like the other stage sections. */
+:root {
+  --marquee-speed: 90;          /* stage px per second; tune here */
+}
+.stage-section.marquee {
+  position: relative;
+  padding: calc(var(--stage-scale, 1) * 120px) 0;
+  overflow: hidden;
+  overflow: clip;
+}
+.m-viewport { position: relative; height: calc(var(--stage-scale, 1) * 144px); }
+.m-scale {
+  position: absolute; top: 0; left: 0;
+  transform-origin: 0 0;
+  scale: var(--stage-scale, 1);
+}
+.m-track {
+  display: flex; width: max-content;
+  will-change: transform;
+  animation: marquee-loop var(--marquee-dur, 40s) linear infinite;
+  animation-play-state: var(--marquee-state, running);
+}
+.m-group { display: flex; flex: none; }
+.m-item { display: flex; flex: none; align-items: center; height: 144px; padding-right: 49px; white-space: nowrap; color: #000; letter-spacing: -.02em; }
+.m-text { font: var(--type-display-marquee-font); letter-spacing: var(--type-display-marquee-ls); }
+.m-star { font: var(--type-display-asterisk-font); letter-spacing: var(--type-display-asterisk-ls); color: #F24822; margin-left: 16px; }
+@keyframes marquee-loop { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .m-track { animation: none; }
+}

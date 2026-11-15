@@ -1,0 +1,337 @@
+:root {
+  /* Figma "AID Slide" variables */
+  --text-default: rgba(0, 0, 0, .9);
+  --text-white: #fff;
+  --text-tertiary: rgba(0, 0, 0, .3);
+  --border-default: #e6e6e6;
+  --bg-white: #fff;
+  --bg-subtle: #f5f5f5;
+  --accent-blue-solid: #0d99ff;
+  --accent-purple-solid: #9747ff;
+  --accent-purple-subtle: #f1e5ff;
+  --accent-purple-text: #8638e5;
+  --accent-yellow-solid: #ffcd29;
+  --accent-pink-solid: #ff24bd;
+  --accent-pink-text: #ea10ac;
+  --ramp-pink-700: #cb0b96;
+  --accent-red-solid: #f24822;
+  --accent-green-solid: #14ae5c;
+  --ramp-green-600: #009951;
+  --ramp-green-700: #008043;
+  --ramp-yellow-700: #e5a000;
+  --cursor-scale: .7; /* wandering + You cursors, relative to the Figma size */
+  /* no Figma variable */
+  --engineer-highlight: rgba(255, 241, 171, .6);
+  --chrome-shadow: 0 0 .5px rgba(0, 0, 0, .18), 0 3px 8px rgba(0, 0, 0, .1), 0 1px 3px rgba(0, 0, 0, .1);
+  --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1)); /* Figma figjam.pill.left / sidebar.right */
+  --chrome-ui-shadow: 0 1px 3px rgba(0, 0, 0, .1); /* Figma DLT/DLT frame and Zoom */
+}
+
+/* ---------- first scene: 1920x1080 stage, contained in the viewport ---------- */
+/* whole-site canvas: fixed dotted layer behind every section (sections stay transparent) */
+body::before {
+  --s: var(--stage-scale, 1);
+  --g: calc(16px * var(--s));
+  --o: calc(50% - 960px * var(--s)) calc(50% - 540px * var(--s));
+  content: "";
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-color: #fff;
+  background-image:
+    linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,.3)),
+    url("../../assets/home/thumb/bg-dot.png"), url("../../assets/home/thumb/bg-dot.png"),
+    url("../../assets/home/thumb/bg-grid.png"), url("../../assets/home/thumb/bg-dot.png"),
+    linear-gradient(#fff, #fff);
+  background-size: auto, var(--g) var(--g), var(--g) var(--g), var(--g) var(--g), var(--g) var(--g), auto;
+  background-position: 0 0, var(--o), var(--o), var(--o), var(--o), 0 0;
+}
+.thumb {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  color: var(--text-default);
+  font-family: var(--type-family-inter);
+}
+.thumb-stage {
+  position: absolute;
+  left: calc(50% - 960px * var(--stage-scale, 1));
+  top: calc(50% - 540px * var(--stage-scale, 1));
+  width: 1920px; height: 1080px;
+  transform-origin: 0 0;
+  scale: var(--stage-scale, 1);
+}
+.thumb * { box-sizing: border-box; }
+.thumb img { display: block; max-width: none; }
+.thumb i { display: block; font-style: normal; }
+.thumb-stage > *:not(.cursor), .hero-cluster > * { position: absolute; }
+.pill-left, .sidebar-right, .zoom-help, .toolbar { position: fixed; pointer-events: none; }
+/* FigJam chrome: fixed to the viewport edges, sized by --chrome-scale (not the stage scale).
+   z 3 at rest: above the page (stage z 2). Spotlight open: z 0, so .dim-overlay (z 1) dims it and the stage (z 2) sits on top.
+   Restoring to z 3 waits 180ms (= the overlay's fade-out) so the chrome never flashes undimmed mid-fade. */
+.pill-left, .sidebar-right, .zoom-help, .toolbar { --s: var(--chrome-scale, 1); scale: var(--s); z-index: 3; transition: z-index 0s linear 180ms; }
+body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotlight .zoom-help, body.is-spotlight .toolbar { z-index: 0; transition: z-index 0s; }
+
+/* hero text cluster: transparent wrapper (same box as the stage); only the intro entrance transforms it */
+.hero-cluster { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 458px; pointer-events: none; }
+/* Figma "Frame 2147228506" is the cluster at 0.616x (AI line 664px wide vs 1077px): static scale + translate on .hero-pos.
+   .hero-fx carries the scroll effect (js/pages/scroll-fx.js, scale only) with its origin at the centre of the cluster box (3 headline lines + badge, measured
+   in local px: x 401..1478, y 205..771). intro.js divides rect diffs by the total scale, so both are included. */
+.hero-pos { left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; translate: 381.7px 181px; scale: .616; pointer-events: none; }
+.hero-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 939.6px 488.1px; pointer-events: none; }
+/* hero photos / mockups (Figma 3781:31654, 3783:37759, 3781:31568, 3783:37781), under the cluster; wrapper = Figma box, scroll-fx moves the wrapper */
+.hero-img { pointer-events: none; }
+.hero-img img { width: 100%; height: 100%; border-radius: 24px; object-fit: cover; }
+.hero-img--apps { left: 51px; top: 172.17px; width: 322.51px; height: 322.51px; }
+/* final resting place is Figma top (617) minus --street-lift (config "lift", js/pages/img-enter.js sets the var); the entrance drops it at +lift, then drags it up */
+.hero-img--street { left: 64.83px; top: calc(617px - var(--street-lift, 80px)); width: 507.17px; height: 338.2px; }
+.hero-img--dark { left: 1512.6px; top: 138.79px; width: 368.24px; height: 368.24px; }
+.hero-img--moto { left: 1440.97px; top: 575.84px; width: 365.03px; height: 365.03px; }
+
+/* ---------- headline ---------- */
+.headline { margin: 0; inset: 0; pointer-events: none; }
+.headline span { position: absolute; white-space: pre; color: #000; }
+.hl-hi { font: var(--type-display-hero-font); letter-spacing: 0; /* exception: current look is 0; Figma style says -2% */ left: 653.55px; top: 205px; }
+.hl-ai { font: var(--type-display-hero-font); left: 401px; top: 375px; line-height: .9; /* exception: kept at .9; Figma style says normal */ letter-spacing: var(--type-display-hero-ls); }
+.hl-eng { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); left: 584.05px; top: 543.14px; }
+.hl-yellow { left: 727px; top: 548.77px; width: 555.949px; height: 131px; background: var(--engineer-highlight); }
+.framing { left: 561.95px; top: 518.15px; width: 838px; height: 192px; }
+
+/* purple text selection with two caret handles */
+.select { left: 528.5px; top: 361.15px; width: 543px; height: 154px; pointer-events: none; }
+.select-bg { position: absolute; inset: 13px 16px 16px 19px; background: var(--accent-purple-solid); opacity: .2; }
+.handle { position: absolute; width: 32px; display: flex; flex-direction: column; align-items: center; }
+.handle img { width: 32px; height: 32px; margin-bottom: -2px; flex: none; }
+.handle i { flex: 1 0 0; width: 6px; background: var(--accent-purple-text); }
+.handle--l { left: 0; top: -3px; bottom: 3px; }
+.handle--r { right: 0; top: 3px; bottom: -3px; flex-direction: column-reverse; }
+.handle--r img { margin: -2px 0 0; }
+
+/* ---------- top-left pill ---------- */
+.pill-left {
+  left: calc(12px * var(--s)); top: calc(12px * var(--s)); transform-origin: 0 0; height: 48px; padding: 8px;
+  display: flex; align-items: center;
+  background: var(--bg-white); border-radius: 13px; filter: var(--chrome-drop);
+}
+.pl-menu {
+  display: flex; align-items: center; padding: 0 4px 0 0; border: 0; border-radius: 5px; background: none;
+  font: inherit; color: inherit; cursor: default; pointer-events: auto;
+}
+.pl-logo { display: block; padding: 4px; margin-right: -8px; }
+.pl-logo img, .pl-page img { width: 24px; height: 24px; }
+.pl-chev, .sr-chev { width: 16px; height: 16px; }
+.pl-file {
+  display: flex; align-items: center; height: 32px; min-width: 66px; padding: 0 8px;
+  font: var(--type-figma-strong-font); letter-spacing: var(--type-figma-strong-ls); color: var(--text-default);
+}
+.pl-div { width: 1px; height: 48px; margin: 0 8px; background: var(--border-default); }
+.pl-page { display: flex; align-items: center; height: 32px; padding: 0 4px; }
+/* right label: items stack in one grid cell; JS swaps them and sets the track width (spring) */
+.pl-track { display: grid; margin: 0 4px; font: var(--type-figma-regular-font); letter-spacing: var(--type-figma-regular-ls); color: #000; white-space: nowrap; }
+.pl-item { grid-area: 1 / 1; justify-self: start; }
+
+/* ---------- top-right sidebar ---------- */
+.sidebar-right {
+  right: calc(12px * var(--s)); top: calc(12px * var(--s)); transform-origin: 100% 0; width: max-content;   /* hugs avatar + share button */
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: 8px 8px 8px 12px;
+  background: var(--bg-white); border-radius: 16px; filter: var(--chrome-drop);
+}
+.sr-avatar { display: flex; align-items: center; }
+.sr-avatar > .sr-av { width: 32px; height: 32px; flex: none; border-radius: 50%; }   /* 3 avatars overlap by 8px, later ones on top */
+.sr-avatar > .sr-av + .sr-av { margin-left: -8px; }
+.sr-share {
+  height: 32px; padding: 4px 12px; border: 0; border-radius: 8px; cursor: default;
+  background: var(--accent-purple-solid); color: var(--text-white);
+  font: var(--type-figma-small-font); letter-spacing: var(--type-figma-small-ls); white-space: nowrap;
+}
+.sr-share s { text-decoration: line-through; }
+
+/* ---------- bottom-right zoom / help ---------- */
+.zoom-help { right: calc(16px * var(--s)); bottom: calc(16px * var(--s)); transform-origin: 100% 100%; display: flex; align-items: center; gap: 4px; }
+.zoom {
+  display: flex; width: 62px; height: 32px; overflow: hidden;
+  background: var(--bg-white); border-radius: 16px; box-shadow: -1px 0 3px rgba(0, 0, 0, .1); /* Figma Zoom is rotate-90: local y 1px becomes -1px x */
+}
+.zoom-minus { position: relative; width: 32px; height: 32px; border-right: 1px solid var(--border-default); }
+.zoom-minus i { position: absolute; left: 10px; top: 15.5px; width: 11px; height: 1px; background: var(--text-default); }
+.zoom-plus { width: 30px; height: 32px; }
+.help { position: relative; width: 32px; height: 32px; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1)); }
+.help img { position: absolute; left: -25%; right: -25%; top: -15.63%; width: 150%; height: 150%; }
+
+/* ---------- bottom toolbar ---------- */
+.toolbar {
+  left: 50%; bottom: calc(12px * var(--s)); translate: -50% 0; transform-origin: 50% 100%;
+  display: flex; align-items: flex-end; height: 80px; overflow: hidden;
+  background: var(--bg-white); border: .5px solid var(--text-tertiary); border-radius: 14px;
+  box-shadow: var(--chrome-ui-shadow);
+}
+.tb-div { flex: none; width: 1px; height: 80px; background: var(--border-default); }
+.tb-move { position: relative; flex: none; width: 44px; height: 80px; }
+.tb-move img { position: absolute; left: 0; width: 44px; height: 40px; }
+.tb-move img:first-child { top: 0; }
+.tb-move img:last-child { top: 40px; }
+.tb-objects { display: flex; align-items: flex-start; flex: none; height: 80px; padding: 0 4px; }
+.tb-marker { position: relative; flex: none; width: 72px; height: 80px; overflow: hidden; }
+.tb-marker img { position: absolute; left: -12px; top: -13px; width: 96px; height: 176px; }
+.tb-sticky { position: relative; flex: none; width: 116px; height: 80px; overflow: hidden; }
+.stack { position: absolute; left: 2.64px; top: 16.28px; width: 104px; height: 105.612px; }
+.sq { position: absolute; width: 83.845px; height: 83.845px; background: var(--accent-yellow-solid); box-shadow: var(--chrome-shadow); }
+.sq3 { left: 9.93px; top: 12.29px; transform: rotate(-15deg); }
+.sq2 { left: 14.24px; top: 5.84px; transform: rotate(-7.5deg); }
+.curly { position: absolute; left: 19.34px; top: 0; width: 83.845px; height: 83.845px; filter: drop-shadow(0 0 .25px rgba(0,0,0,.18)) drop-shadow(0 3px 4px rgba(0,0,0,.1)) drop-shadow(0 1px 1.5px rgba(0,0,0,.1)); }
+.curly-clip { position: absolute; inset: 0; overflow: hidden; -webkit-mask: url("../../assets/home/thumb/sticky-mask.svg") no-repeat 0 0 / 83.845px 83.845px; mask: url("../../assets/home/thumb/sticky-mask.svg") no-repeat 0 0 / 83.845px 83.845px; }
+.curly-fill { position: absolute; inset: 0; background: var(--accent-yellow-solid); }
+.curly-shadow { position: absolute; left: -24.07px; top: 7.6px; width: 77.804px; height: 13.483px; background: rgba(0,0,0,.3); filter: blur(12.899px); transform: rotate(-41.91deg); }
+.curl { position: absolute; left: 2.55px; top: 3.4px; width: 22.7px; height: 20.55px; }
+.tb-shapes { flex: none; width: 100px; height: 80px; }
+.tb-flat { display: flex; align-items: center; flex: none; height: 80px; padding: 0 8px; }
+.fi { position: relative; flex: none; width: 56px; height: 56px; }
+.fi img { position: absolute; }
+.fi--1 img { left: 1px; top: 6px; width: 54px; height: 46px; }
+.fi--2 img { left: 5px; top: 6px; width: 46px; height: 46px; }
+.fi--3 img, .fi--4 img { left: 8px; top: 8px; width: 40px; height: 40px; }
+.tb-insert { position: relative; flex: none; width: 192px; height: 80px; overflow: hidden; }
+.ins { position: absolute; display: grid; place-items: center; }
+.ins--align { left: 13.74px; top: calc(50% - 3.42px - 26.5px); width: 57.235px; height: 52.992px; }
+.ins--align img { position: absolute; left: -3.4px; top: .5px; width: 64px; height: 58px; transform-origin: 32px 26px; transform: rotate(-15deg); }
+.ins--alert { left: 10.71px; top: calc(50% + 25.99px - 31.28px); width: 62.557px; height: 62.557px; }
+.ins--alert img { width: 54px; height: 54px; transform: rotate(-10deg); }
+.ins--laugh { left: 66.76px; top: calc(50% - 4.07px - 28.17px); width: 56.338px; height: 56.338px; }
+.ins--laugh span { display: block; width: 46px; height: 46px; overflow: hidden; transform: rotate(15deg); }
+.ins--laugh img { width: 100%; height: 100%; }
+.ins--booth { left: 64.59px; top: calc(50% + 25.85px - 28.14px); width: 60.44px; height: 56.279px; }
+.ins--booth span { display: block; width: 53.693px; height: 47.561px; transform: rotate(10deg) skewX(.85deg); }
+.ins--booth img { width: 100%; height: 100%; }
+.ins-plus { position: absolute; left: calc(50% + 56px - 28px); top: 12px; width: 56px; height: 56px; }
+.ins-plus i { position: absolute; left: 8px; top: 8px; width: 40px; height: 40px; background: var(--bg-white); border: 1px solid var(--text-tertiary); border-radius: 8px; box-shadow: 0 0 .5px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.15); }
+.ins-plus img { position: absolute; left: 12px; top: 12px; width: 32px; height: 32px; }
+
+/* ---------- cursors (Figma cursor-chat-*: 56px box, arrow + chip), one fixed full-viewport layer ---------- */
+.cursor-layer *, .cursor-layer { box-sizing: border-box; }
+.cursor-layer img { display: block; max-width: none; }
+.cursor-layer { position: fixed; inset: 0; z-index: 2147483647; pointer-events: none; overflow: hidden; }
+.cursor { --k: calc(var(--chrome-scale, 1) * var(--cursor-scale, .7)); position: absolute; left: 0; top: 0; width: 56px; height: 56px; pointer-events: none; }
+.cursor--pink, .cursor--yellow {
+  /* rest = the cursor's Figma spot, mapped to the viewport at scroll top (arrow tip stays put when scaled) */
+  --rx: calc(var(--vw) / 2 + (var(--tx) - 960px) * var(--stage-scale, 1) - 5.7px);
+  --ry: calc(var(--vh) / 2 + (var(--ty) - 540px) * var(--stage-scale, 1) - 5.8px);
+  translate: var(--rx) var(--ry);
+  scale: var(--k); transform-origin: 5.7px 5.8px;
+  animation: 16s linear infinite; will-change: translate;
+}
+.cursor--pink { --tx: 313.6px; --ty: 438.95px; animation-name: wander-pink; --chip: var(--accent-pink-text); --chip-border: var(--ramp-pink-700); --chip-ink: var(--text-white); }
+.cursor--yellow { --tx: 1483.87px; --ty: 654.45px; animation-name: wander-yellow; animation-duration: 19s; --chip: var(--accent-yellow-solid); --chip-border: var(--ramp-yellow-700); --chip-ink: var(--text-default); }
+.cursor--you { transform-origin: 0 0; visibility: hidden; will-change: transform; --chip: var(--ramp-green-600); --chip-border: var(--ramp-green-700); --chip-ink: var(--text-white); }
+.cursor--you.is-on { visibility: visible; }
+/* arrow: 24.5px slot at right/bottom 27.12px, svg drawn 35x35 around it (Figma inset -14.29% -21.43% -28.57%) */
+.cursor-arrow { position: absolute; left: -.87px; top: .88px; width: 35px; height: 35px; overflow: visible; }
+.cursor-chip {
+  position: absolute; left: 28px; top: 28px; display: flex; align-items: center; justify-content: center;
+  padding: 14px 28px 14px 21px; white-space: nowrap;
+  background: var(--chip); border: 3.5px solid var(--chip-border); color: var(--chip-ink);
+  /* Figma radii 3.5 / 173.25 / 173.25 / 33.25; Figma clamps each to half the chip height (33.5), CSS would
+     scale all four down proportionally and squash the bottom-left, so the clamp is applied here by hand */
+  border-radius: 3.5px 33.5px 33.5px 33.25px;
+  box-shadow: 0 0 .875px rgba(0,0,0,.15), 0 8.75px 21px rgba(0,0,0,.13), 0 1.75px 5.25px rgba(0,0,0,.1);
+  font: var(--type-figma-cursor-font); letter-spacing: var(--type-figma-cursor-ls);
+}
+@media (hover: none), (pointer: coarse) { .cursor--you { display: none; } }
+@media (hover: hover) and (pointer: fine) { html.has-you, html.has-you * { cursor: none !important; } }
+@media (prefers-reduced-motion: reduce) { .cursor--pink, .cursor--yellow { animation: none; } }
+
+@keyframes wander-pink {
+  0% { translate: var(--rx) var(--ry); animation-timing-function: cubic-bezier(.5,0,.2,1); }
+  7% { translate: var(--rx) var(--ry); animation-timing-function: cubic-bezier(.4,0,.2,1); }
+  15% { translate: calc(var(--vw) * 0.1) calc(var(--vh) * 0.12); animation-timing-function: cubic-bezier(.3,0,.6,1); }
+  22% { translate: calc(var(--vw) * 0.42) calc(var(--vh) * 0.06); animation-timing-function: ease-out; }
+  26% { translate: calc(var(--vw) * 0.46) calc(var(--vh) * 0.07); animation-timing-function: cubic-bezier(.6,0,.2,1); }
+  33% { translate: calc(var(--vw) * 0.76) calc(var(--vh) * 0.22); animation-timing-function: ease-in-out; }
+  40% { translate: calc(var(--vw) * 0.9) calc(var(--vh) * 0.48); animation-timing-function: cubic-bezier(.2,.7,.3,1); }
+  45% { translate: calc(var(--vw) * 0.64) calc(var(--vh) * 0.64); animation-timing-function: ease-in; }
+  53% { translate: calc(var(--vw) * 0.3) calc(var(--vh) * 0.9); animation-timing-function: cubic-bezier(.4,0,.2,1); }
+  60% { translate: calc(var(--vw) * 0.06) calc(var(--vh) * 0.72); animation-timing-function: ease-out; }
+  63% { translate: calc(var(--vw) * 0.07) calc(var(--vh) * 0.69); animation-timing-function: cubic-bezier(.5,0,.3,1); }
+  71% { translate: calc(var(--vw) * 0.24) calc(var(--vh) * 0.28); animation-timing-function: ease-in-out; }
+  79% { translate: calc(var(--vw) * 0.56) calc(var(--vh) * 0.36); animation-timing-function: cubic-bezier(.3,0,.2,1); }
+  88% { translate: calc(var(--vw) * 0.34) calc(var(--vh) * 0.52); animation-timing-function: cubic-bezier(.3,0,.1,1); }
+  94% { translate: var(--rx) var(--ry); animation-timing-function: linear; }
+  100% { translate: var(--rx) var(--ry); }
+}
+@keyframes wander-yellow {
+  0% { translate: var(--rx) var(--ry); animation-timing-function: ease-in-out; }
+  5% { translate: var(--rx) var(--ry); animation-timing-function: cubic-bezier(.5,0,.1,1); }
+  12% { translate: calc(var(--vw) * 0.78) calc(var(--vh) * 0.84); animation-timing-function: cubic-bezier(.3,0,.5,1); }
+  18% { translate: calc(var(--vw) * 0.62) calc(var(--vh) * 0.93); animation-timing-function: ease-out; }
+  22% { translate: calc(var(--vw) * 0.58) calc(var(--vh) * 0.92); animation-timing-function: ease-in-out; }
+  30% { translate: calc(var(--vw) * 0.3) calc(var(--vh) * 0.8); animation-timing-function: cubic-bezier(.2,.7,.3,1); }
+  38% { translate: calc(var(--vw) * 0.12) calc(var(--vh) * 0.58); animation-timing-function: ease-in; }
+  46% { translate: calc(var(--vw) * 0.4) calc(var(--vh) * 0.3); animation-timing-function: cubic-bezier(.4,0,.2,1); }
+  51% { translate: calc(var(--vw) * 0.43) calc(var(--vh) * 0.28); animation-timing-function: ease-in-out; }
+  59% { translate: calc(var(--vw) * 0.74) calc(var(--vh) * 0.12); animation-timing-function: cubic-bezier(.3,0,.6,1); }
+  66% { translate: calc(var(--vw) * 0.88) calc(var(--vh) * 0.3); animation-timing-function: ease-out; }
+  74% { translate: calc(var(--vw) * 0.68) calc(var(--vh) * 0.52); animation-timing-function: cubic-bezier(.6,0,.3,1); }
+  82% { translate: calc(var(--vw) * 0.8) calc(var(--vh) * 0.7); animation-timing-function: ease-in-out; }
+  90% { translate: calc(var(--vw) * 0.86) calc(var(--vh) * 0.6); animation-timing-function: cubic-bezier(.3,0,.1,1); }
+  100% { translate: var(--rx) var(--ry); }
+}
+
+/* [VIbecode] sticker (Figma 3764:63467; frame bbox 855.25,659.94 351x139, centre kept) */
+.badge-vibe {
+  left: 1030.85px; top: 701.55px; transform: translate(-50%, -50%) rotate(-3.2deg);
+  padding: 8px 16px; border: 8px solid #fff; border-radius: 24px; background: var(--accent-red-solid);
+  filter: drop-shadow(0 0 .25px rgba(0,0,0,.3)) drop-shadow(0 1px 1.5px rgba(0,0,0,.15));
+  pointer-events: none;
+}
+.badge-vibe span { display: block; white-space: nowrap; font: var(--type-fun-badge-font); letter-spacing: var(--type-fun-badge-ls); color: var(--text-white); }
+
+/* ---------- intro (js/pages/intro.js): typing animation, all motion driven from JS ---------- */
+.headline .c { font-style: normal; }
+.caret { position: absolute; left: 0; top: 0; overflow: hidden; background: var(--accent-blue-solid); visibility: hidden; pointer-events: none; }
+.caret.on { visibility: visible; }
+.caret.blink { animation: caret-blink 1.06s steps(1, end) infinite; } /* idle blink: the only CSS animation in the intro */
+@keyframes caret-blink { 0% { opacity: 1; } 50% { opacity: 0; } }
+/* terminal block: white copy of the char sits inside the block (inverse video); when the block blinks off, the real black char shows */
+.headline .caret-ch { display: none; left: 0; top: 0; color: #fff; }
+.caret.block .caret-ch { display: block; font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); }
+/* pre-intro hidden state; JS overrides with inline styles while running and clears them at the end */
+html.intro-on:not(.intro-run) .headline { visibility: hidden; }
+html.intro-on .hl-yellow { clip-path: inset(0 100% 0 0); }
+html.intro-on .select-bg { opacity: 0; transform: scaleX(.006); transform-origin: 0 50%; }
+html.intro-on .framing, html.intro-on .badge-vibe, html.intro-on .handle { opacity: 0; }
+/* framing, rebuilt from 4 corner handles + 4 edges (Figma 3764:63817) so it can be drawn as a drag from the top-left corner */
+.framing i { position: absolute; background: var(--accent-blue-solid); }
+.framing .fr-t, .framing .fr-b { left: 14.12px; width: 809.96px; height: 8px; transform-origin: 0 0; }
+.framing .fr-t { top: 13.68px; } .framing .fr-b { top: 170.32px; }
+.framing .fr-l, .framing .fr-r { top: 13.68px; width: 8px; height: 164.64px; transform-origin: 0 0; }
+.framing .fr-l { left: 14.12px; } .framing .fr-r { left: 816.08px; }
+.framing .fr-h { width: 36px; height: 36px; border: 6px solid #f5f5f5; }
+.framing .fr-h--tl { left: 0; top: 0; } .framing .fr-h--tr { left: 802px; top: 0; }
+.framing .fr-h--bl { left: 0; top: 156px; } .framing .fr-h--br { left: 802px; top: 156px; }
+/* black move-h cursor (Figma 3764:63784), part of the intro layer: above the headline, below the site cursor layer */
+.intro-cursor { left: 0; top: 0; width: 52.5px; height: 46.375px; transform-origin: 7px 5.3px; opacity: 0; pointer-events: none; }
+
+/* FigJam-style toast, fixed above the toolbar, scaled with the stage like the other chrome */
+.toast {
+  --s: var(--chrome-scale, 1);
+  position: fixed; left: 50%; bottom: calc(103px * var(--s)); translate: -50% 0; scale: var(--s); transform-origin: 50% 100%;
+  padding: 10px 16px; border-radius: 8px; background: #1e1e1e; color: #fff; white-space: nowrap;
+  font: var(--type-figma-toast-font); letter-spacing: var(--type-figma-toast-ls); box-shadow: 0 0 .5px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.25), 0 1px 3px rgba(0,0,0,.2);
+  opacity: 0; pointer-events: none;
+}
+html.hero-out .toast { visibility: hidden; }   /* the toast belongs to the hero: hidden once the hero is scrolled out of view (js/pages/about.js) */
+
+/* ---------- image entrance (js/pages/img-enter.js): cursors drag the 4 hero images in, Figma-style selection while dragging ---------- */
+/* hidden / flying states. .he-in on a wrapper = its drag started; .he-fly = cursor driven by JS (CSS wander paused); .he-free = handed back to the wander loop */
+html.intro-on .hero-img:not(.he-in) .he-drag { opacity: 0; }
+html.intro-on .cursor--pink:not(.he-fly):not(.he-free), html.intro-on .cursor--yellow:not(.he-fly):not(.he-free) { visibility: hidden; animation-name: none; }
+.cursor.he-fly { animation-name: none; }
+.he-drag { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: 50% 50%; }
+/* selection: sized in screen px (every length divided by the stage scale), so text and lines never grow with the stage */
+.he-sel { --u: calc(1px / var(--stage-scale, 1)); position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.he-sel::before { content: ""; position: absolute; inset: 0; border: var(--u) solid #0D99FF; }
+.he-sel .he-h { position: absolute; width: calc(8 * var(--u)); height: calc(8 * var(--u)); margin: calc(-4 * var(--u)); background: #fff; border: var(--u) solid #0D99FF; }
+.he-sel .he-h:nth-child(1) { left: 0; top: 0; } .he-sel .he-h:nth-child(2) { left: 100%; top: 0; }
+.he-sel .he-h:nth-child(3) { left: 0; top: 100%; } .he-sel .he-h:nth-child(4) { left: 100%; top: 100%; }
+.he-name { position: absolute; left: 0; bottom: 100%; margin-bottom: calc(5 * var(--u)); transform-origin: 0 100%; scale: calc(1 / var(--stage-scale, 1)); white-space: nowrap; font: var(--type-figma-small-font); line-height: 14px; /* exception: 14px; Figma/Small is 16 */ letter-spacing: var(--type-figma-small-ls); color: #0D99FF; }
+.he-size { position: absolute; left: 50%; top: 100%; margin-top: calc(6 * var(--u)); translate: -50% 0; transform-origin: 50% 0; scale: calc(1 / var(--stage-scale, 1)); white-space: nowrap; padding: 2px 6px; border-radius: 4px; background: #0D99FF; color: #fff; font: var(--type-figma-small-font); letter-spacing: var(--type-figma-small-ls); }

@@ -1,0 +1,7 @@
+/* Case-page banner marquee (js/base/case-marquee.js). Transparent strip so the page dot grid shows through.
+   Unit = one 2274x214 loop image (assets/shared/case/s13-dec-banners-loop.webp, 2x). Track holds 3 copies; JS wraps at one copy width. */
+.case-marquee { --cm-h: max(calc(214 * var(--case-u)), 120px); height: calc(var(--cm-h) + 2px); overflow: hidden; overflow: clip; }
+.case-marquee__track { display: flex; width: max-content; height: var(--cm-h); will-change: transform; animation: case-marquee-loop 40s linear infinite; }
+.case-marquee__track img { display: block; flex: none; width: auto; height: var(--cm-h); max-width: none; }
+@keyframes case-marquee-loop { to { transform: translateX(-33.3333%); } }
+@media (prefers-reduced-motion: reduce) { .case-marquee__track { animation: none; } }

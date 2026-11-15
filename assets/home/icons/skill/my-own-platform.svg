@@ -1,0 +1,25 @@
+<svg width="93" height="94" viewBox="-4 -4 93 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>.a1{animation:a1 1.6s step-end infinite}.a2{animation:a2 1.6s step-end infinite}.a3{animation:a3 1.6s step-end infinite}@keyframes a1{0%{opacity:0}12.5%{opacity:1}87.5%{opacity:0}}@keyframes a2{0%{opacity:0}25%{opacity:1}87.5%{opacity:0}}@keyframes a3{0%{opacity:0}37.5%{opacity:1}87.5%{opacity:0}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<g id="Skill icon">
+<rect x="-1156.5" y="-20.5" width="1259" height="139" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+<g id="Skill=My own platform">
+<g id="My own platform icon" filter="url(#filter0_d_3783_37887)">
+<rect id="Frame" x="1.8053" y="7.98912" width="75.4671" height="71.0629" rx="18.5" transform="rotate(-5 1.8053 7.98912)" fill="#FF9D2A" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+<rect id="Screen" x="14.0566" y="18.269" width="52.8503" height="48.4461" rx="10" transform="rotate(-5 14.0566 18.269)" fill="#1E1E1E"/>
+<path class="a1" id="Chevron L" d="M32.8413 30.705L24.9301 41.3444L34.5686 50.4484" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path class="a3" id="Chevron R" d="M50.416 29.7451L60.0545 38.8491L52.1433 49.4886" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path class="a2" id="Slash" d="M40.8391 55.335L44.1518 26.7772" stroke="white" stroke-width="5" stroke-linecap="round"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_3783_37887" x="-3.1543" y="-3.54736" width="91.293" height="93.2881" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3783_37887"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3783_37887" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -1,0 +1,23 @@
+<svg width="101" height="104" viewBox="-4 -4 101 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>.s1{animation:o1 1s step-end infinite}.s2{animation:o2 1s step-end infinite}.s3{animation:o3 1s step-end infinite}.s4{animation:o4 1s step-end infinite}@keyframes o1{0%{transform:none}20%{transform:translate(-0.37px,-1.45px)}40%{transform:translate(-0.75px,-2.90px)}60%{transform:translate(-0.75px,-2.90px)}80%{transform:translate(-0.37px,-1.45px)}}@keyframes o2{0%{transform:none}20%{transform:translate(0.37px,1.45px)}40%{transform:translate(0.75px,2.90px)}60%{transform:translate(0.75px,2.90px)}80%{transform:translate(0.37px,1.45px)}}@keyframes o3{0%{transform:none}20%{transform:translate(1.45px,-0.37px)}40%{transform:translate(2.90px,-0.75px)}60%{transform:translate(2.90px,-0.75px)}80%{transform:translate(1.45px,-0.37px)}}@keyframes o4{0%{transform:none}20%{transform:translate(-1.45px,0.37px)}40%{transform:translate(-2.90px,0.75px)}60%{transform:translate(-2.90px,0.75px)}80%{transform:translate(-1.45px,0.37px)}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<g id="Skill icon">
+<rect x="-139.766" y="-15.5" width="1259" height="139" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+<g id="Skill=Multi-brand DS" filter="url(#filter0_d_3783_37887)">
+<g class="s1"><rect id="Rectangle 30777" x="21.3091" y="30.8348" width="28.7457" height="28.7457" transform="rotate(-59.4732 21.3091 30.8348)" fill="#9747FF" stroke="white" stroke-width="5"/></g>
+<g class="s2"><rect id="Rectangle 30778" x="31.9107" y="71.9056" width="28.7457" height="28.7457" transform="rotate(-59.4732 31.9107 71.9056)" fill="#9747FF" stroke="white" stroke-width="5"/></g>
+<g class="s3"><rect id="Rectangle 30777_2" x="61.7453" y="21.3081" width="28.7457" height="28.7457" transform="rotate(30.5268 61.7453 21.3081)" fill="#9747FF" stroke="white" stroke-width="5"/></g>
+<g class="s4"><rect id="Rectangle 30778_2" x="20.675" y="31.9097" width="28.7457" height="28.7457" transform="rotate(30.5268 20.675 31.9097)" fill="#9747FF" stroke="white" stroke-width="5"/></g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_3783_37887" x="-4" y="-4" width="100.58" height="106.581" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3783_37887"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3783_37887" result="shape"/>
+</filter>
+</defs>
+</svg>
