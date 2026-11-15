@@ -24,7 +24,8 @@
       fromX(e.clientX);
       e.preventDefault();
     });
-    stage.addEventListener('pointermove', function (e) { if (dragging) fromX(e.clientX); });
+    // mouse: the bar follows on plain hover too (user, 2026-11-16); outside the stage no events -> bar stays put. Touch still needs a drag.
+    stage.addEventListener('pointermove', function (e) { if (dragging || e.pointerType === 'mouse') fromX(e.clientX); });
     function end(e) { dragging = false; try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
     stage.addEventListener('pointerup', end);
     stage.addEventListener('pointercancel', end);

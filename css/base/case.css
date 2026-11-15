@@ -4,7 +4,7 @@
    Load after css/base/type.css. Source: Figma file L019S5a1cfWPNCtASIazaY, frame 1828:9464 (OneU).
 
    Scale: design is 1920 wide, content column 250 -> 1670 (1420). From 1024px up everything is sized in
-   "design units": 1u = min(100vw, 1920px) / 1920 (so it shrinks with the viewport, never grows past 1920).
+   "design units": 1u = min(100vw, 1600px) / 1920 (so it shrinks with the viewport, never grows past 1600px).
    Below 1024px the layout becomes one column at real px (target 390).
 
    PAGE SHELL
@@ -42,7 +42,8 @@
    ========================================================================== */
 
 :root {
-  --case-u: calc(min(100vw, 1920px) / 1920);
+  --case-vw: min(100vw, 1600px);   /* page max width (user, 2026-11-16) */
+  --case-u: calc(var(--case-vw) / 1920);
   --case-w: calc(1420 * var(--case-u));
   --case-gap: calc(106 * var(--case-u));
   --case-col-gap: calc(20 * var(--case-u));
@@ -121,7 +122,7 @@
 .case-fig img { width: 100%; height: auto; }
 .case-fig--card { background: var(--case-card-bg); border-radius: var(--case-card-radius); overflow: hidden; }
 .case-fig--hero { aspect-ratio: 1419 / 829; }   /* keeps the card size while the image is missing */
-.case-fig--bleed { width: 100vw; margin-left: calc(50% - 50vw); }
+.case-fig--bleed { width: var(--case-vw); margin-left: calc(50% - var(--case-vw) / 2); }
 .case-fig--bleed img { width: 100%; }
 
 /* ---------- mobile (390 target) ---------- */

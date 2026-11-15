@@ -7,7 +7,7 @@
 .oneu-s03__body > .case-p--strong + .case-list { margin-top: 0; }
 
 /* s04 photo: full-bleed photo (1921x1280), phone mockup overlaid at x1336 y234 size 375x812 (% of the photo) */
-.oneu-s04__fig { position: relative; }
+.oneu-s04__fig { position: relative; border-radius: var(--case-card-radius); overflow: hidden; }   /* same radius as the card images (user, 2026-11-16) */
 .oneu-s04__fig .oneu-s04__photo { display: block; width: 100%; height: auto; }
 .oneu-s04__fig .oneu-s04__phone { position: absolute; left: 72.06%; top: 26.44%; width: 14.5%; height: 47.12%; /* shrunk ~0.74x around same centre (user, 2026-11-15): sprite frames are only 560px wide */ max-width: none; }
 /* s04 phone = 5-frame sprite (Figma "Home OneU" variants: OneU / Techcombank / Inspire / Priority / Private, 0.8s each); normal blend (not the multiply used by the s08 GIFs), soft fade on the bottom edge */
@@ -155,10 +155,11 @@
 /* ---------- case-compare (reusable before/after slider; see js/pages/case-compare.js) ----------
    <div class="case-compare" data-compare> stage (2 layers, bar, range) + labels. Full-bleed 1920u; both images 2562x1607, stage uses the same ratio so before/after match pixel for pixel.
    --hr on each img = its height relative to the stage (1 when both images share one ratio). */
-.case-compare { width: 100vw; margin-left: calc(50% - 50vw); --pos: 50%; }
+.case-compare { width: var(--case-vw); margin-left: calc(50% - var(--case-vw) / 2); --pos: 50%; }
 .case-compare__stage { position: relative; width: 100%; aspect-ratio: 2562 / 1607; overflow: hidden; touch-action: pan-y; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
 .case-compare__layer { position: absolute; inset: 0; }
 .case-compare__layer--before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.case-compare__layer--after { clip-path: inset(0 0 0 var(--pos)); }   /* images are transparent now: after must not show through the before side */
 .case-compare__img { position: absolute; top: 0; left: 50%; width: 100%; height: auto; max-width: none; transform: translateX(-50%); -webkit-user-drag: none; pointer-events: none; }
 /* handle from Figma 3794:108133 (1x = 1920 design): 2px #FFCD29 line, gap, 39x27 pill (2px #FFCD29 ring r8, 2px clear gap, 31x19 white r6, three 1x7 #D9D9D9 grips at x10/15/20). No shadows. --s = px per Figma unit (min 1px) */
 .case-compare__bar { --s: max(var(--case-u), 1px); --ks: calc(1.35 * var(--s)); --line: calc(3 * var(--s)); --half: calc(9.5 * var(--ks) + var(--line)); position: absolute; top: 0; bottom: 0; left: var(--pos); width: var(--line); margin-left: calc(var(--line) / -2); background: linear-gradient(#007be5, #007be5) top / 100% calc(50% - var(--half)) no-repeat, linear-gradient(#007be5, #007be5) bottom / 100% calc(50% - var(--half)) no-repeat; pointer-events: none; }   /* Figma 3794:108134: blue #007be5 line, same thickness as the pill ring (--line, user), meets the ring */
