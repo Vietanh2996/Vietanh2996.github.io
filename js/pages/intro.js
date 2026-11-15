@@ -29,6 +29,7 @@
     stampScale: 2.2, stampFall: 180, stampShake: 2,   // VIBECODE stamp: start scale, fall time (ms), headline thud (px, 0 = off)
     enterRise: 0, enterLineDur: 700, enterLineFade: 200, enterStagger: 100,   // all 3 lines start rising at t=0, each enterStagger ms after the previous one: offset (stage px), duration per line, fade-in (ms); independent of typing
     enterScale: 1, enterDur: 900, enterWait: 0,             // cluster holds this scale; it starts shrinking to 1 at 2*enterStagger + .85*enterLineDur + enterWait (right after the last rise), over enterDur (expo-out). rise 0 + scale 1 = no entrance
+    parallel: true,                   // user test 2026-11-15: all 3 lines type at the same moment (false = the old one-after-another timeline)
     seed: 7                           // fixed seed = same "human" rhythm every run
   };
   var SPRING = { k: 650, c: 32 };     // same as spotlight.js open
@@ -38,7 +39,48 @@
      pause {ms} | caret {line, mode:'bar'|'block'|'off'} | type {line, text, think:{charIndex: ms}} | telex {line, ch, delay}
      backspace {line, n, delay} | handles | cursorIn | drag | cursorOut | toast {hold} | framing | badge
      (everything from handles on is fire-and-forget: use pause to space it) */
-  function steps() { return [   // function so ?tune values are read at every replay
+  function steps() { return TIME.parallel ? stepsParallel() : stepsSequential(); }
+  function stepsParallel() { return [   // three tracks start together after TIME.start; the purple selection starts when line 2 is done
+    { do: 'pause', ms: TIME.start },
+    { do: 'par', steps: [
+      { do: 'caret', line: 'hi', mode: 'bar' },
+      { do: 'type', line: 'hi', text: 'Hi! I’m an', rate: 12 },
+      { do: 'pause', ms: 300 },
+      { do: 'caret', line: 'hi', mode: 'off' }
+    ] },
+    { do: 'par', steps: [
+      { do: 'caret', line: 'ai', mode: 'bar' },
+      { do: 'type', line: 'ai', text: 'AI  Product  Design', rate: 12, think: { 4: TIME.think } },
+      { do: 'pause', ms: 120 },
+      { do: 'par', steps: [
+        { do: 'handles' },
+        { do: 'pause', ms: TIME.handlesPause },
+        { do: 'cursorIn' },
+        { do: 'pause', ms: TIME.cursorPause },
+        { do: 'drag' },
+        { do: 'pause', ms: TIME.drag + TIME.cursorLinger },
+        { do: 'cursorOut' }
+      ] },
+      { do: 'pause', ms: 180 },
+      { do: 'caret', line: 'ai', mode: 'off' }
+    ] },
+    { do: 'caret', line: 'eng', mode: 'block' },
+    { do: 'pause', ms: 150 },
+    { do: 'type', line: 'eng', text: '</Engine', rate: 3 },
+    { do: 'telex', line: 'eng', ch: 'ê', delay: TIME.telexE },
+    { do: 'telex', line: 'eng', ch: 'ể', delay: TIME.telexR },
+    { do: 'pause', ms: 400 },
+    { do: 'toast', text: TOAST_TEXT, hold: TIME.toastHold },
+    { do: 'pause', ms: TIME.toastWait },
+    { do: 'backspace', line: 'eng', n: 6, delay: TIME.backspace },
+    { do: 'pause', ms: TIME.retypeGap },
+    { do: 'type', line: 'eng', text: 'Engineer>', rate: 3 },
+    { do: 'pause', ms: 100 },
+    { do: 'framing' },
+    { do: 'pause', ms: TIME.frame + 40 },
+    { do: 'badge' }
+  ]; }
+  function stepsSequential() { return [   // function so ?tune values are read at every replay
     { do: 'pause', ms: TIME.start },
     { do: 'caret', line: 'hi', mode: 'bar' },            // line rises are no longer triggered here: compile() starts all three at t=0
     { do: 'type', line: 'hi', text: 'Hi! I’m an', rate: 12 },
@@ -100,15 +142,19 @@
   });
   /* per-line groups: elements that rise together with a line (transform only; their own opacity / clip logic is untouched) */
   var groups = { hi: [lines.hi.el], ai: [lines.ai.el, el.selBg.parentNode], eng: [lines.eng.el, el.yellow, el.framing] };
-  var caret = document.createElement('div'); caret.className = 'caret'; head.appendChild(caret);
-  var caretCh = document.createElement('span'); caretCh.className = 'caret-ch'; caret.appendChild(caretCh);   // white copy of the char under the block
+  var carets = {};      // one caret per line: { el, ch, mode ('bar' | 'block' | null = hidden), blinking, lastOp }
+  ['hi', 'ai', 'eng'].forEach(function (n) {
+    var el_ = document.createElement('div'); el_.className = 'caret'; head.appendChild(el_);
+    var ch_ = document.createElement('span'); ch_.className = 'caret-ch'; el_.appendChild(ch_);   // white copy of the char under the block
+    carets[n] = { el: el_, ch: ch_, mode: null, blinking: false, lastOp: 0 };
+  });
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var dbg = window.__intro = { hold: Infinity, restart: null };   // hold = freeze the timeline at t ms (for screenshots)
 
   /* ================= state ================= */
   var lineY = { hi: 0, ai: 0, eng: 0 };            // current rise offset (stage px) of each line: the caret lives outside the lines, so it adds this itself
-  var ev, evI, anims, springs, raf = 0, t0 = 0, lastT = 0, lastOp = 0, cur = null, blinking = false, caretOn = false;
+  var ev, evI, anims, springs, raf = 0, t0 = 0, lastT = 0;
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
   /* total on-screen scale of the cluster = --stage-scale x the entrance scale. Every rect-based measurement below only uses DIFFERENCES between rects
      (char - line, baseline - line), so the entrance translate cancels out and dividing by this scale gives untransformed stage px. */
@@ -118,7 +164,7 @@
 
   /* ---------- caret ---------- */
   function place(name, mode) {
-    var L = lines[name], cs = L.chars, n = L.n, k = scale(), lr = L.el.getBoundingClientRect(), x, w, r, idx;
+    var C = carets[name], caret = C.el, caretCh = C.ch, L = lines[name], cs = L.chars, n = L.n, k = scale(), lr = L.el.getBoundingClientRect(), x, w, r, idx;
     if (mode === 'block') {                         // sits ON the last typed char (inverse video); slot 0 while the line is empty
       idx = clamp(n - 1, 0, cs.length - 1); r = cs[idx].getBoundingClientRect(); x = r.left;
       w = r.width / k - (parseFloat(getComputedStyle(L.el).letterSpacing) || 0);   // full monospace cell
@@ -134,21 +180,24 @@
     caret.style.height = h.toFixed(2) + 'px';
     caret.style.transform = 'translate3d(' + (parseFloat(getComputedStyle(L.el).left) + (x - lr.left) / k).toFixed(2) + 'px,' + (parseFloat(getComputedStyle(L.el).top) + dy + (lineY[name] || 0)).toFixed(2) + 'px,0)';
   }
-  function solid(t) {
-    lastOp = t;
-    if (blinking) { caret.classList.remove('blink'); blinking = false; }
+  function solid(name, t) {
+    var C = carets[name]; C.lastOp = t;
+    if (C.blinking) { C.el.classList.remove('blink'); C.blinking = false; }
   }
-  function refresh(t) { if (cur && cur.mode !== 'off') { place(cur.line, cur.mode); solid(t); } }
+  function refresh(name, t) { if (carets[name].mode) { place(name, carets[name].mode); solid(name, t); } }
+  function caretOff(name) { var C = carets[name]; C.mode = null; C.el.classList.remove('on', 'blink'); C.blinking = false; }
 
   /* ---------- ops (what each timeline event does) ---------- */
   var ops = {
     caret: function (s, t) {
-      if (s.mode === 'off') { cur = null; caretOn = false; caret.classList.remove('on', 'blink'); blinking = false; return; }
-      cur = { line: s.line, mode: s.mode }; caretOn = true; caret.classList.add('on'); refresh(t);
+      var k;
+      if (s.mode === 'off') { if (s.line) caretOff(s.line); else for (k in carets) caretOff(k); return; }
+      if (!TIME.parallel) for (k in carets) if (k !== s.line) caretOff(k);   // sequential: a single caret that moves from line to line
+      carets[s.line].mode = s.mode; carets[s.line].el.classList.add('on'); refresh(s.line, t);
     },
-    type: function (s, t, ch) { var L = lines[s.line], c = L.chars[L.n]; c.textContent = ch; c.style.opacity = 1; L.n++; refresh(t); yellowFor(s.line, t); },
-    telex: function (s, t) { var L = lines[s.line]; L.chars[L.n - 1].textContent = s.ch; refresh(t); },
-    back: function (s, t) { var L = lines[s.line]; L.n--; var c = L.chars[L.n]; c.style.opacity = 0; c.textContent = L.text[L.n]; refresh(t); yellowFor(s.line, t); }
+    type: function (s, t, ch) { var L = lines[s.line], c = L.chars[L.n]; c.textContent = ch; c.style.opacity = 1; L.n++; refresh(s.line, t); yellowFor(s.line, t); },
+    telex: function (s, t) { var L = lines[s.line]; L.chars[L.n - 1].textContent = s.ch; refresh(s.line, t); },
+    back: function (s, t) { var L = lines[s.line]; L.n--; var c = L.chars[L.n]; c.style.opacity = 0; c.textContent = L.text[L.n]; refresh(s.line, t); yellowFor(s.line, t); }
   };
 
   /* ---------- yellow highlight: one rect (final geometry), revealed one cell per typed char of "Engineer" (line-3 chars 2..9) ---------- */
@@ -171,7 +220,7 @@
     lineY[name] = y;
     for (i = 0; i < g.length; i++) g[i].style.transform = p >= 1 ? '' : 'translate3d(0,' + y.toFixed(2) + 'px,0)';
     g[0].style.opacity = p >= 1 ? '' : clamp(p * TIME.enterLineDur / Math.max(1, TIME.enterLineFade), 0, 1).toFixed(3);
-    if (cur && cur.line === name && cur.mode !== 'off') place(name, cur.mode);
+    if (carets[name].mode) place(name, carets[name].mode);
   }
   function zoomOut(t0) {                 // cluster scale: enterScale -> 1, expo-out; scheduled right after the last line's rise
     var cl = el.cluster, s0 = TIME.enterScale;
@@ -339,7 +388,7 @@
       if (Math.abs(s.p - 1) < .0005 && Math.abs(s.v) < .005) { s.fn(1); s.node.style.willChange = ''; springs.splice(i, 1); }
       else s.fn(s.p);
     }
-    if (caretOn && !blinking && tm - lastOp > TIME.idleBlink) { caret.classList.add('blink'); blinking = true; }
+    for (var cn in carets) { var C = carets[cn]; if (C.mode && !C.blinking && tm - C.lastOp > TIME.idleBlink) { C.el.classList.add('blink'); C.blinking = true; } }
     if (evI >= ev.length && !anims.length && !springs.length) { finish(); return; }
     raf = requestAnimationFrame(tick);
   }
@@ -354,16 +403,17 @@
   function setFinal() {      // static layout + block cursor blinking at the end of line 3
     var k; for (k in lines) { lines[k].chars.forEach(function (c, i) { c.textContent = lines[k].text[i]; c.style.opacity = 1; }); lines[k].n = lines[k].chars.length; }
     clearInline(); root.classList.remove('intro-on'); root.classList.add('intro-run');
-    cur = { line: 'eng', mode: 'block' }; caretOn = true; caret.classList.add('on'); place('eng', 'block');
-    if (!blinking) { caret.classList.add('blink'); blinking = true; }
+    for (k in carets) caretOff(k);
+    carets.eng.mode = 'block'; carets.eng.el.classList.add('on'); place('eng', 'block');
+    if (!carets.eng.blinking) { carets.eng.el.classList.add('blink'); carets.eng.blinking = true; }
   }
   function finish() { raf = 0; setFinal(); }
   function reset() {
     var k; cancelAnimationFrame(raf); raf = 0;
     root.classList.add('intro-on', 'intro-run');
     for (k in lines) { lines[k].n = 0; lines[k].chars.forEach(function (c, i) { c.style.opacity = 0; c.textContent = lines[k].text[i]; }); }
-    clearInline(); caret.classList.remove('on', 'blink'); caret.style.transform = ''; blinking = false; caretOn = false; cur = null;
-    ev = compile(); evI = 0; anims = []; springs = []; t0 = 0; lastT = 0; lastOp = 0;
+    clearInline(); for (k in carets) { caretOff(k); carets[k].el.style.transform = ''; carets[k].lastOp = 0; }
+    ev = compile(); evI = 0; anims = []; springs = []; t0 = 0; lastT = 0;
     if (!reduced) {
       if (TIME.enterRise > 0) for (var g in groups) { lineY[g] = TIME.enterRise; paintLine(g, 0); }   // lines wait below, invisible, until their typing starts
       if (TIME.enterScale !== 1 && TIME.enterDur > 0) {      // whole cluster holds the big scale; zoomOut() (scheduled when the last line starts rising) brings it to 1
