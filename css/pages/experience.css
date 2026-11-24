@@ -4,7 +4,7 @@
    Stage: 2202px wide (the bar), own scale via fit-stage (data-stage-w, scale to width, cap .9). */
 /* Full viewport height, bar block centred; room left around it for photos later.
    The whole section is the hover area; one zone is always active (picked by x, kept when the pointer leaves). */
-.stage-section.experience { position: relative; display: flex; align-items: center; height: 100svh; }
+.stage-section.experience { position: relative; z-index: 0; display: flex; align-items: center; height: 100svh; }   /* z 0 = own stacking context under .dim-overlay (z 1), so the About spotlight blurs it like the rest of the page */
 .exp-fit { position: relative; width: 100%; height: calc(300px * var(--stage-scale, 1)); }
 .exp-canvas {
   position: absolute; top: 0; left: calc(50% - 1101px * var(--stage-scale, 1));
@@ -12,14 +12,14 @@
   --tick-grey: var(--object-quaternary, rgba(0, 0, 0, .16));
 }
 
-/* Zones: years 2 : 2 : 5+, snapped to the 8px tick pitch (61 : 61 : 154 ticks). Zones only carry their colours (--c ticks, --tint
+/* Zones: 2017-19 / 2019-22 / 2022-now, snapped to the 8px tick pitch (61 : 91 : 123 ticks). Zones only carry their colours (--c ticks, --tint
    background, both painted on the canvas so the tint follows the wave) and their data; hover is handled on the whole section. The ticks themselves are drawn by experience.js on a <canvas> in screen pixels
    (scaled CSS gradients gave uneven 1-2px lines and a doubled tick at the zone seams). */
 .exp-bar { position: absolute; inset: 0; }
 .exp-zone { --c: #f24822; --tint: rgba(242, 72, 34, .16); position: absolute; top: 0; height: 100%; pointer-events: none; }
 .exp-zone[data-z="1"] { left: 0; width: 488px; }
-.exp-zone[data-z="2"] { left: 488px; width: 488px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
-.exp-zone[data-z="3"] { left: 976px; width: 1226px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
+.exp-zone[data-z="2"] { left: 488px; width: 728px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
+.exp-zone[data-z="3"] { left: 1216px; width: 986px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
 /* zone 4 overlaps the end of zone 3 (2026: Product Design Lead at VSF + course instructor at UX Foundation, 31 ticks). In the overlap both
    indicators show (zone 3 above the bar, zone 4 hanging below, 3 ticks apart) and the ticks alternate purple / pink. */
 .exp-zone[data-z="4"] { left: 1954px; width: 248px; --c: #ff24bd; --tint: rgba(255, 36, 189, .16); }

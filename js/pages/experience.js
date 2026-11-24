@@ -14,7 +14,7 @@
 
   var W = 2202, BAR_Y = 160, BAR_H = 38, PITCH = 8, TICK_W = 2;
   var GROW = { up: 12, down: 30 };          // stage px a tick can stretch above / below the bar at full lift
-  var MARK_H = 75, MARK_W = 4, TOP = BAR_Y + BAR_H - MARK_H, OFF = BAR_Y - TOP;   // year marks: 4px lines ending at the bar bottom; tick canvas starts at their top
+  var MARK_H = 75, MARK_W = 3, TOP = BAR_Y + BAR_H - MARK_H, OFF = BAR_Y - TOP;   // year marks: 3px lines ending at the bar bottom; tick canvas starts at their top
   var RADIUS = 56;                          // stage px: width (sigma) of the lift around the pointer
   var FADE = 760, MIN_H = 12;               // stage px from the indicator at which the resting bar has shrunk to MIN_H (smooth taper, centred on the bar)
   var DECAY = 0.0045;                       // per ms: how fast a left-behind tick sinks back (higher = shorter trail)
@@ -24,8 +24,8 @@
   var main = zones.filter(function (z) { return !z.hasAttribute('data-down'); }), side = zones.filter(function (z) { return z.hasAttribute('data-down'); })[0];
   var cur = null, dual = false, ax = 0, px = -1, raf = 0, last = 0;
   var LOGO_DIR = 'assets/shared/company/';
-  zones.forEach(function (z) {                // data-co="file|Name|years|title;...": companies in order, sized by years (default 1); title overrides the role
-    var co = z.dataset.co.split(';').map(function (p) { p = p.split('|'); return { file: p[0], name: p[1], w: +(p[2] || 1), title: p[3] || '' }; });
+  zones.forEach(function (z) {                // data-co="file|Name|years|title|dur;...": companies in order, sized by years (default 1); title / dur override the role and duration
+    var co = z.dataset.co.split(';').map(function (p) { p = p.split('|'); return { file: p[0], name: p[1], w: +(p[2] || 1), title: p[3] || '', dur: p[4] || '' }; });
     var tot = co.reduce(function (a, c) { return a + c.w; }, 0), acc = 0;
     co.forEach(function (c) { c.from = acc / tot; acc += c.w; });
     z._co = co;
@@ -41,6 +41,10 @@
     return s * dpr;
   }
   function colours(z) { var cs = getComputedStyle(z); return { x0: z.offsetLeft, x1: z.offsetLeft + z.offsetWidth, c: cs.getPropertyValue('--c').trim(), tint: cs.getPropertyValue('--tint').trim() }; }
+  function bar(x, y, w, h) {                 // vertical line with round ends (falls back to square on old browsers)
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, w / 2); ctx.fill(); } else ctx.fillRect(x, y, w, h);
+  }
   function draw() {
     var k = geom(), tw = Math.max(1, Math.round(TICK_W * k));
     var grey = getComputedStyle(canvas).getPropertyValue('--tick-grey').trim();
@@ -59,12 +63,13 @@
       }
       if (marked[x]) continue;               // a year mark replaces this tick
       ctx.fillStyle = hit ? use.c : grey;
-      ctx.fillRect(Math.round(x * k), y0, tw, y1 - y0);
+      bar(Math.round(x * k), y0, tw, y1 - y0);
     }
     years.forEach(function (m) {              // year marks: the active zone's own mark lights in its colour ("now" = the side zone, while both show)
       var c = cur && cur.dataset.z === m.z ? on.c : dual && side.dataset.z === m.z ? alt.c : '';
       ctx.fillStyle = c || grey;
-      ctx.fillRect(Math.round((m.x + TICK_W / 2 - MARK_W / 2) * k), 0, Math.max(2, Math.round(MARK_W * k)), Math.round((OFF + BAR_H) * k));   // 4px, centred on the tick slot
+      var mw = Math.max(2, Math.round(MARK_W * k));   // 3px, centred on the tick slot (kept inside the canvas at 2017)
+      bar(Math.max(0, Math.round((m.x + TICK_W / 2 - MARK_W / 2) * k)), 0, mw, Math.round((OFF + BAR_H) * k));
       m.el.style.color = c;
     });
   }
@@ -124,6 +129,7 @@
   }
   function indCo(I, c, animate) {           // swap company: old name slides up/out, new slides in, pill width eases to fit; its logo pops in
     I.title.textContent = c.title || I.zone.dataset.title;
+    I.dur.textContent = c.dur || I.zone.dataset.dur;
     var img = new Image(); img.src = LOGO_DIR + c.file + '.png'; img.alt = '';
     var oldImgs = [].slice.call(I.logos.children); I.logos.appendChild(img);
     if (animate) { img.classList.add('is-in'); oldImgs.forEach(function (o) { o.classList.add('is-out'); setTimeout(function () { o.remove(); }, 200); }); }
@@ -152,16 +158,23 @@
     px = place((e.clientX - r.left) / s);
     kick();
   }
-  /* stage quote above the bar: each zone holds a few lines in data-quote ("a|b|c"), read in order along the zone. When the count
-     matches the zone's companies (zone 3: MISA / One Mount / VSF) each line follows its company; else the zone is split evenly.
-     While both indicators show, the side zone's lines are used. Cross-faded on change. */
+  /* stage quote above the bar. data-quote holds lines split by "|", read in order along the zone. "~" splits them into one group per
+     company (zone 2: Direction / MISA, zone 3: One Mount / VSF): each group stays inside its company's stretch.
+     While both indicators show, the side zone's lines are used. New lines come in word by word. */
   var quote = canvas.querySelector('.exp-quote-t'), quoteKey = null;
-  zones.forEach(function (z) { z._q = (z.dataset.quote || '').split('|'); });
+  zones.forEach(function (z) {
+    var g = (z.dataset.quote || '').split('~');
+    z._q = g.length === z._co.length ? g.map(function (t) { return t.split('|'); }) : [g.join('|').split('|')];
+  });
   function setQuote(z, x) {
     if (!quote) return;
-    var f = Math.max(0, Math.min(.999, (x - z.offsetLeft) / z.offsetWidth)), q = z._q, i = Math.floor(f * q.length);
-    if (q.length === z._co.length) z._co.forEach(function (c, k) { if (f >= c.from) i = k; });
-    var key = z.dataset.z + ':' + i, text = q[i];
+    var f = Math.max(0, Math.min(.999, (x - z.offsetLeft) / z.offsetWidth)), gi = 0, a = 0, b = 1;
+    if (z._q.length > 1) {
+      z._co.forEach(function (c, k) { if (f >= c.from) gi = k; });
+      a = z._co[gi].from; b = gi + 1 < z._co.length ? z._co[gi + 1].from : 1;
+    }
+    var q = z._q[gi], i = Math.min(q.length - 1, Math.floor((f - a) / (b - a) * q.length)), text = q[i];
+    var key = z.dataset.z + ':' + gi + ':' + i;
     if (key === quoteKey) return;
     var first = quoteKey === null; quoteKey = key;
     if (first || reduced) { quote.textContent = text; return; }
