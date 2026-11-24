@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/pages/about.css">
 <link rel="stylesheet" href="css/pages/work.css">
 <link rel="stylesheet" href="css/pages/marquee.css">
+<link rel="stylesheet" href="css/pages/experience.css">
 <link rel="stylesheet" href="css/base/theme.css">
 </head>
 <body>
@@ -182,6 +183,38 @@
   </div>
 </section>
 
+<section class="stage-section experience" data-section-name="Experience">
+  <div class="exp-fit" data-stage-w="2752">
+    <div class="exp-canvas" id="exp-canvas">
+      <p class="exp-quote" aria-live="polite"><span class="exp-quote-t"></span></p>
+      <div class="exp-photos" aria-hidden="true">
+        <figure class="exp-ph" style="--x: 2027; --y: -156; --w: 130; --h: 174; --r: 17.3deg; --rad: 24px"><img src="assets/home/experience/p01.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: 1700; --y: -236; --w: 150; --h: 150; --r: 27.6deg; --rad: 50%"><img src="assets/home/experience/p02.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: 2230; --y: 470; --w: 120; --h: 120; --r: -0.6deg; --rad: 50%"><img src="assets/home/experience/p03.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: -40; --y: -210; --w: 110; --h: 110; --r: -28.5deg; --rad: 50%"><img src="assets/home/experience/p04.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: -140; --y: 300; --w: 160; --h: 160; --r: 27.6deg; --rad: 50%"><img src="assets/home/experience/p05.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: 283; --y: -226; --w: 128; --h: 162; --r: 19.3deg; --rad: 24px"><img src="assets/home/experience/p06.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: 448; --y: 537; --w: 261; --h: 164; --r: -12.6deg; --rad: 24px"><img src="assets/home/experience/p07.jpg" alt="" loading="lazy"></figure>
+        <figure class="exp-ph" style="--x: 1780; --y: 485; --w: 96; --h: 123; --r: -12.7deg; --rad: 24px"><img src="assets/home/experience/p08.jpg" alt="" loading="lazy"></figure>
+      </div>
+      <div class="exp-bar">
+        <div class="exp-zone" data-z="1" data-quote="I tried it all, from cameras to timelines.|Knowing a bit of everything wasn&#39;t enough." data-title="Multimedia &amp; Graphic Designer" data-dur="x2 years" data-co="adayroi.com|Adayroi.com;direction-creative-agency|Direction Creative Agency"></div>
+        <div class="exp-zone" data-z="2" data-quote="I gave up comfort to go deep.|Not the best drawer, but strong in layout and logic.|Then I found the web, and it fit." data-title="UI Designer" data-dur="x2 years" data-co="direction-creative-agency|Direction Creative Agency;misa-jsc|MISA JSC"></div>
+        <div class="exp-zone" data-z="3" data-quote="Pixels weren&#39;t enough. I needed the why.|One Mount taught me to think in products.|From designing screens to leading a team." data-title="Product Designer" data-dur="x5+ years" data-co="misa-jsc|MISA JSC|1;one-mount-group|One Mount Group|2;vinsmart-future|VinSmart Future|2|Product Design Lead"></div>
+        <div class="exp-zone" data-z="4" data-quote="Years of foundation, then AI made it fly.|Now I teach what changed me most." data-down data-title="Course Instructor" data-dur="&lt;1 year" data-co="ux-foundation|UX Foundation"></div>
+      </div>
+      <div class="exp-years" aria-hidden="true">
+        <span class="exp-yr" data-z="1" style="left: 7px">2017</span><span class="exp-yr" data-z="2" style="left: 495px">2019</span><span class="exp-yr" data-z="3" style="left: 983px">2021</span><span class="exp-yr" data-z="4" style="left: 1959px">2026</span><span class="exp-yr exp-yr--end" data-z="4" style="left: 2207px">now</span>
+      </div>
+      <div class="exp-ind" aria-hidden="true">
+        <span class="exp-line"></span><span class="exp-ring"></span>
+        <div class="exp-label"><span class="exp-head"><span class="exp-title"></span><span class="exp-dur"></span></span><span class="exp-pill"><span class="exp-logos"></span><span class="exp-co"></span></span></div>
+      </div>
+    </div>
+    <canvas class="exp-ticks" aria-hidden="true"></canvas>
+  </div>
+</section>
+
 <section class="stage-section marquee" data-section-name="Work" aria-label="Think first, design after">
   <div class="m-viewport" aria-hidden="true"><div class="m-scale"><div class="m-track">
     <div class="m-group"><span class="m-item"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span><span class="m-item" aria-hidden="true"><span class="m-text">Think first, design after</span><span class="m-star">*</span></span></div>
@@ -205,8 +238,7 @@
 </main>
 <div class="cursor-layer" id="cursor-layer" aria-hidden="true">
   <div class="cursor cursor--pink"><img class="cursor-arrow" src="assets/home/thumb/cursor-pink.svg" alt=""><span class="cursor-chip">Việt Anh</span></div>
-  <div class="cursor cursor--yellow"><img class="cursor-arrow" src="assets/home/thumb/cursor-yellow.svg" alt=""><span class="cursor-chip">Subagent-chan</span></div>
-  <div class="cursor cursor--you" id="you-cursor"><img class="cursor-arrow" src="assets/home/thumb/cursor-green.svg" alt=""><span class="cursor-chip">You</span></div>
+  <div class="cursor cursor--yellow"><img class="cursor-arrow" src="assets/home/thumb/cursor-claude.svg" alt=""><span class="cursor-chip">Claude-chan</span></div>
 </div>
 <script src="js/pages/fit-stage.js"></script>
 <script src="js/pages/thumb.js"></script>
@@ -216,8 +248,10 @@
 <script src="js/pages/about.js"></script>
 <script src="js/pages/work.js"></script>
 <script src="js/pages/marquee.js"></script>
+<script src="js/pages/experience.js"></script>
 <script src="js/pages/scroll-fx.js"></script>
 <script src="js/pages/section-indicator.js"></script>
 <script src="js/pages/theme.js"></script>
+<script src="js/pages/cursor-guide.js"></script>
 </body>
 </html>

@@ -17,15 +17,24 @@
    Body/L            body-l            BDO Grotesk 400 18 / 24       -2%              Work spotlight title line 2, contact items
    Body/M            body-m            BDO Grotesk 400 16 / 20       0                Work card description
    Note/Handwritten  note-handwritten  Caveat 700 32 / 37            0                handwritten notes (avatar note, Work note)
+   Note/Quote        note-quote        Caveat 700 80 / 80            0                Experience stage quote (Figma 3988:47590)
    Label/Glyph       label-glyph       BDO Grotesk 500 20 / 1        -2%              letter fallback in chip icon tiles
    Figma/Regular     figma-regular     Inter 400 13 / 22             0                fake Figma page name
    Figma/Strong      figma-strong      Inter 600 13 / 22             0                fake Figma file name
    Figma/Small       figma-small       Inter 500 11 / 16             .5%              cursor name chips, share button, image selection labels
    Figma/Toast       figma-toast       Inter 500 15 / 22             0                toast
    Fun/Badge         fun-badge         Bangers 400 80 / 1.1          0                [VIbecode] sticker
-   Figma/Cursor      figma-cursor      Cal Sans 400 24 / 32          0                cursor name chips ("Việt Anh", "Subagent-chan", "You")
+   Figma/Cursor      figma-cursor      Cal Sans 400 24 / 32          0                cursor name chips ("Việt Anh", "Claude-chan", "You")
    Display/Marquee   display-marquee   BDO Grotesk 500 160 / .9      -2%              marquee "Think first, design after" text
    Display/Asterisk  display-asterisk  Cal Sans 400 160 / .9         -2%              marquee asterisk
+   Heading/Title-XL  heading-title-xl  Cal Sans 400 36 / 44          0                Experience role title, big section titles
+   Heading/Title-L   heading-title-l   Cal Sans 400 28 / 36          0                step between Title 24 and Title-XL 36
+   Heading/Title-S   heading-title-s   Cal Sans 400 20 / 26          0                small titles, sub cards
+   Heading/H2        heading-h2        BDO Grotesk 500 36 / 40       -2%              heading under H1
+   Heading/H3        heading-h3        BDO Grotesk 500 28 / 32       -2%              sub-heading
+   Body/XL           body-xl           BDO Grotesk 400 20 / 28       -2%              lead paragraph
+   Body/S            body-s            BDO Grotesk 400 14 / 18       0                captions
+   Body/XS           body-xs           BDO Grotesk 400 12 / 16       0                meta, dates
 
    Families are tokens too, for containers that only set a family.
    BDO Grotesk is not on Google Fonts: its OTFs are served from assets/shared/fonts.
@@ -67,6 +76,8 @@
   /* Note/Handwritten */
   --type-note-handwritten-font: 700 32px/37px var(--type-family-caveat);
   --type-note-handwritten-ls: 0;
+  --type-note-quote-font: 700 80px/80px var(--type-family-caveat);
+  --type-note-quote-ls: 0;
   /* Label/Glyph */
   --type-label-glyph-font: 500 20px/1 var(--type-family-bdo);
   --type-label-glyph-ls: -0.02em;
@@ -94,6 +105,30 @@
   /* Display/Asterisk */
   --type-display-asterisk-font: 400 160px/.9 var(--type-family-cal);
   --type-display-asterisk-ls: -0.02em;
+  /* Heading/Title-XL */
+  --type-heading-title-xl-font: 400 36px/44px var(--type-family-cal);
+  --type-heading-title-xl-ls: 0;
+  /* Heading/Title-L */
+  --type-heading-title-l-font: 400 28px/36px var(--type-family-cal);
+  --type-heading-title-l-ls: 0;
+  /* Heading/Title-S */
+  --type-heading-title-s-font: 400 20px/26px var(--type-family-cal);
+  --type-heading-title-s-ls: 0;
+  /* Heading/H2 */
+  --type-heading-h2-font: 500 36px/40px var(--type-family-bdo);
+  --type-heading-h2-ls: -0.02em;
+  /* Heading/H3 */
+  --type-heading-h3-font: 500 28px/32px var(--type-family-bdo);
+  --type-heading-h3-ls: -0.02em;
+  /* Body/XL */
+  --type-body-xl-font: 400 20px/28px var(--type-family-bdo);
+  --type-body-xl-ls: -0.02em;
+  /* Body/S */
+  --type-body-s-font: 400 14px/18px var(--type-family-bdo);
+  --type-body-s-ls: 0;
+  /* Body/XS */
+  --type-body-xs-font: 400 12px/16px var(--type-family-bdo);
+  --type-body-xs-ls: 0;
 }
 
 .t-display-hero { font: var(--type-display-hero-font); letter-spacing: var(--type-display-hero-ls); }
@@ -104,6 +139,7 @@
 .t-body-l { font: var(--type-body-l-font); letter-spacing: var(--type-body-l-ls); }
 .t-body-m { font: var(--type-body-m-font); letter-spacing: var(--type-body-m-ls); }
 .t-note-handwritten { font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); }
+.t-note-quote { font: var(--type-note-quote-font); letter-spacing: var(--type-note-quote-ls); }
 .t-label-glyph { font: var(--type-label-glyph-font); letter-spacing: var(--type-label-glyph-ls); }
 .t-figma-regular { font: var(--type-figma-regular-font); letter-spacing: var(--type-figma-regular-ls); }
 .t-figma-strong { font: var(--type-figma-strong-font); letter-spacing: var(--type-figma-strong-ls); }
@@ -113,3 +149,11 @@
 .t-figma-cursor { font: var(--type-figma-cursor-font); letter-spacing: var(--type-figma-cursor-ls); }
 .t-display-marquee { font: var(--type-display-marquee-font); letter-spacing: var(--type-display-marquee-ls); }
 .t-display-asterisk { font: var(--type-display-asterisk-font); letter-spacing: var(--type-display-asterisk-ls); }
+.t-heading-title-xl { font: var(--type-heading-title-xl-font); letter-spacing: var(--type-heading-title-xl-ls); }
+.t-heading-title-l { font: var(--type-heading-title-l-font); letter-spacing: var(--type-heading-title-l-ls); }
+.t-heading-title-s { font: var(--type-heading-title-s-font); letter-spacing: var(--type-heading-title-s-ls); }
+.t-heading-h2 { font: var(--type-heading-h2-font); letter-spacing: var(--type-heading-h2-ls); }
+.t-heading-h3 { font: var(--type-heading-h3-font); letter-spacing: var(--type-heading-h3-ls); }
+.t-body-xl { font: var(--type-body-xl-font); letter-spacing: var(--type-body-xl-ls); }
+.t-body-s { font: var(--type-body-s-font); letter-spacing: var(--type-body-s-ls); }
+.t-body-xs { font: var(--type-body-xs-font); letter-spacing: var(--type-body-xs-ls); }

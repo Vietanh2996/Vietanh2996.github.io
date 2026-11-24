@@ -1,0 +1,112 @@
+/* Experience (draft). Figma VA Portfolio 3988:21461 (states 1-4).
+   State 1: grey tick bar only. Hover a zone: its ticks + tint take the zone colour and an indicator (line + ring + title/logos/duration)
+   follows the mouse inside that zone (js/pages/experience.js).
+   Stage: 2202px wide (the bar), own scale via fit-stage (data-stage-w, scale to width, cap .9). */
+/* Full viewport height, bar block centred; room left around it for photos later.
+   The whole section is the hover area; one zone is always active (picked by x, kept when the pointer leaves). */
+.stage-section.experience { position: relative; display: flex; align-items: center; height: 100svh; }
+.exp-fit { position: relative; width: 100%; height: calc(300px * var(--stage-scale, 1)); }
+.exp-canvas {
+  position: absolute; top: 0; left: calc(50% - 1101px * var(--stage-scale, 1));
+  width: 2202px; height: 300px; transform-origin: 0 0; scale: var(--stage-scale, 1); z-index: 1;
+  --tick-grey: var(--object-quaternary, rgba(0, 0, 0, .16));
+}
+
+/* Zones: years 2 : 2 : 5+, snapped to the 8px tick pitch (61 : 61 : 154 ticks). Zones only carry their colours (--c ticks, --tint
+   background, both painted on the canvas so the tint follows the wave) and their data; hover is handled on the whole section. The ticks themselves are drawn by experience.js on a <canvas> in screen pixels
+   (scaled CSS gradients gave uneven 1-2px lines and a doubled tick at the zone seams). */
+.exp-bar { position: absolute; inset: 0; }
+.exp-zone { --c: #f24822; --tint: rgba(242, 72, 34, .16); position: absolute; top: 0; height: 100%; pointer-events: none; }
+.exp-zone[data-z="1"] { left: 0; width: 488px; }
+.exp-zone[data-z="2"] { left: 488px; width: 488px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
+.exp-zone[data-z="3"] { left: 976px; width: 1226px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
+/* zone 4 overlaps the end of zone 3 (2026: Product Design Lead at VSF + course instructor at UX Foundation, 31 ticks). In the overlap both
+   indicators show (zone 3 above the bar, zone 4 hanging below, 3 ticks apart) and the ticks alternate purple / pink. */
+.exp-zone[data-z="4"] { left: 1954px; width: 248px; --c: #ff24bd; --tint: rgba(255, 36, 189, .16); }
+/* year marks (Figma 3988:21461): 2px line from 75px above the bar down to its bottom, drawn on the tick canvas; the year in Caveat sits
+   at its top right. The active zone lights its own mark in the zone colour (zone 4 lights "now"). */
+.exp-years { position: absolute; inset: 0; pointer-events: none; }
+.exp-yr { position: absolute; top: 117px; font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); color: var(--tick-grey); white-space: nowrap; transition: color .2s ease; }
+.exp-yr--end { translate: calc(-100% - 14px) 0; }   /* "now" sits left of the last mark so it stays inside the stage */
+/* photos around the timeline (Figma 3988:20772): white 5px frame, soft shadow, tilted. Centred on --x/--y (stage px, bar = 0..2202 / bar top 160).
+   On a zone change experience.js swaps their pictures (pool of 11, assets/home/experience/p01-p11) with a small flip, staggered. */
+.exp-photos { position: absolute; inset: 0; pointer-events: none; }
+.exp-ph {
+  position: absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: calc(var(--w) * 1px); height: calc(var(--h) * 1px); margin: 0;
+  translate: -50% -50%; rotate: var(--r); box-sizing: border-box; border: 5px solid #fff; border-radius: var(--rad); overflow: hidden; background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .1), 0 3px 8px rgba(0, 0, 0, .1), 0 0 .5px rgba(0, 0, 0, .18);
+  transition: scale .22s cubic-bezier(.4, 0, .6, 1), opacity .22s ease;
+}
+.exp-ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.exp-ph.is-swap { scale: .6; opacity: 0; }
+.exp-ph.is-back { transition: scale .45s cubic-bezier(.3, 1.5, .5, 1), opacity .2s ease; }
+@media (prefers-reduced-motion: reduce) { .exp-ph { transition: none; } }
+/* stage quote (Figma 3988:47590): Caveat 700 80/80, black 90%, centred, 797px wide (wraps to two lines), its top 306px above the bar's
+   stage top. One per zone (data-quote, placeholder for now); cross-fades on a zone change. */
+.exp-quote {
+  position: absolute; left: 1101px; top: -306px; width: 797px; translate: -50% 0; margin: 0; text-align: center; pointer-events: none;
+  font: var(--type-note-quote-font); letter-spacing: var(--type-note-quote-ls); color: var(--text-default, rgba(0, 0, 0, .9));
+}
+.exp-quote-t { display: inline-block; transition: opacity .2s ease, translate .2s ease, filter .2s ease; }
+.exp-quote-t.is-out { opacity: 0; translate: 0 6px; filter: blur(3px); }
+.exp-qw { display: inline-block; animation: exp-qw-in .45s cubic-bezier(.2, .8, .2, 1) both; }   /* each word of a new quote, staggered by JS */
+@keyframes exp-qw-in { from { opacity: 0; translate: 0 .25em; filter: blur(6px); } }
+@media (prefers-reduced-motion: reduce) { .exp-quote-t { transition: none; } .exp-qw { animation: none; } }
+.exp-ticks { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; }   /* under the stage, so the indicator line + ring sit on top of the ticks */
+
+/* indicator: Figma frame "3" 3988:21787. Line 4px x 174 (from 110px above the bar top down to the ring) + ring 18px, both with a glow
+   in the zone colour (drop shadow 0 0 10 @ .4). Label column, gap 8: head row (title + "x2 years", centred, gap 8) / pill (logos + company). */
+.exp-ind {
+  --ic: #f24822; --tc: #dc3412; --glow: rgba(242, 72, 34, .4);
+  position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none;
+  opacity: 0; transition: opacity .18s ease;
+}
+.exp-ind.is-on { opacity: 1; }
+.exp-ind[data-z="2"] { --ic: #0d99ff; --tc: #007be5; --glow: rgba(13, 153, 255, .4); }
+.exp-ind[data-z="3"] { --ic: #9747ff; --tc: #8638e5; --glow: rgba(151, 71, 255, .4); }
+.exp-ind[data-z="4"] { --ic: #ff24bd; --tc: #ea10ac; --glow: rgba(255, 36, 189, .4); }
+.exp-line { position: absolute; left: -2px; top: 10px; width: 4px; height: 207px; border-radius: 3px; background: var(--ic); box-shadow: 0 0 10px var(--glow); }
+.exp-ring { position: absolute; left: -9px; top: 208px; width: 18px; height: 18px; box-sizing: border-box; border-radius: 50%; background: #fff; border: 4px solid var(--ic); box-shadow: 0 0 10px var(--glow); }
+.exp-label { position: absolute; left: 35px; top: 10px; white-space: nowrap; display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+.exp-pill { align-self: flex-start; }
+.exp-ind.is-flip .exp-pill { align-self: flex-end; }
+.exp-ind.is-flip .exp-label { left: auto; right: 35px; }
+/* zone 4 (Figma frame "5" 3988:21839 right / "2022" 3988:47560 left): ring on the bar's top edge, line hanging down, label below the bar.
+   Both sides keep head (title + years) first, pill second; flipped (left) the column aligns right so the pill hugs the line. */
+.exp-ind.is-down .exp-ring { top: 160px; }
+.exp-ind.is-down .exp-line { top: 162px; height: 174px; }
+.exp-ind.is-down .exp-label { top: 236px; }
+.exp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.exp-title { font: var(--type-heading-title-xl-font); letter-spacing: var(--type-heading-title-xl-ls); color: var(--tc); white-space: pre; }   /* Heading/Title-XL 36; data-title may hold a line break */
+.exp-pill {
+  display: flex; align-items: center; gap: 8px; height: 48px; box-sizing: border-box; padding: 4px 12px 4px 4px;
+  border-radius: 48px; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .15), 0 0 .5px rgba(0, 0, 0, .3);
+}
+.exp-logos { display: flex; }
+.exp-logos { position: relative; width: 40px; height: 40px; }
+.exp-logos img { position: absolute; inset: 0; width: 40px; height: 40px; }   /* the PNGs carry their own white disc + soft shadow; no CSS shadow (it drew a second ring) */
+.exp-logos img.is-in { animation: exp-logo-in .35s cubic-bezier(.3, 1.4, .5, 1) both; }
+.exp-logos img.is-out { animation: exp-logo-out .2s ease-in both; }
+@keyframes exp-logo-in { from { scale: .4; opacity: 0; } }
+@keyframes exp-logo-out { to { scale: .4; opacity: 0; } }
+/* company name: JS sets the width (transitioned, so the pill eases to the new length); the old name slides up and out, the new one in from below */
+.exp-co { position: relative; display: block; height: 31px; overflow: hidden; transition: width .35s cubic-bezier(.2, .8, .2, 1); font: 400 24px/31px "Cal Sans", sans-serif; color: #000; }
+.exp-co.no-anim { transition: none; }
+.exp-co-t { position: absolute; left: 0; top: 0; white-space: nowrap; }
+.exp-co-t.is-in { animation: exp-co-in .35s cubic-bezier(.2, .8, .2, 1) both; }
+.exp-co-t.is-out { animation: exp-co-out .25s ease-in both; }
+@keyframes exp-co-in { from { translate: 0 100%; opacity: 0; filter: blur(3px); } }
+@keyframes exp-co-out { to { translate: 0 -100%; opacity: 0; filter: blur(3px); } }
+.exp-dur { font: var(--type-note-handwritten-font); color: var(--text-secondary, rgba(0, 0, 0, .5)); }
+
+/* show animation (re-triggered by .is-anim on each zone change): line grows up from the ring, then title / logos / duration rise in */
+.exp-ind.is-anim .exp-line { animation: exp-grow .35s cubic-bezier(.2, .8, .2, 1) both; transform-origin: 50% 100%; }
+.exp-ind.is-down.is-anim .exp-line { transform-origin: 50% 0; }
+.exp-ind.is-anim .exp-ring { animation: exp-pop .3s cubic-bezier(.3, 1.6, .5, 1) both; }
+.exp-ind.is-anim .exp-label > * { animation: exp-rise .4s cubic-bezier(.2, .8, .2, 1) both; }
+.exp-ind.is-anim .exp-head { animation-delay: .08s; }
+.exp-ind.is-anim .exp-pill { animation-delay: .16s; }
+@keyframes exp-grow { from { scale: 1 0; } }
+@keyframes exp-pop { from { scale: 0; } }
+@keyframes exp-rise { from { opacity: 0; translate: 0 14px; filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) { .exp-ind { transition: none; } .exp-ind.is-anim *, .exp-co-t, .exp-logos img { animation: none !important; } .exp-yr { transition: none; } .exp-co { transition: none; } }
