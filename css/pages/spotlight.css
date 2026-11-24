@@ -1,13 +1,15 @@
 :root {
   --blue: #0D5EFF;
   --ink: #0C0C0C;
+  --dim: rgba(229, 229, 229, .5);   /* spotlight dim overlay */
+  --text-muted: rgba(0, 0, 0, .55);
 }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: #E5E5E5;
+  background: var(--canvas, #E5E5E5);
   color: var(--ink);
   font-family: var(--type-family-bdo);
   overflow-x: hidden;
@@ -23,7 +25,7 @@ body {
 .dim-overlay {
   position: fixed; inset: 0;
   z-index: 1;
-  background: rgba(229, 229, 229, .5);
+  background: var(--dim);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   pointer-events: none;
@@ -178,7 +180,7 @@ body.is-spotlight .dim-overlay {
 .pill {
   height: 57px;
   padding: 16px 16px 20px;
-  background: #fff;
+  background: var(--bg-white, #fff);
   border-radius: 28px;
   filter: drop-shadow(1px 1px .5px rgba(0, 0, 0, .25));
   transform: rotate(3deg);
@@ -205,7 +207,7 @@ body.is-spotlight .dim-overlay {
   flex: none;
   width: 420px; /* was 391: BDO Grotesk is wider than the old face, the email row needed the room */
   padding: 16px;
-  background: #fff;
+  background: var(--bg-white, #fff);
   border-radius: 28px;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
   transform: rotate(-4.62deg);

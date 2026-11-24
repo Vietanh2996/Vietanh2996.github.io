@@ -51,14 +51,14 @@
 .about-stage {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   font-family: var(--type-family-bdo);
-  color: #000;
+  color: var(--text-strong);
 }
 .about-stage * { box-sizing: border-box; }
 .about-block { display: flex; flex-direction: column; align-items: center; }
 
 /* ---------- type ---------- */
-.ab-t { font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls); white-space: pre; color: #000; }
-.ab-t--skill { color: rgba(0, 0, 0, .9); }
+.ab-t { font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls); white-space: pre; color: var(--text-strong); }
+.ab-t--skill { color: var(--text-default); }
 .about-hello { display: flex; align-items: center; gap: 12px; }
 .about-skill {
   width: 1600px; margin: 20px 0 0;   /* widest row 1 (End-to-end products + Production-ready UI) is ~1509px; 160px side margin on the 1920 stage */
@@ -90,7 +90,7 @@
   height: 64px; padding: 0 20px 0 8px; margin: 0; border: 0;
   border-radius: 100px; background: var(--bg-alpha-black-10);
   font: var(--type-heading-h1-font); letter-spacing: var(--type-heading-h1-ls);
-  color: rgba(0, 0, 0, .9); white-space: nowrap; text-align: left;
+  color: var(--text-default); white-space: nowrap; text-align: left;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .skill-chip:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }

@@ -1,11 +1,15 @@
 :root {
   /* Figma "AID Slide" variables */
+  --text-strong: #000;           /* headline, About / Marquee / Work text (no Figma variable) */
   --text-default: rgba(0, 0, 0, .9);
   --text-white: #fff;
   --text-tertiary: rgba(0, 0, 0, .3);
   --border-default: #e6e6e6;
   --bg-white: #fff;
   --bg-subtle: #f5f5f5;
+  --canvas: #f5f5f5;              /* page canvas colour = the tile image's base (bg-dot.png) */
+  --canvas-tile: url("../../assets/home/thumb/bg-dot.png");   /* Figma AID1 2089:10287: 32px image, Tile x0.5 */
+  --canvas-tile-size: 16px;
   --accent-blue-solid: #0d99ff;
   --accent-purple-solid: #9747ff;
   --accent-purple-subtle: #f1e5ff;
@@ -31,18 +35,12 @@
 /* whole-site canvas: fixed dotted layer behind every section (sections stay transparent) */
 body::before {
   --s: var(--stage-scale, 1);
-  --g: calc(16px * var(--s));
+  --g: calc(var(--canvas-tile-size) * var(--s));
   --o: calc(50% - 960px * var(--s)) calc(50% - 540px * var(--s));
   content: "";
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-color: #fff;
-  background-image:
-    linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,.3)),
-    url("../../assets/home/thumb/bg-dot.png"), url("../../assets/home/thumb/bg-dot.png"),
-    url("../../assets/home/thumb/bg-grid.png"), url("../../assets/home/thumb/bg-dot.png"),
-    linear-gradient(#fff, #fff);
-  background-size: auto, var(--g) var(--g), var(--g) var(--g), var(--g) var(--g), var(--g) var(--g), auto;
-  background-position: 0 0, var(--o), var(--o), var(--o), var(--o), 0 0;
+  /* same recipe as Figma: one image with a single dot in the middle, tiled (light / dark swap --canvas-tile, see css/base/theme.css) */
+  background: var(--canvas) var(--canvas-tile) var(--o) / var(--g) var(--g) repeat;
 }
 .thumb {
   position: relative;
@@ -90,12 +88,12 @@ body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotligh
 
 /* ---------- headline ---------- */
 .headline { margin: 0; inset: 0; pointer-events: none; }
-.headline span { position: absolute; white-space: pre; color: #000; }
+.headline span { position: absolute; white-space: pre; color: var(--text-strong); }
 .hl-hi { font: var(--type-display-hero-font); letter-spacing: 0; /* exception: current look is 0; Figma style says -2% */ left: 653.55px; top: 205px; }
 .hl-ai { font: var(--type-display-hero-font); left: 401px; top: 375px; line-height: .9; /* exception: kept at .9; Figma style says normal */ letter-spacing: var(--type-display-hero-ls); }
-.hl-eng { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); left: 584.05px; top: 543.14px; }
-.hl-yellow { left: 727px; top: 548.77px; width: 555.949px; height: 131px; background: var(--engineer-highlight); }
-.framing { left: 561.95px; top: 518.15px; width: 838px; height: 192px; }
+.hl-eng { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); left: 537.85px; top: 543.14px; } /* letter-spacing -7px (was -15.4): line is 92.4px wider, left moved 46.2px to stay centred; yellow + framing below widened to match */
+.hl-yellow { left: 697.6px; top: 548.77px; width: 623.149px; height: 131px; background: var(--engineer-highlight); }
+.framing { left: 515.75px; top: 518.15px; width: 930.4px; height: 192px; }
 
 /* purple text selection with two caret handles */
 .select { left: 528.5px; top: 361.15px; width: 543px; height: 154px; pointer-events: none; }
@@ -127,7 +125,7 @@ body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotligh
 .pl-div { width: 1px; height: 48px; margin: 0 8px; background: var(--border-default); }
 .pl-page { display: flex; align-items: center; height: 32px; padding: 0 4px; }
 /* right label: items stack in one grid cell; JS swaps them and sets the track width (spring) */
-.pl-track { display: grid; margin: 0 4px; font: var(--type-figma-regular-font); letter-spacing: var(--type-figma-regular-ls); color: #000; white-space: nowrap; }
+.pl-track { display: grid; margin: 0 4px; font: var(--type-figma-regular-font); letter-spacing: var(--type-figma-regular-ls); color: var(--text-strong); white-space: nowrap; }
 .pl-item { grid-area: 1 / 1; justify-self: start; }
 
 /* ---------- top-right sidebar ---------- */
@@ -278,7 +276,7 @@ body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotligh
 
 /* [VIbecode] sticker (Figma 3764:63467; frame bbox 855.25,659.94 351x139, centre kept) */
 .badge-vibe {
-  left: 1030.85px; top: 701.55px; transform: translate(-50%, -50%) rotate(-3.2deg);
+  left: 1077.05px; top: 745px; transform: translate(-50%, -50%) rotate(-3.2deg);
   padding: 8px 16px; border: 8px solid #fff; border-radius: 24px; background: var(--accent-red-solid);
   filter: drop-shadow(0 0 .25px rgba(0,0,0,.3)) drop-shadow(0 1px 1.5px rgba(0,0,0,.15));
   pointer-events: none;
@@ -301,13 +299,13 @@ html.intro-on .select-bg { opacity: 0; transform: scaleX(.006); transform-origin
 html.intro-on .framing, html.intro-on .badge-vibe, html.intro-on .handle { opacity: 0; }
 /* framing, rebuilt from 4 corner handles + 4 edges (Figma 3764:63817) so it can be drawn as a drag from the top-left corner */
 .framing i { position: absolute; background: var(--accent-blue-solid); }
-.framing .fr-t, .framing .fr-b { left: 14.12px; width: 809.96px; height: 8px; transform-origin: 0 0; }
+.framing .fr-t, .framing .fr-b { left: 14.12px; width: 902.36px; height: 8px; transform-origin: 0 0; }
 .framing .fr-t { top: 13.68px; } .framing .fr-b { top: 170.32px; }
 .framing .fr-l, .framing .fr-r { top: 13.68px; width: 8px; height: 164.64px; transform-origin: 0 0; }
-.framing .fr-l { left: 14.12px; } .framing .fr-r { left: 816.08px; }
-.framing .fr-h { width: 36px; height: 36px; border: 6px solid #f5f5f5; }
-.framing .fr-h--tl { left: 0; top: 0; } .framing .fr-h--tr { left: 802px; top: 0; }
-.framing .fr-h--bl { left: 0; top: 156px; } .framing .fr-h--br { left: 802px; top: 156px; }
+.framing .fr-l { left: 14.12px; } .framing .fr-r { left: 908.48px; }
+.framing .fr-h { width: 36px; height: 36px; border: 6px solid var(--canvas); }
+.framing .fr-h--tl { left: 0; top: 0; } .framing .fr-h--tr { left: 894.4px; top: 0; }
+.framing .fr-h--bl { left: 0; top: 156px; } .framing .fr-h--br { left: 894.4px; top: 156px; }
 /* black move-h cursor (Figma 3764:63784), part of the intro layer: above the headline, below the site cursor layer */
 .intro-cursor { left: 0; top: 0; width: 52.5px; height: 46.375px; transform-origin: 7px 5.3px; opacity: 0; pointer-events: none; }
 

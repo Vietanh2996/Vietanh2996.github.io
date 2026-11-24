@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Light / dark theme for the home page (index.html). Load LAST.
+   Light values live with each page's :root (thumb / about / spotlight); this file only overrides them for
+   html[data-theme="dark"] (set before first paint by the inline script in <head>, switched by js/pages/theme.js).
+   Dark canvas = Figma AID1 2089:10295 (36px image, Tile x0.5 -> 18px cell). Chrome colours follow Figma's own dark UI.
+   ========================================================================== */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #373737;
+  --canvas-tile: url("../../assets/home/thumb/bg-dot-dark.png");
+  --canvas-tile-size: 18px;
+
+  --text-strong: #fff;
+  --text-default: rgba(255, 255, 255, .9);
+  --text-muted: rgba(255, 255, 255, .6);
+  --text-secondary: rgba(255, 255, 255, .5);
+  --text-tertiary: rgba(255, 255, 255, .16);
+  --border-default: #444;
+  --bg-white: #2c2c2c;           /* chrome surfaces: pills, toolbar, zoom, contact card, tagline */
+  --bg-subtle: #383838;
+  --bg-alpha-black-10: rgba(255, 255, 255, .1);
+  --ink: #f5f5f5;
+  --dim: rgba(30, 30, 30, .55);
+  --engineer-highlight: rgba(255, 205, 41, .28);
+  --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .4));
+  --chrome-ui-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+}
+
+/* single-colour (black) chrome icons -> white; colourful illustrations (marker, sticky, shapes, emoji, move) stay as they are */
+html[data-theme="dark"] :is(.pl-logo img, .pl-chev, .sr-chev, .pl-page img, .zoom-plus, .help img, .ins-plus img, .tb-flat img, .tb-move img:last-child, .ins--align img) {
+  filter: invert(1);
+}
+
+/* ---------- theme toggle: 48px rounded-square button just outside the top-right bar (lives inside .sidebar-right so it scales and layers with it) ---------- */
+.theme-toggle {
+  position: absolute; right: calc(100% + 8px); top: 50%; translate: 0 -50%;
+  display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 16px;   /* same corner as the bar next to it */
+  background: var(--bg-white); color: var(--text-default); cursor: pointer; pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.theme-toggle:focus-visible { outline: 2px solid var(--accent-blue-solid); outline-offset: 2px; }
+.theme-toggle svg { grid-area: 1 / 1; width: 22px; height: 22px; transition: opacity .2s ease, rotate .35s cubic-bezier(.2, .8, .2, 1), scale .35s cubic-bezier(.2, .8, .2, 1); }
+.theme-toggle .tt-moon { opacity: 0; rotate: -90deg; scale: .5; }
+html[data-theme="dark"] .theme-toggle .tt-sun { opacity: 0; rotate: 90deg; scale: .5; }
+html[data-theme="dark"] .theme-toggle .tt-moon { opacity: 1; rotate: 0deg; scale: 1; }
+@media (prefers-reduced-motion: reduce) { .theme-toggle svg { transition: none; } }

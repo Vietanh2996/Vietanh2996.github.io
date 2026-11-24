@@ -2,7 +2,7 @@
    Figma Web: _Folder 3794:45309, spotlight A 3794:45368, spotlight B 3794:45369. Same 1920 stage / scale as About (.about-fit + .a-canvas from about.css).
    The cards are drawn by js/pages/work.js inside .work-sp (above the dim overlay); the <a class="work-card"> in the page stage is only the hover/focus/click slot. */
 .stage-section.work { position: relative; margin: 0; }
-.work-stage { font-family: var(--type-family-bdo); color: #000; }
+.work-stage { font-family: var(--type-family-bdo); color: var(--text-strong); }
 .work-stage * { box-sizing: border-box; }
 .work-sp { z-index: 2; pointer-events: none; }
 
@@ -36,13 +36,13 @@ img.w-part { display: block; max-width: none; }
 .w-title, .w-desc, .w-title2 { position: absolute; margin: 0; white-space: normal; }
 .w-title { width: 328px; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: #fff; }
 .w-desc { width: 328px; font: var(--type-body-m-font); letter-spacing: var(--type-body-m-ls); color: rgba(255,255,255,.8); }
-.w-title2 { z-index: 7; width: 422px; text-align: center; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: #000; opacity: 0; }
+.w-title2 { z-index: 7; width: 422px; text-align: center; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: var(--text-strong); opacity: 0; }
 .w-title2 .w-t1, .w-title2 .w-t2 { display: block; }
-.w-title2 .w-t2 { font: var(--type-body-l-font); letter-spacing: var(--type-body-l-ls); margin-top: 2px; color: rgba(0,0,0,.55); }
+.w-title2 .w-t2 { font: var(--type-body-l-font); letter-spacing: var(--type-body-l-ls); margin-top: 2px; color: var(--text-muted); }
 .w-note {
   z-index: 8; text-align: center; font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); opacity: 0; visibility: hidden;
 }
-.w-note--a { color: rgba(0,0,0,.55); }
+.w-note--a { color: var(--text-muted); }
 
 @media (prefers-reduced-motion: reduce) { .w-part { will-change: auto; } }
 /* phone bezel: Figma rectangle stroke 2.4-2.7px outside (#212121 -> #616161 gradient), radius 12.7 / 14.3 */
@@ -52,7 +52,7 @@ img.w-part { display: block; max-width: none; }
 /* card B (Dynamic Engagement Content): brown folder label, SVG front, screenshot-style images (no bezel) */
 .work-comp--b .w-title { width: 304px; color: rgba(92, 61, 48, .75); }
 .work-comp--b .w-desc { width: 304px; color: rgba(92, 61, 48, .48); }
-.w-note--b { color: rgba(0,0,0,.5); }
+.w-note--b { color: var(--text-secondary); }
 img.w-flap-img { pointer-events: none; }
 
 /* GIF parts (card B, Card Link): static body PNG + the GIF as a stepped sprite overlaid at its Figma box */

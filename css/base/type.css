@@ -10,7 +10,7 @@
    Figma style       token             font                          letter-spacing   used for
    ----------------  ----------------  ----------------------------  ---------------  ------------------------------------------------
    Display/Hero      display-hero      Cal Sans 400 140 / normal     -2%              hero "Hi! I'm an", "AI Product Design"
-   Display/Code      display-code      IBM Plex Mono 500 140 / .9    -15.4px          hero </Engineer>, typing caret glyph
+   Display/Code      display-code      IBM Plex Mono 500 140 / .9    -7px             hero </Engineer>, typing caret glyph
    Heading/H1        heading-h1        BDO Grotesk 500 48 / .9       -2%              About sentence, skill chip labels
    Heading/Title     heading-title     Cal Sans 400 24 / 31          0                Work card title, Work spotlight title line 1, contact card title
    Heading/Tagline   heading-tagline   Cal Sans 400 22 / normal      0                avatar spotlight pill "#Human Taste, AI Speed"
@@ -48,7 +48,7 @@
   --type-display-hero-ls: -0.02em;
   /* Display/Code */
   --type-display-code-font: 500 140px/.9 var(--type-family-plex);
-  --type-display-code-ls: -15.4px;
+  --type-display-code-ls: -7px;   /* was -15.4px (-11%); opened up 2026-11-24 */
   /* Heading/H1 */
   --type-heading-h1-font: 500 48px/.9 var(--type-family-bdo);
   --type-heading-h1-ls: -0.02em;

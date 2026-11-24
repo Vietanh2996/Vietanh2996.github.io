@@ -29,7 +29,8 @@
     stampScale: 2.2, stampFall: 180, stampShake: 2,   // VIBECODE stamp: start scale, fall time (ms), headline thud (px, 0 = off)
     enterRise: 0, enterLineDur: 700, enterLineFade: 200, enterStagger: 100,   // all 3 lines start rising at t=0, each enterStagger ms after the previous one: offset (stage px), duration per line, fade-in (ms); independent of typing
     enterScale: 1, enterDur: 900, enterWait: 0,             // cluster holds this scale; it starts shrinking to 1 at 2*enterStagger + .85*enterLineDur + enterWait (right after the last rise), over enterDur (expo-out). rise 0 + scale 1 = no entrance
-    parallel: true,                   // user test 2026-11-15: all 3 lines type at the same moment (false = the old one-after-another timeline)
+    glyphStart: 600, glyphStep: 450, glyphMax: 3,   // after the intro: letters of "Engineer" swap to coloured code glyphs, one swap every glyphStep ms (steady beat), at most glyphMax at once; loops forever
+    parallel: true,                 // user test 2026-11-15: all 3 lines type at the same moment (false = the old one-after-another timeline)
     seed: 7                           // fixed seed = same "human" rhythm every run
   };
   var SPRING = { k: 650, c: 32 };     // same as spotlight.js open
@@ -359,7 +360,7 @@
     el.cursor.style.transform = 'translate3d(' + (SEL_X + SEL_DX * sel.d - 7).toFixed(2) + 'px,' + (SEL_Y + sel.jy - 5.3).toFixed(2) + 'px,0) scale(' + sc.toFixed(4) + ')';
   }
   /* framing: p 0 = small square at the top-left corner, 1 = full box (838 x 192) */
-  var FW = 802, FH = 156, EW = 801.96, EH = 156.64;
+  var FW = 894.4, FH = 156, EW = 894.36, EH = 156.64;   // widths follow the -7px letter-spacing (was 802 / 801.96)
   function paintFrame(p) {
     var x = FW * p, y = FH * p, q = Math.max(p, .0001);
     el.framing.style.opacity = clamp(p / .12, 0, 1).toFixed(3);
@@ -407,9 +408,45 @@
     carets.eng.mode = 'block'; carets.eng.el.classList.add('on'); place('eng', 'block');
     if (!carets.eng.blinking) { carets.eng.el.classList.add('blink'); carets.eng.blinking = true; }
   }
-  function finish() { raf = 0; setFinal(); }
+  /* ---------- glyph loop (ref: "/a de<el+pe¬s"): after the intro, letters of "Engineer" (line-3 chars 2..9) take turns becoming coloured code glyphs.
+     Monospace cells, so nothing reflows; text-only writes, one char per step. ---------- */
+  var GLYPHS = '/<>{}[]+=;*#&|~!$%_¬'.split('');
+  var GLYPH_COLORS = ['var(--accent-red-solid)', 'var(--accent-blue-solid)', 'var(--accent-pink-solid)', 'var(--accent-purple-solid)', 'var(--accent-green-solid)'];
+  var GLYPH_RECENT = 10;   // a glyph is not reused until this many others have been shown (pool is 20)
+  var glyph = { timer: 0, on: [], recent: [], r: Math.random };
+  function pick(list, avoid) {   // random item not in avoid (falls back to the whole list if everything is excluded)
+    var ok = list.filter(function (x) { return avoid.indexOf(x) < 0; });
+    if (!ok.length) ok = list;
+    return ok[Math.floor(glyph.r() * ok.length)];
+  }
+  function glyphSet(i, on) {
+    var c = lines.eng.chars[i];
+    if (on) {
+      var col = pick(GLYPH_COLORS, glyph.on.map(function (j) { return lines.eng.chars[j].style.color; }));   // colours on screen stay distinct, like the ref
+      var g = pick(GLYPHS, glyph.recent);                                                                   // no repeats on screen, nor among the last GLYPH_RECENT
+      glyph.recent.push(g); if (glyph.recent.length > GLYPH_RECENT) glyph.recent.shift();
+      c.textContent = g; c.style.color = col; glyph.on.push(i);
+    } else {
+      c.textContent = lines.eng.text[i]; c.style.color = ''; glyph.on.splice(glyph.on.indexOf(i), 1);
+    }
+  }
+  /* steady conveyor: once glyphMax are up, every step retires the OLDEST glyph and adds a new one in the same beat,
+     so each glyph lives exactly glyphMax steps (no random long holds) */
+  function glyphStep() {
+    if (!document.hidden) {
+      var gone = -1, free = [], i;
+      if (glyph.on.length >= TIME.glyphMax) { gone = glyph.on[0]; glyphSet(gone, false); }
+      for (i = 2; i <= 9; i++) if (i !== gone && glyph.on.indexOf(i) < 0 && glyph.on.indexOf(i - 1) < 0 && glyph.on.indexOf(i + 1) < 0) free.push(i);   // never side by side, never the cell just restored
+      if (free.length) glyphSet(free[Math.floor(glyph.r() * free.length)], true);
+    }
+    glyph.timer = setTimeout(glyphStep, TIME.glyphStep / TIME.speed);
+  }
+  function glyphStart() { glyphStop(); if (!reduced) glyph.timer = setTimeout(glyphStep, TIME.glyphStart / TIME.speed); }
+  function glyphStop() { clearTimeout(glyph.timer); glyph.timer = 0; while (glyph.on.length) glyphSet(glyph.on[0], false); }
+
+  function finish() { raf = 0; setFinal(); glyphStart(); }
   function reset() {
-    var k; cancelAnimationFrame(raf); raf = 0;
+    var k; cancelAnimationFrame(raf); raf = 0; glyphStop();
     root.classList.add('intro-on', 'intro-run');
     for (k in lines) { lines[k].n = 0; lines[k].chars.forEach(function (c, i) { c.style.opacity = 0; c.textContent = lines[k].text[i]; }); }
     clearInline(); for (k in carets) { caretOff(k); carets[k].el.style.transform = ''; carets[k].lastOp = 0; }
