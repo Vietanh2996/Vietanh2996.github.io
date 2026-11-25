@@ -149,11 +149,17 @@
     z._co.forEach(function (c, i) { if (f >= c.from) ci = i; });           // company under the pointer
     if (ci !== I.ci) { I.ci = ci; indCo(I, z._co[ci], I.swap); I.swap = true; }
     I.el.style.translate = x.toFixed(1) + 'px 0';
-    I.el.classList.toggle('is-flip', x + 35 + I.label.offsetWidth > W);
+    var flip = x + 35 + I.label.offsetWidth > W;
+    if (mobile()) {                          // phones: the canvas is cropped, so flip when the label would run past the screen edge
+      var s = canvas.getBoundingClientRect().width / W;
+      flip = (parseFloat(canvas.style.left) || 0) + (x + 35 + I.label.offsetWidth) * s > fit.clientWidth - 8;
+    }
+    I.el.classList.toggle('is-flip', flip);
   }
 
   function zoneAt(x) { for (var i = 0; i < main.length; i++) if (x < main[i].offsetLeft + main[i].offsetWidth) return main[i]; return main[main.length - 1]; }
   function move(e) {
+    if (mobile()) return;
     var r = canvas.getBoundingClientRect(), s = r.width / W;
     px = place((e.clientX - r.left) / s);
     kick();
@@ -201,11 +207,30 @@
     draw();
     return x;
   }
+  /* phones (fit-stage mobile mode): no hover, so the page scroll scrubs along the bar (the section is tall, the bar block sticky) and the
+     canvas pans so the active point stays centred; the quote follows the viewport centre. */
+  var mq = window.__mobileFit && window.__mobileFit.mq;
+  function mobile() { return !!(mq && mq.matches); }
+  function pan(x) {
+    var fw = fit.clientWidth, s = canvas.getBoundingClientRect().width / W, g = 16;
+    var left = Math.max(fw - W * s - g, Math.min(g, fw / 2 - x * s));
+    canvas.style.left = left.toFixed(1) + 'px';
+    if (quote) quote.parentElement.style.left = ((fw / 2 - left) / s).toFixed(1) + 'px';
+  }
+  function scrub() {
+    if (!mobile()) { if (canvas.style.left) { canvas.style.left = ''; if (quote) quote.parentElement.style.left = ''; draw(); } return; }
+    var r = section.getBoundingClientRect(), span = r.height - window.innerHeight;
+    var p = span > 0 ? Math.max(0, Math.min(1, -r.top / span)) : 0, x = 2 + p * (W - 4);
+    pan(x); px = place(x); kick();
+  }
+  window.addEventListener('scroll', scrub, { passive: true });
+  window.addEventListener('resize', scrub);
   section.addEventListener('pointermove', move);
   section.addEventListener('pointerenter', move);
   section.addEventListener('pointerleave', function () { px = -1; kick(); });   // keep the last zone + indicators, only the wave settles
 
   place(main[0].offsetWidth / 2);            // always one zone active: start on zone 1
+  scrub();
   window.addEventListener('resize', draw);
   if (window.ResizeObserver) new ResizeObserver(draw).observe(fit);
   new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
