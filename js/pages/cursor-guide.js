@@ -118,7 +118,7 @@
     var used = false;
     toggle.addEventListener('click', function () { used = true; });
     schedule({
-      cursor: '.cursor--yellow', target: toggle, text: 'Try here to change mode',
+      cursor: '.cursor--yellow', target: toggle, get text() { return window.I18N ? I18N.t('cursor.mode', 'Try here to change mode') : 'Try here to change mode'; },
       first: 3000, every: 60000, until: function () { return used; }
     });
   }

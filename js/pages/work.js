@@ -125,7 +125,8 @@
     var desc = el('p', 'w-desc', front); desc.style.left = fr.dx + 'px'; desc.style.top = fr.dy + 'px'; desc.textContent = fr.desc;
     var note = el('p', 'w-part w-note w-note--' + v, comp);
     note.style.width = sp.note.w + 'px';
-    note.textContent = sp.note.text;
+    var setNote = function () { note.textContent = window.I18N ? I18N.t('work.' + v + '.note', sp.note.text) : sp.note.text; };
+    setNote(); document.addEventListener('langchange', setNote);
 
     var units = sp.parts.map(function (pt, k) {
       var node = nodes[k];
@@ -148,7 +149,9 @@
       // folder fades + shrinks away, the centred black title takes over
       var title2 = el('p', 'w-part w-title2', comp);
       title2.innerHTML = '<span class="w-t1"></span><span class="w-t2"></span>';
-      title2.firstChild.textContent = sp.title.l1; title2.lastChild.textContent = sp.title.l2;
+      title2.firstChild.textContent = sp.title.l1;
+      var setT2 = function () { title2.lastChild.textContent = window.I18N ? I18N.t('work.' + v + '.l2', sp.title.l2) : sp.title.l2; };
+      setT2(); document.addEventListener('langchange', setT2);
       var away = function (node, y0) {
         return { el: node, dIn: D.mid[0], dOut: D.mid[1], amp: AMP.mid, tilt: 0, kf: KF.mid, draw: function (u) {
           var q = clamp(u.p / .55, 0, 1);

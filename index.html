@@ -1,25 +1,27 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VietAnh - an AI Product Design &lt;/Engineer&gt;</title>
 <link rel="icon" type="image/png" sizes="32x32" href="assets/shared/favicon.png">
 <script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("intro-on")</script>
-<script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t)})()</script>
+<script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="dark")t="light";document.documentElement.setAttribute("data-theme",t)})()</script>
+<script>(function(){var l;try{l=localStorage.getItem("lang")}catch(e){}document.documentElement.lang=l==="vi"?"vi":"en"})()</script>
 <link rel="preload" as="image" href="assets/home/avatar/avatar-cutout.png">
 <link rel="preload" as="font" type="font/otf" href="assets/shared/fonts/BDOGrotesk-Medium.otf" crossorigin>
 <link rel="preload" as="font" type="font/otf" href="assets/shared/fonts/BDOGrotesk-Regular.otf" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cal+Sans&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base/type.css">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cal+Sans&family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base/type.css?v=vfk1">
 <link rel="stylesheet" href="css/pages/spotlight.css">
 <link rel="stylesheet" href="css/pages/thumb.css">
-<link rel="stylesheet" href="css/pages/about.css">
+<link rel="stylesheet" href="css/pages/about.css?v=2">
 <link rel="stylesheet" href="css/pages/work.css">
 <link rel="stylesheet" href="css/pages/marquee.css">
-<link rel="stylesheet" href="css/pages/experience.css">
+<link rel="stylesheet" href="css/pages/experience.css?v=2">
+<link rel="stylesheet" href="css/pages/playground.css">
 <link rel="stylesheet" href="css/base/theme.css">
 <link rel="stylesheet" href="css/base/mobile.css">
 </head>
@@ -61,10 +63,14 @@
   </div>
 
   <div class="sidebar-right">
+    <div class="pref-combo">
     <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
       <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></svg>
       <svg class="tt-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
     </button>
+    <span class="pc-div" aria-hidden="true"></span>
+    <button class="lang-toggle" type="button" aria-label="Chuyển sang tiếng Việt"><span class="lt-code lt-en">EN</span><span class="lt-code lt-vi">VI</span></button>
+    </div>
     <div class="sr-avatar"><img class="sr-av" src="assets/shared/avatars/avatar-1.png" alt=""><img class="sr-av" src="assets/shared/avatars/avatar-2.png" alt=""><img class="sr-av" src="assets/shared/avatars/avatar-you.png" alt=""><img class="sr-chev" src="assets/shared/icons/chevron.svg" alt=""></div>
     <button class="sr-share" type="button">Share</button>
   </div>
@@ -119,19 +125,19 @@
     <div class="a-canvas about-stage" id="about-stage">
       <div class="about-block">
         <div class="about-hello">
-          <span class="ab-t">Watch out,</span>
+          <span class="ab-t" data-i18n="about.hi1">Watch out,</span>
           <span class="who-pill"><button class="who-avatar" id="who-avatar" type="button" aria-label="Show contact info" aria-expanded="false"></button><span class="ab-t">Việt Anh</span></span>
-          <span class="ab-t">is coming!!</span>
+          <span class="ab-t" data-i18n="about.hi2">is coming to</span>
         </div>
         <p class="about-skill" id="about-skill">
           <span class="skill-row">
-            <span class="ab-t ab-t--skill">I design</span>
+            <span class="ab-t ab-t--skill" data-i18n="about.design">design</span>
             <button class="skill-chip" type="button" data-slot="0"></button>
-            <span class="ab-t ab-t--skill">I build</span>
+            <span class="ab-t ab-t--skill" data-i18n="about.build">build</span>
             <button class="skill-chip" type="button" data-slot="1"></button>
           </span>
           <span class="skill-row">
-            <span class="ab-t ab-t--skill">and ship with</span>
+            <span class="ab-t ab-t--skill" data-i18n="about.ship">and ship with</span>
             <button class="skill-chip" type="button" data-slot="2"></button>
           </span>
         </p>
@@ -154,7 +160,7 @@
 
         <div class="sp-layer layer--card">
           <div class="card">
-            <h2>Feel free to connect!</h2>
+            <h2 data-i18n="card.title">Feel free to connect!</h2>
             <div class="card-row">
               <div class="col col--left">
                 <a class="item" href="tel:+84333442129"><img src="assets/home/icons/phone.svg" alt=""><span>(+84) 333.44.2129</span></a>
@@ -169,7 +175,7 @@
         </div>
 
         <div class="sp-layer layer--note">
-          <p class="note">Currently, I am a Lead Design Engineer with 9+ years in design, 5+ of them in Product Design. I build AI-native design systems and team workflows that turn design into production-ready code.</p>
+          <p class="note" data-i18n="about.note">Currently, I am a Lead Design Engineer with 9+ years in design, 5+ of them in Product Design. I build AI-native design systems and team workflows that turn design into production-ready code.</p>
         </div>
 
         <div class="avatar-group" id="avatar-group">
@@ -199,13 +205,13 @@
         <figure class="exp-ph" style="--x: 1780; --y: 485; --w: 96; --h: 123; --r: -12.7deg; --rad: 24px"><img src="assets/home/experience/p08.jpg" alt="" loading="lazy"></figure>
       </div>
       <div class="exp-bar">
-        <div class="exp-zone" data-z="1" data-quote="I made things look good: photos, video, banners.|But I never asked if they worked.~So I went looking for how things work." data-title="Multimedia &amp; Graphic Designer" data-dur="x2 years" data-co="adayroi.com|Adayroi.com;direction-creative-agency|Direction Creative Agency"></div>
-        <div class="exp-zone" data-z="2" data-quote="Not the best drawer, but I loved layout and logic.|The web gave that a home.~MISA taught me what lives beneath the screen." data-title="UI Designer" data-dur="x3 years" data-co="direction-creative-agency|Direction Creative Agency|1|Web Designer;misa-jsc|MISA JSC|2"></div>
-        <div class="exp-zone" data-z="3" data-quote="One Mount built my product mindset: why before how.~At VinSmart, AI gave my foundation wings." data-title="Product Designer" data-dur="x4 years" data-co="one-mount-group|One Mount Group|3|Sr. Product Designer;vinsmart-future|VinSmart Future|2.4|Design Engineer Lead|1+ years"></div>
-        <div class="exp-zone" data-z="4" data-quote="AI is only as good as the foundation under it.|Now I teach that foundation." data-down data-title="Course Instructor" data-dur="&lt;1 year" data-co="ux-foundation|UX Foundation"></div>
+        <div class="exp-zone" data-z="1" data-quote="Back then I knew a little of everything:|from video and photography to design and animation.|But I wasn&#x27;t really good at any of it.~So I went looking for a more professional place|to become a real graphic designer." data-quote-vi="Hồi đó cái gì tôi cũng biết một chút:|từ quay dựng, chụp ảnh, đến thiết kế, animation.|Nhưng chẳng thực sự giỏi cái nào.~Tôi tìm tới một môi trường chuyên nghiệp hơn,|quyết theo nghề graphic designer cho ra trò." data-title="Multimedia &amp; Graphic Designer" data-dur="x2 years" data-co="adayroi.com|Adayroi.com;direction-creative-agency|Direction Creative Agency"></div>
+        <div class="exp-zone" data-z="2" data-quote="But I couldn&#x27;t draw well enough|to stand out in graphics,|but I was good at layout and fairly quick with tech.|Web design let me make the most of every strength.~MISA was my first product team,|and my first time building a design system.|But UI &amp; UX alone couldn&#x27;t answer why." data-quote-vi="Khả năng vẽ tay không đủ|để tôi bứt phá trong nghề graphic,|nhưng tôi giỏi bố cục và khá nhanh nhạy về công nghệ.|Thiết kế web là chỗ tôi tận dụng được hết thế mạnh.~MISA là môi trường product đầu tiên của tôi,|cũng là lần đầu tôi dựng một Design System.|Nhưng UI &amp; UX vẫn chưa trả lời được câu hỏi tại sao." data-title="UI Designer" data-dur="x2 years" data-co="direction-creative-agency|Direction Creative Agency|1|Web Designer|1 year;misa-jsc|MISA JSC|1|UI Designer|1 year"></div>
+        <div class="exp-zone" data-z="3" data-quote="One Mount taught me the product mindset:|always ask why before you start building,|judge whether it&#x27;s worth doing at all,|and balance business goals,|resources and user needs.~At VSF I learned to steer AI and build AI products.|On top of my product and design foundation,|AI let it all compound and speed up,|opening up a lot of room to grow." data-quote-vi="One Mount dạy tôi product mindset:|luôn hỏi tại sao trước khi bắt tay vào làm,|đánh giá được việc này có đáng làm không,|và biết cân bằng giữa mục tiêu kinh doanh,|nguồn lực và nhu cầu người dùng.~Khi sang VSF, tôi học cách kiểm soát AI|và làm sản phẩm AI.|Cộng với nền tư duy product và design có sẵn,|AI giúp tôi cộng dồn và bứt tốc,|mở ra rất nhiều năng lực phát triển." data-title="Product Designer" data-dur="x4 years" data-co="one-mount-group|One Mount Group|3|Sr. Product Designer;vinsmart-future|VinSmart Future|2.4|Design Engineer Lead|1+ years"></div>
+        <div class="exp-zone" data-z="4" data-quote="But AI is only as strong|as the foundation of whoever uses it.|Now I guide newcomers to build it, step by step." data-quote-vi="Nhưng AI chỉ mạnh|khi người dùng có nền tảng đủ vững.|Giờ tôi dẫn các bạn mới xây cái nền đó, từng bước một." data-down data-title="Course Instructor" data-dur="&lt;1 year" data-co="ux-foundation|UX Foundation"></div>
       </div>
       <div class="exp-years" aria-hidden="true">
-        <span class="exp-yr" data-z="1" style="left: 7px">2017</span><span class="exp-yr" data-z="2" style="left: 495px">2019</span><span class="exp-yr" data-z="3" style="left: 1223px">2022</span><span class="exp-yr" data-z="4" style="left: 1959px">2026</span><span class="exp-yr exp-yr--end" data-z="4" style="left: 2207px">now</span>
+        <span class="exp-yr" data-z="1" style="left: 7px">2017</span><span class="exp-yr" data-z="2" style="left: 495px">2020</span><span class="exp-yr" data-z="3" style="left: 1223px">2022</span><span class="exp-yr" data-z="4" style="left: 1959px">2026</span><span class="exp-yr exp-yr--end" data-z="4" style="left: 2207px" data-i18n="exp.now">now</span>
       </div>
       <div class="exp-ind" aria-hidden="true">
         <span class="exp-line"></span><span class="exp-ring"></span>
@@ -233,6 +239,82 @@
   </div>
 </section>
 
+<section class="stage-section playground" data-section-name="Playground" aria-label="Throwbacks">
+  <div class="pg-fit" data-stage-w="1920" data-mobile-w="1480">
+    <div class="pg-canvas">
+      <header class="pg-head"><div class="pg-hl"><h2 class="pg-title">Throwbacks</h2><p class="pg-sub">From the archive: older client work, kept for the memories.</p></div></header>
+      <div class="pg-grid">
+        <article class="pg-card pg-card--kto" tabindex="0" data-scenes="tall:kto/full.jpg;kto/h1.jpg|kto/h2.jpg|kto/h3.jpg|kto/h4.jpg;kto/p1.jpg|kto/p2.jpg|kto/p3.jpg" aria-label="Korea Travel Festa 2025, 2025">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/kto/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/kto/win.jpg" alt="Korea Travel Festa 2025 homepage" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">Korea Travel Festa 2025</h3><p class="pg-kind">Since 2025 <span class="pg-aside">(except this one, quite new)</span></p></div>
+        </article>
+        <article class="pg-card pg-card--alchemist" tabindex="0" data-scenes="tall:alchemist/full.jpg;tall:alchemist/bs.jpg;alchemist/n1.jpg|alchemist/n2.jpg|alchemist/n3.jpg|alchemist/n4.jpg;alchemist/b1.jpg|alchemist/b2.jpg|alchemist/b3.jpg|alchemist/b4.jpg" aria-label="The Alchemist Group &amp; The Blacksheep Cocktail Theatre, 2021">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/alchemist/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/alchemist/win.jpg" alt="The Alchemist Group homepage" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">The Alchemist Group &amp; The Blacksheep Cocktail Theatre</h3><p class="pg-kind">Since 2021</p></div>
+        </article>
+        <article class="pg-card pg-card--vuuv" tabindex="0" data-scenes="tall:vuuv/full.jpg;vuuv/d1.jpg|vuuv/d2.jpg|vuuv/d3.jpg|vuuv/d4.jpg|vuuv/d5.jpg|vuuv/d6.jpg;vuuv/h2.jpg|vuuv/h3.jpg|vuuv/h4.jpg|vuuv/h5.jpg|vuuv/p1.jpg|vuuv/p2.jpg|vuuv/p3.jpg" aria-label="VUUV Architecture &amp; Interior Design, 2020">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/vuuv/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/vuuv/h1.jpg" alt="VUUV homepage: Jasmine house" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">VUUV Architecture &amp; Interior Design</h3><p class="pg-kind">Since 2020</p></div>
+        </article>
+        <article class="pg-card pg-card--motor" tabindex="0" data-scenes="motor/s1.jpg|motor/s2.jpg;motor/shot.jpg" aria-label="Blacksheep Motor, 2020">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/motor/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/motor/win.jpg" alt="Blacksheep Motor homepage" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">Blacksheep Motor</h3><p class="pg-kind">Since 2020</p></div>
+        </article>
+        <article class="pg-card pg-card--senlicious" tabindex="0" data-scenes="tall:senlicious/full.jpg;tall:senlicious/menu.jpg;senlicious/h1.jpg|senlicious/h2.jpg|senlicious/h4.jpg|senlicious/h6.jpg;senlicious/m1.jpg|senlicious/m2.jpg" aria-label="Senlicious, 2020">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/senlicious/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/senlicious/win.jpg" alt="Senlicious menu page" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">Senlicious</h3><p class="pg-kind">Since 2020</p></div>
+        </article>
+        <article class="pg-card pg-card--clickon" tabindex="0" data-scenes="tall:clickon/full.jpg;tall:clickon/design.jpg;clickon/t1.jpg|clickon/t3.jpg;clickon/g1.jpg|clickon/g2.jpg|clickon/g3.jpg" aria-label="ClickOn Digital, 2020">
+          <div class="pg-media">
+            <img class="pg-bg" src="assets/home/playground/clickon/bg.jpg" alt="" loading="lazy">
+            <div class="pg-tex" aria-hidden="true"></div>
+            <div class="pg-win">
+              <img class="pg-dots" src="assets/home/playground/dots.svg" alt="" width="29" height="3">
+              <div class="pg-screen"><img class="pg-scene" src="assets/home/playground/clickon/win.jpg" alt="ClickOn Digital homepage" loading="lazy"></div>
+            </div>
+          </div>
+          <div class="pg-text"><h3 class="pg-name">ClickOn Digital</h3><p class="pg-kind">Since 2020</p></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
 <main class="page">
   <section class="outro" data-section-name="Outro">
   </section>
@@ -241,6 +323,7 @@
   <div class="cursor cursor--pink"><img class="cursor-arrow" src="assets/home/thumb/cursor-pink.svg" alt=""><span class="cursor-chip">Việt Anh</span></div>
   <div class="cursor cursor--yellow"><img class="cursor-arrow" src="assets/home/thumb/cursor-claude.svg" alt=""><span class="cursor-chip">Claude-chan</span></div>
 </div>
+<script src="js/pages/lang.js?v=3"></script>
 <script src="js/pages/fit-stage.js"></script>
 <script src="js/pages/thumb.js"></script>
 <script src="js/pages/img-enter.js"></script>
@@ -250,6 +333,7 @@
 <script src="js/pages/work.js"></script>
 <script src="js/pages/marquee.js"></script>
 <script src="js/pages/experience.js"></script>
+<script src="js/pages/playground.js"></script>
 <script src="js/pages/scroll-fx.js"></script>
 <script src="js/pages/section-indicator.js"></script>
 <script src="js/pages/theme.js"></script>

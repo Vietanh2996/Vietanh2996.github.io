@@ -27,6 +27,7 @@
    Figma/Cursor      figma-cursor      Cal Sans 400 24 / 32          0                cursor name chips ("Việt Anh", "Claude-chan", "You")
    Display/Marquee   display-marquee   BDO Grotesk 500 160 / .9      -2%              marquee "Think first, design after" text
    Display/Asterisk  display-asterisk  Cal Sans 400 160 / .9         -2%              marquee asterisk
+   Heading/Title-XXL heading-title-xxl Cal Sans 400 64 / 72          0                section titles (Throwbacks)
    Heading/Title-XL  heading-title-xl  Cal Sans 400 36 / 44          0                Experience role title, big section titles
    Heading/Title-L   heading-title-l   Cal Sans 400 28 / 36          0                step between Title 24 and Title-XL 36
    Heading/Title-S   heading-title-s   Cal Sans 400 20 / 26          0                small titles, sub cards
@@ -42,6 +43,8 @@
 
 @font-face { font-family: "BDO Grotesk"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Regular.otf") format("opentype"); }
 @font-face { font-family: "BDO Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Medium.otf") format("opentype"); }
+/* Caveat 700 with full Vietnamese (Google's Caveat lacks hỏi / ơ ư): VFK - Caveat Bold 1.004, OFL (see VFK-Caveat-OFL.txt). Kept the family name "Caveat" so every existing rule picks it up. */
+@font-face { font-family: "Caveat"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Caveat-Bold.woff2") format("woff2"); }
 
 :root {
   /* families */
@@ -105,6 +108,9 @@
   /* Display/Asterisk */
   --type-display-asterisk-font: 400 160px/.9 var(--type-family-cal);
   --type-display-asterisk-ls: -0.02em;
+  /* Heading/Title-XXL */
+  --type-heading-title-xxl-font: 400 64px/72px var(--type-family-cal);
+  --type-heading-title-xxl-ls: 0;
   /* Heading/Title-XL */
   --type-heading-title-xl-font: 400 36px/44px var(--type-family-cal);
   --type-heading-title-xl-ls: 0;

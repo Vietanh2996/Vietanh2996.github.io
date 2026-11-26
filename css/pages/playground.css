@@ -1,0 +1,72 @@
+/* Visual Playground: older web projects as a grid of cards (Figma VA Portfolio, Container 4008:104372; card = Item 2384:51875).
+   Card: 460 square photo of the project's world + paper texture, a small glass browser window in the middle showing the site.
+   Hover / focus: shared spotlight engine (js/pages/spotlight.js) - the page blurs (body.is-spotlight .dim-overlay) and the project's
+   best scenes fly out of the card as small browser windows (js/pages/playground.js).
+   Stage 1920 wide, scales to width via fit-stage (cap .9). */
+.stage-section.playground { position: relative; margin: 0; padding: calc(80px * var(--stage-scale, 1)) 0; }   /* no z-index: the canvas must be able to rise above .dim-overlay (z 1) */
+.pg-fit { position: relative; width: 100%; height: calc(var(--pg-h, 700px) * var(--stage-scale, 1)); }
+.pg-canvas {
+  position: absolute; top: 0; left: calc(50% - 960px * var(--stage-scale, 1));
+  width: 1920px; padding: 0 250px; transform-origin: 0 0; scale: var(--stage-scale, 1);
+  font-family: var(--type-family-bdo); color: var(--text-strong);
+}
+.pg-canvas * { box-sizing: border-box; }
+.playground.is-lit .pg-canvas { z-index: 2; }   /* spotlight open: above the blur, the rest of the canvas blurs itself */
+.pg-head, .pg-card { transition: opacity .2s ease-out, filter .2s ease-out; }
+.playground.is-lit :is(.pg-head, .pg-card:not(.is-open)) { opacity: .35; filter: blur(6px); }
+
+.pg-head { display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 64px; }
+.pg-title { margin: 0; font: var(--type-heading-title-xxl-font); letter-spacing: var(--type-heading-title-xxl-ls); }
+.pg-note { margin: 6px 0 0; font: var(--type-body-l-font); color: var(--text-muted); }
+.pg-sub { margin: 4px 0 0; font: var(--type-note-handwritten-font); color: var(--text-muted); white-space: nowrap; }
+
+.pg-grid { display: flex; flex-wrap: wrap; gap: 52px 20px; width: 1420px; }
+.pg-card { position: relative; display: flex; flex-direction: column; gap: 24px; width: 460px; outline: none; cursor: pointer; }
+
+.pg-media { position: relative; width: 460px; height: 460px; overflow: hidden; border-radius: 15.77px; background: #000; isolation: isolate; }
+.pg-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; transition: scale .9s cubic-bezier(.2, .8, .2, 1); }
+.pg-tex { position: absolute; inset: 0; mix-blend-mode: hard-light; pointer-events: none;
+  background: url("../../assets/home/playground/tex-a.png") center bottom / 100% 100% no-repeat; }
+.pg-tex::after { content: ""; position: absolute; inset: 0; opacity: .1; background: url("../../assets/home/playground/tex-b.jpg") center / cover no-repeat; }
+.pg-card.is-open .pg-bg { scale: 1.06; }
+.pg-card--alchemist .pg-media::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(18, 16, 14, 0), #12100e); }
+.pg-card--alchemist :is(.pg-tex, .pg-win) { z-index: 2; }   /* Figma: dark fade over the photo */
+.pg-card--clickon .pg-bg { opacity: 1; }
+
+/* glass browser window */
+.pg-win {
+  position: absolute; left: 50%; top: 50%; width: 354px; height: 228px; translate: -50% -50%;
+  display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 6.76px;
+  background: rgba(255, 255, 255, .1); border: .42px solid rgba(255, 255, 255, .7);
+  -webkit-backdrop-filter: blur(1.69px); backdrop-filter: blur(1.69px);
+}
+.pg-dots { flex: none; display: block; width: 28.73px; height: 3.38px; }
+.pg-screen { position: relative; flex: 1; overflow: hidden; border-radius: 5.95px; background: #efefef; }
+.pg-scene { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.pg-card:focus-visible .pg-media { outline: 3px solid var(--blue, #0d5eff); outline-offset: 4px; }
+
+.pg-text { display: flex; flex-direction: column; gap: 8px; padding: 0 16px; }
+.pg-name { margin: 0; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: var(--text-strong); }
+.pg-kind { margin: 0; font: 700 32px/28px var(--type-family-caveat); color: var(--text-secondary, rgba(0, 0, 0, .5)); }
+.pg-aside { margin-left: 6px; white-space: nowrap; font-size: 24px; font-weight: 400; display: inline-block; rotate: -3deg; }   /* playful note: KTO is the one recent project in the archive */
+
+/* spotlight satellites: the best scenes, each a small light browser window (positions set by js/pages/playground.js) */
+.pg-comp { z-index: 3; pointer-events: none; }
+.pg-sat {
+  position: absolute; margin: 0; width: 460px; padding: 8px; border-radius: 12px; visibility: hidden;
+  background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, .28), 0 0 0 1px rgba(0, 0, 0, .06);
+  transform-origin: 50% 50%; will-change: transform, opacity;
+}
+.pg-sat .pg-dots { margin: 0 0 7px 2px; width: 34px; height: 4px; }
+.pg-sat--tall { width: 300px; }   /* full page, scrolling top to bottom */
+.pg-sat--tall .pg-shot { aspect-ratio: auto; height: 540px; }
+.pg-shot { position: relative; aspect-ratio: 1.66; overflow: hidden; border-radius: 6px; background: #efefef; }
+.pg-shot img { position: absolute; left: 0; top: 0; display: block; width: 100%; }
+.pg-shot--cycle img { height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .7s ease; }   /* cross-fades between the project's screens */
+.pg-shot--cycle img.is-on { opacity: 1; }
+.pg-shot--scroll img { height: auto; will-change: transform; }   /* full page, slid up by js/pages/playground.js */
+@media (prefers-reduced-motion: reduce) {
+  .pg-sat { transition: opacity .2s linear; }
+  .pg-comp:not(.is-open) .pg-sat { opacity: 0; }
+  .pg-comp.is-open .pg-sat { opacity: 1; visibility: visible; }
+}

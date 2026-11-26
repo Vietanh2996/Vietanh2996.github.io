@@ -32,21 +32,33 @@ html[data-theme="dark"] :is(.pl-logo img, .pl-chev, .sr-chev, .pl-page img, .zoo
   filter: invert(1);
 }
 
-/* ---------- theme toggle: 48px rounded-square button just outside the top-right bar (lives inside .sidebar-right so it scales and layers with it) ---------- */
-.theme-toggle {
+/* ---------- theme + language combo: one 48px rounded bar just outside the top-right bar (lives inside .sidebar-right so it scales and
+   layers with it): [sun/moon] | [EN/VI], a 1px divider in the middle. Each half is a 40px button with its own hover. ---------- */
+.pref-combo {
   position: absolute; right: calc(100% + 8px); top: 50%; translate: 0 -50%;
-  display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 16px;   /* same corner as the bar next to it */
-  background: var(--bg-white); color: var(--text-default); cursor: pointer; pointer-events: auto;
+  display: flex; align-items: center; gap: 4px; height: 48px; padding: 4px; box-sizing: border-box;
+  border-radius: 16px; background: var(--bg-white); pointer-events: auto;
+}
+.pc-div { width: 1px; height: 24px; background: var(--border-default); flex: none; }
+.theme-toggle, .lang-toggle {
+  display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 12px;
+  background: transparent; color: var(--text-default); cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.theme-toggle { transition: background-color .15s ease; }
-.theme-toggle:hover, .theme-toggle.is-guided { background: var(--bg-subtle, #f0f0f0); }   /* .is-guided = a guide cursor is "hovering" it (js/pages/cursor-guide.js) */
-.theme-toggle:focus-visible { outline: 2px solid var(--accent-blue-solid); outline-offset: 2px; }
+.theme-toggle, .lang-toggle { transition: background-color .15s ease; }
+.theme-toggle:hover, .theme-toggle.is-guided, .lang-toggle:hover, .lang-toggle.is-guided { background: var(--bg-subtle, #f0f0f0); }   /* .is-guided = a guide cursor is "hovering" it (js/pages/cursor-guide.js) */
+.theme-toggle:focus-visible, .lang-toggle:focus-visible { outline: 2px solid var(--accent-blue-solid); outline-offset: 2px; }
 .theme-toggle svg { grid-area: 1 / 1; width: 22px; height: 22px; transition: opacity .2s ease, rotate .35s cubic-bezier(.2, .8, .2, 1), scale .35s cubic-bezier(.2, .8, .2, 1); }
 .theme-toggle .tt-moon { opacity: 0; rotate: -90deg; scale: .5; }
 html[data-theme="dark"] .theme-toggle .tt-sun { opacity: 0; rotate: 90deg; scale: .5; }
 html[data-theme="dark"] .theme-toggle .tt-moon { opacity: 1; rotate: 0deg; scale: 1; }
-@media (prefers-reduced-motion: reduce) { .theme-toggle svg { transition: none; } }
+/* language: both codes stack in one cell, the current one shows; switching slides the old one up and the new one in from below */
+.lang-toggle { overflow: hidden; font: 600 15px/1 "Inter", sans-serif; letter-spacing: .02em; }
+.lt-code { grid-area: 1 / 1; transition: opacity .2s ease, translate .35s cubic-bezier(.2, .8, .2, 1); }
+.lt-vi { opacity: 0; translate: 0 14px; }
+html[lang="vi"] .lt-en { opacity: 0; translate: 0 -14px; }
+html[lang="vi"] .lt-vi { opacity: 1; translate: 0 0; }
+@media (prefers-reduced-motion: reduce) { .theme-toggle svg, .lt-code { transition: none; } }
 
 /* ---------- cursor chat (js/pages/cursor-guide.js): the name chip turns into a typed hint with a blinking caret ---------- */
 .cursor-chip.is-chat .cg-msg::after {
@@ -56,3 +68,4 @@ html[data-theme="dark"] .theme-toggle .tt-moon { opacity: 1; rotate: 0deg; scale
 @keyframes cg-caret { 50% { opacity: 0; } }
 /* not enough room on the right (e.g. next to the top-right bar): the chat opens to the left of the arrow, small corner at the tip */
 .cursor-chip.is-flip { left: auto; right: 50px; border-radius: 33.5px 3.5px 33.5px 33.5px; }
+

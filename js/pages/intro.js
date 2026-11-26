@@ -301,7 +301,7 @@
           break;
         case 'toast':
           add(t, function (tm) {
-            el.toast.textContent = s.text;
+            el.toast.textContent = window.I18N ? I18N.t('intro.toast', s.text) : s.text;
             spring(function (p) { el.toast.style.opacity = clamp(p / .35, 0, 1).toFixed(3); el.toast.style.transform = 'translate3d(0,' + (16 * (1 - p)).toFixed(2) + 'px,0) scale(' + (.9 + .1 * p).toFixed(4) + ')'; }, el.toast);
           });
           add(t + s.hold / sp, function (tm) {

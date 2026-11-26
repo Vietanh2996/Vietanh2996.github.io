@@ -22,7 +22,7 @@
   var years = [].slice.call(canvas.querySelectorAll('.exp-yr')).map(function (el) { return { el: el, z: el.dataset.z, x: Math.round((parseFloat(el.style.left) - 7) / PITCH) * PITCH }; });
   var GAP = 24;                             // stage px (3 ticks) between the two indicators in the overlap
   var main = zones.filter(function (z) { return !z.hasAttribute('data-down'); }), side = zones.filter(function (z) { return z.hasAttribute('data-down'); })[0];
-  var cur = null, dual = false, ax = 0, px = -1, raf = 0, last = 0;
+  var lastX = null, cur = null, dual = false, ax = 0, px = -1, raf = 0, last = 0;
   var LOGO_DIR = 'assets/shared/company/';
   zones.forEach(function (z) {                // data-co="file|Name|years|title|dur;...": companies in order, sized by years (default 1); title / dur override the role and duration
     var co = z.dataset.co.split(';').map(function (p) { p = p.split('|'); return { file: p[0], name: p[1], w: +(p[2] || 1), title: p[3] || '', dur: p[4] || '' }; });
@@ -112,6 +112,7 @@
   }
 
   /* indicator: line + ring + label (title, duration, pill with one logo + company). Two of them: A for zones 1-3, B (a clone) for zone 4 */
+  function dur(s) { return window.I18N ? I18N.dur(s) : s; }
   function Ind(el) {
     return { el: el, title: el.querySelector('.exp-title'), dur: el.querySelector('.exp-dur'), logos: el.querySelector('.exp-logos'),
       co: el.querySelector('.exp-co'), label: el.querySelector('.exp-label'), zone: null, ci: -1, swap: false };
@@ -123,7 +124,7 @@
     I.zone = z;
     if (!z) { I.el.classList.remove('is-on'); return; }
     I.el.dataset.z = z.dataset.z;
-    I.title.textContent = z.dataset.title; I.dur.textContent = z.dataset.dur;
+    I.title.textContent = z.dataset.title; I.dur.textContent = dur(z.dataset.dur);
     I.el.classList.toggle('is-down', z.hasAttribute('data-down'));
     I.ci = -1; I.swap = false;                 // first company of a zone appears with the label (no slide)
     I.el.classList.add('is-on');
@@ -131,7 +132,7 @@
   }
   function indCo(I, c, animate) {           // swap company: old name slides up/out, new slides in, pill width eases to fit; its logo pops in
     I.title.textContent = c.title || I.zone.dataset.title;
-    I.dur.textContent = c.dur || I.zone.dataset.dur;
+    I.dur.textContent = dur(c.dur || I.zone.dataset.dur);
     var img = new Image(); img.src = LOGO_DIR + c.file + '.png'; img.alt = '';
     var oldImgs = [].slice.call(I.logos.children); I.logos.appendChild(img);
     if (animate) { img.classList.add('is-in'); oldImgs.forEach(function (o) { o.classList.add('is-out'); setTimeout(function () { o.remove(); }, 200); }); }
@@ -170,9 +171,18 @@
      company (zone 2: Direction / MISA, zone 3: One Mount / VSF): each group stays inside its company's stretch.
      While both indicators show, the side zone's lines are used. New lines come in word by word. */
   var quote = canvas.querySelector('.exp-quote-t'), quoteKey = null;
-  zones.forEach(function (z) {
-    var g = (z.dataset.quote || '').split('~');
-    z._q = g.length === z._co.length ? g.map(function (t) { return t.split('|'); }) : [g.join('|').split('|')];
+  function parseQuotes() {                   // data-quote-vi holds the Vietnamese lines (same "|" / "~" layout), used when <html lang="vi">
+    zones.forEach(function (z) {
+      var src = (window.I18N && I18N.lang === 'vi' && z.dataset.quoteVi) || z.dataset.quote || '';
+      var g = src.split('~');
+      z._q = g.length === z._co.length ? g.map(function (t) { return t.split('|'); }) : [g.join('|').split('|')];
+    });
+  }
+  parseQuotes();
+  document.addEventListener('langchange', function () {
+    parseQuotes(); quoteKey = null;
+    [A, B].forEach(function (I) { if (I.zone) I.dur.textContent = dur(I.ci >= 0 && I.zone._co[I.ci] && I.zone._co[I.ci].dur || I.zone.dataset.dur); });
+    if (cur && lastX != null) place(lastX);
   });
   function setQuote(z, x) {
     if (!quote) return;
@@ -197,7 +207,7 @@
     });
   }
   function place(x) {                         // stage x, clamped to the bar: left of it = zone 1, right of it = zone 3
-    x = Math.max(2, Math.min(W - 2, x));
+    x = Math.max(2, Math.min(W - 2, x)); lastX = x;
     cur = zoneAt(x);
     dual = !!side && x >= side.offsetLeft;
     var xa = dual ? Math.min(x, W - 2 - GAP) : x;
@@ -240,7 +250,42 @@
   depth = depth.map(function (w) { return PAR.far + (PAR.near - PAR.far) * (w - dMin) / Math.max(1, dMax - dMin); });
   var parCur = null, parTo = 0, parRaf = 0, parLast = 0;
   function parTarget() { var r = fit.getBoundingClientRect(); return (r.top + r.height / 2 - window.innerHeight / 2) / (canvas.getBoundingClientRect().width / W || 1); }
-  function parApply(o) { PHOTOS.forEach(function (f, i) { f.style.transform = 'translate3d(0,' + (depth[i] * o).toFixed(2) + 'px,0)'; }); }
+  /* entrance: the first time the block scrolls into view, the photos fly out from the centre of the visible bar block to their spots,
+     fast then slowing down (ease-out), slightly staggered. fly[i] = 0..1 progress; until it starts they are hidden. */
+  var FLY = { dur: 1100, stagger: 45, from: .35 };   // ms, ms between photos, start scale
+  var fly = PHOTOS.map(function () { return reduced ? 1 : 0; }), flyT0 = 0, flyC = [0, 0];
+  function easeOut(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }   // expo out: quick launch, long soft landing
+  function parApply(o) {
+    PHOTOS.forEach(function (f, i) {
+      var e = easeOut(fly[i]), dx = 0, dy = depth[i] * o, sc = '';
+      if (e < 1) { dx = (flyC[0] - f.offsetLeft) * (1 - e); dy += (flyC[1] - f.offsetTop) * (1 - e); sc = ' scale(' + (FLY.from + (1 - FLY.from) * e).toFixed(3) + ')'; }
+      f.style.transform = 'translate3d(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px,0)' + sc;
+      f.style.opacity = e < 1 ? Math.min(1, fly[i] * 5).toFixed(3) : '';
+    });
+  }
+  var flyGen = 0, flyArmed = true;   // gen cancels a running fly when the block leaves; armed = may launch on next entry
+  function flyFrame(t, g) {
+    if (g !== flyGen) return;
+    var done = true;
+    fly = fly.map(function (v, i) { var p = Math.max(0, (t - flyT0 - i * FLY.stagger) / FLY.dur); if (p < 1) done = false; return Math.min(1, p); });
+    parApply(parCur === null ? parTarget() : parCur);
+    if (!done) requestAnimationFrame(function (n) { flyFrame(n, g); });
+  }
+  function launch() {
+    var cr = canvas.getBoundingClientRect(), fr = fit.getBoundingClientRect(), s = cr.width / W || 1;
+    flyC = [(fr.left + fr.width / 2 - cr.left) / s, (fr.top + fr.height / 2 - cr.top) / s];   // centre of the visible block, in canvas px
+    flyT0 = performance.now(); var g = ++flyGen; requestAnimationFrame(function (n) { flyFrame(n, g); });
+  }
+  if (!reduced && window.IntersectionObserver) {
+    PHOTOS.forEach(function (f) { f.style.opacity = '0'; });
+    /* replays every visit: launch once 35% is in view; once the block is fully off screen, reset (hidden at the centre) for the next entry */
+    var io = new IntersectionObserver(function (en) {
+      var e = en[0];
+      if (e.isIntersecting && e.intersectionRatio >= .35 && flyArmed) { flyArmed = false; launch(); }
+      else if (!e.isIntersecting && !flyArmed) { flyArmed = true; flyGen++; fly = fly.map(function () { return 0; }); PHOTOS.forEach(function (f) { f.style.opacity = '0'; }); }
+    }, { threshold: [0, .35] });
+    io.observe(fit);
+  } else fly = fly.map(function () { return 1; });
   function parFrame(t) {
     parRaf = 0;
     var dt = Math.min((t - parLast) / 16.667, 4) || 1; parLast = t;
