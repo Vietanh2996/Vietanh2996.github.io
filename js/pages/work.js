@@ -37,7 +37,7 @@
       ],
       front: { flap: null, title: 'The New Journey: From VinID → OneU', desc: 'Revamp App', tx: 16, ty: 16, dx: 16, dy: 82 },
       title: { l1: 'The New Journey: From VinID → OneU', l2: 'From a points app to a lifestyle platform', x: -34.5, y: 283 },
-      note: { text: "VinID felt like a dated points app. OneU had to become Techcombank's lifestyle arm, so it needed a full redesign", x: -82.7, y: 354.5, w: 526 },
+      note: { text: "VinID was a points super app. Once it was repositioned as an extension of the Techcombank ecosystem, OneU had to look like a trendy lifestyle app", x: -82.7, y: 354.5, w: 526 },
       bounds: { x1: -83, y1: -127, x2: 444, y2: 490 }
     },
     // B: Dynamic Engagement Content (Figma _Folder 2 3819:28424 + Spotlight 2 3823:28424). Papers frame (-21,-48) 400x302 clips at rest. Frame origin (-80,-143.5).

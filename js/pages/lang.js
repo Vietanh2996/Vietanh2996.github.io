@@ -19,7 +19,7 @@
       'cursor.mode': 'Bấm vào đây đổi chế độ thử xem',
       'intro.toast': 'Đã chuyển bộ gõ sang English (US)',
       'work.a.l2': 'Từ app tích điểm lên nền tảng lifestyle',
-      'work.a.note': 'VinID lúc đó trông như một app tích điểm cũ kỹ. Muốn OneU thành mảng lifestyle của Techcombank thì phải làm lại toàn bộ',
+      'work.a.note': 'VinID khi đó là một super app tích điểm. Khi chuyển hướng thành cánh tay nối dài của hệ sinh thái Techcombank, OneU phải trông như một lifestyle app thời thượng',
       'work.b.l2': 'Nội dung cá nhân hoá bằng AI',
       'work.b.note': 'Kết nối với người dùng đúng lúc họ cần, một cách thông minh, tự động và linh hoạt hơn'
     },
