@@ -326,7 +326,7 @@
 
   // The sentence words sit next to chips with a 12px flex gap, but the glyphs have side bearings (+ trailing letter-spacing), so the
   // visible gap varied per word. Measure each word's ink bearings and cancel them with negative margins: ink-to-chip gap = 12px everywhere.
-  document.addEventListener('langchange', function () { trimInk(); });
+  document.addEventListener('langchange', function () { relayoutAll(); });   // text widths change with the language: the avatar + chips follow
   function trimInk() {
     var cx = document.createElement('canvas').getContext('2d');
     Array.prototype.forEach.call(document.querySelectorAll('.about-skill > .skill-row > .ab-t, .about-hello > .ab-t'), function (sp) {

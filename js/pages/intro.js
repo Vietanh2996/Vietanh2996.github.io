@@ -45,7 +45,7 @@
     { do: 'pause', ms: TIME.start },
     { do: 'par', steps: [
       { do: 'caret', line: 'hi', mode: 'bar' },
-      { do: 'type', line: 'hi', text: 'Hi! I’m an', rate: 12 },
+      { do: 'type', line: 'hi', text: lines.hi.text, rate: 12 },
       { do: 'pause', ms: 300 },
       { do: 'caret', line: 'hi', mode: 'off' }
     ] },
@@ -84,7 +84,7 @@
   function stepsSequential() { return [   // function so ?tune values are read at every replay
     { do: 'pause', ms: TIME.start },
     { do: 'caret', line: 'hi', mode: 'bar' },            // line rises are no longer triggered here: compile() starts all three at t=0
-    { do: 'type', line: 'hi', text: 'Hi! I’m an', rate: 12 },
+    { do: 'type', line: 'hi', text: lines.hi.text, rate: 12 },
     { do: 'pause', ms: 220 },
     { do: 'caret', line: 'ai', mode: 'bar' },
     { do: 'pause', ms: 120 },
@@ -141,6 +141,19 @@
     var mk = document.createElement('i'); mk.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; node.appendChild(mk);   // zero-size marker on the baseline
     lines[d[0]] = { el: node, text: text, chars: chars, n: 0, base: mk };
   });
+  /* line 1 follows the language (DICT key hero.hi, VI "Xin chào, tôi là một"): chars rebuilt, kept centred on the English line's centre
+     through --hi-dx on .headline (the line's own inline style is wiped by clearInline) */
+  var hiEN = lines.hi.text, hiW = lines.hi.el.offsetWidth;
+  function setHi(shown) {
+    var L = lines.hi, txt = window.I18N ? I18N.t('hero.hi', hiEN) : hiEN, i, c;
+    if (txt === L.text) return;
+    L.el.textContent = ''; L.chars = []; L.text = txt;
+    for (i = 0; i < txt.length; i++) { c = document.createElement('em'); c.className = 'c'; c.textContent = txt[i]; if (!shown) c.style.opacity = 0; L.el.appendChild(c); L.chars.push(c); }
+    L.el.appendChild(L.base); L.n = shown ? L.chars.length : 0;
+    head.style.setProperty('--hi-dx', ((hiW - L.el.offsetWidth) / 2).toFixed(2) + 'px');
+  }
+  setHi(true);
+  document.addEventListener('langchange', function () { setHi(lines.hi.n >= lines.hi.chars.length); });
   /* per-line groups: elements that rise together with a line (transform only; their own opacity / clip logic is untouched) */
   var groups = { hi: [lines.hi.el], ai: [lines.ai.el, el.selBg.parentNode], eng: [lines.eng.el, el.yellow, el.framing] };
   var carets = {};      // one caret per line: { el, ch, mode ('bar' | 'block' | null = hidden), blinking, lastOp }

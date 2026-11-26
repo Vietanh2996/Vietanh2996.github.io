@@ -9,8 +9,9 @@
   var DICT = {
     vi: {
       'card.title': 'Kết nối với tôi nhé!',
-      'about.note': 'Tôi đang là Lead Design Engineer, hơn 9 năm làm design, trong đó hơn 5 năm làm Product Design. Tôi dựng design system và quy trình làm việc dựa trên AI cho team, để bản thiết kế đi thẳng ra code chạy được luôn.',
-      'about.hi1': 'Cẩn thận,',
+      'about.note': 'Xin chào, hiện tôi đang làm Lead Design Engineer tại Hà Nội, Việt Nam, với hơn 9 năm kinh nghiệm trong ngành design, trong đó 5 năm gần đây làm Product Design và Design Engineering. Tôi xây dựng Design System và quy trình làm việc cùng AI cho team, để rút ngắn con đường từ thiết kế đến sản phẩm chạy thật.',
+      'hero.hi': 'Xin chào, tôi là một',
+      'about.hi1': 'Êy! Cẩn thận đây,',
       'about.hi2': 'đang tới để',
       'about.design': 'thiết kế',
       'about.build': 'xây dựng',

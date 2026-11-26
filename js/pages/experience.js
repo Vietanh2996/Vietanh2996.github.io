@@ -125,14 +125,18 @@
     if (!z) { I.el.classList.remove('is-on'); return; }
     I.el.dataset.z = z.dataset.z;
     I.title.textContent = z.dataset.title; I.dur.textContent = dur(z.dataset.dur);
+    I.title.parentElement.classList.remove('is-swap');   // the zone's show animation plays on the heading instead
     I.el.classList.toggle('is-down', z.hasAttribute('data-down'));
     I.ci = -1; I.swap = false;                 // first company of a zone appears with the label (no slide)
     I.el.classList.add('is-on');
     I.el.classList.remove('is-anim'); void I.el.offsetWidth; I.el.classList.add('is-anim');   // replay the show animation
   }
   function indCo(I, c, animate) {           // swap company: old name slides up/out, new slides in, pill width eases to fit; its logo pops in
-    I.title.textContent = c.title || I.zone.dataset.title;
-    I.dur.textContent = dur(c.dur || I.zone.dataset.dur);
+    var nt = c.title || I.zone.dataset.title, nd = dur(c.dur || I.zone.dataset.dur);
+    if (animate && (I.title.textContent !== nt || I.dur.textContent !== nd)) {   // role / duration changed inside the zone: replay the rise on the heading
+      var h = I.title.parentElement; h.classList.remove('is-swap'); void h.offsetWidth; h.classList.add('is-swap');
+    }
+    I.title.textContent = nt; I.dur.textContent = nd;
     var img = new Image(); img.src = LOGO_DIR + c.file + '.png'; img.alt = '';
     var oldImgs = [].slice.call(I.logos.children); I.logos.appendChild(img);
     if (animate) { img.classList.add('is-in'); oldImgs.forEach(function (o) { o.classList.add('is-out'); setTimeout(function () { o.remove(); }, 200); }); }

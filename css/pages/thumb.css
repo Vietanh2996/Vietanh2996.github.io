@@ -90,7 +90,7 @@ body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotligh
 /* ---------- headline ---------- */
 .headline { margin: 0; inset: 0; pointer-events: none; }
 .headline span { position: absolute; white-space: pre; color: var(--text-strong); }
-.hl-hi { font: var(--type-display-hero-font); letter-spacing: 0; /* exception: current look is 0; Figma style says -2% */ left: 653.55px; top: 205px; }
+.hl-hi { font: var(--type-display-hero-font); letter-spacing: 0; /* exception: current look is 0; Figma style says -2% */ left: calc(653.55px + var(--hi-dx, 0px)); top: 205px; }
 .hl-ai { font: var(--type-display-hero-font); left: 401px; top: 375px; line-height: .9; /* exception: kept at .9; Figma style says normal */ letter-spacing: var(--type-display-hero-ls); }
 .hl-eng { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); left: 537.85px; top: 543.14px; } /* letter-spacing -7px (was -15.4): line is 92.4px wider, left moved 46.2px to stay centred; yellow + framing below widened to match */
 .hl-yellow { left: 697.6px; top: 548.77px; width: 623.149px; height: 131px; background: var(--engineer-highlight); }

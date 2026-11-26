@@ -17,9 +17,9 @@
    (scaled CSS gradients gave uneven 1-2px lines and a doubled tick at the zone seams). */
 .exp-bar { position: absolute; inset: 0; }
 .exp-zone { --c: #f24822; --tint: rgba(242, 72, 34, .16); position: absolute; top: 0; height: 100%; pointer-events: none; }
-.exp-zone[data-z="1"] { left: 0; width: 488px; }
-.exp-zone[data-z="2"] { left: 488px; width: 728px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
-.exp-zone[data-z="3"] { left: 1216px; width: 986px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
+.exp-zone[data-z="1"] { left: 0; width: 648px; }   /* zones sized by years at ~217px a year: 2017-2020 / 2020-2022 / 2022-now */
+.exp-zone[data-z="2"] { left: 648px; width: 440px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
+.exp-zone[data-z="3"] { left: 1088px; width: 1114px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
 /* zone 4 overlaps the end of zone 3 (2026: Design Engineer Lead at VSF + course instructor at UX Foundation, 31 ticks). In the overlap both
    indicators show (zone 3 above the bar, zone 4 hanging below, 3 ticks apart) and the ticks alternate purple / pink. */
 .exp-zone[data-z="4"] { left: 1954px; width: 248px; --c: #ff24bd; --tint: rgba(255, 36, 189, .16); }
@@ -76,7 +76,7 @@
 .exp-ind.is-down .exp-ring { top: 160px; }
 .exp-ind.is-down .exp-line { top: 162px; height: 174px; }
 .exp-ind.is-down .exp-label { top: 236px; }
-.exp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.exp-head { display: flex; align-items: center; justify-content: flex-start; gap: 6px; }   /* duration sits right after the title, not pushed to the far edge when the company pill is wider */
 .exp-title { font: var(--type-heading-title-xl-font); letter-spacing: var(--type-heading-title-xl-ls); color: var(--tc); white-space: pre; }   /* Heading/Title-XL 36; data-title may hold a line break */
 .exp-pill {
   display: flex; align-items: center; gap: 8px; height: 48px; box-sizing: border-box; padding: 4px 12px 4px 4px;
@@ -106,7 +106,9 @@
 .exp-ind.is-anim .exp-label > * { animation: exp-rise .4s cubic-bezier(.2, .8, .2, 1) both; }
 .exp-ind.is-anim .exp-head { animation-delay: .08s; }
 .exp-ind.is-anim .exp-pill { animation-delay: .16s; }
+.exp-head.is-swap, .exp-ind.is-anim .exp-label > .exp-head.is-swap { animation: exp-swap .4s cubic-bezier(.2, .8, .2, 1) both; }   /* role changes between companies of one zone */
 @keyframes exp-grow { from { scale: 1 0; } }
 @keyframes exp-pop { from { scale: 0; } }
 @keyframes exp-rise { from { opacity: 0; translate: 0 14px; filter: blur(4px); } }
-@media (prefers-reduced-motion: reduce) { .exp-ind { transition: none; } .exp-ind.is-anim *, .exp-co-t, .exp-logos img { animation: none !important; } .exp-yr { transition: none; } .exp-co { transition: none; } }
+@keyframes exp-swap { from { opacity: 0; translate: 0 14px; filter: blur(4px); } }   /* same as exp-rise, own name so it restarts over the show animation */
+@media (prefers-reduced-motion: reduce) { .exp-ind { transition: none; } .exp-ind.is-anim *, .exp-head.is-swap, .exp-co-t, .exp-logos img { animation: none !important; } .exp-yr { transition: none; } .exp-co { transition: none; } }
