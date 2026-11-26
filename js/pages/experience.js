@@ -191,6 +191,10 @@
       z._co.forEach(function (c, k) { if (f >= c.from) gi = k; });
       a = z._co[gi].from; b = gi + 1 < z._co.length ? z._co[gi + 1].from : 1;
     }
+    if (side && z !== side) {                 // past side.offsetLeft the side zone's lines take over, so squeeze this group's lines into the part still shown
+      var end = (side.offsetLeft - z.offsetLeft) / z.offsetWidth;
+      if (end > a && end < b) b = end;
+    }
     var q = z._q[gi], i = Math.min(q.length - 1, Math.floor((f - a) / (b - a) * q.length)), text = q[i];
     var key = z.dataset.z + ':' + gi + ':' + i;
     if (key === quoteKey) return;
