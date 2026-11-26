@@ -14,7 +14,7 @@
 
   var W = 2202, BAR_Y = 160, BAR_H = 38, PITCH = 8, TICK_W = 2;
   var GROW = { up: 12, down: 30 };          // stage px a tick can stretch above / below the bar at full lift
-  var MARK_H = 75, MARK_W = 3, TOP = BAR_Y + BAR_H - MARK_H, OFF = BAR_Y - TOP;   // year marks: 3px lines ending at the bar bottom; tick canvas starts at their top
+  var MARK_UP = 76, MARK_W = 3, OFF = 80, TOP = BAR_Y - OFF;   // year marks: 3px lines, top fixed MARK_UP above the bar, bottom rides the wave's bottom; OFF = canvas headroom above the bar
   var RADIUS = 56;                          // stage px: width (sigma) of the lift around the pointer
   var FADE = 760, MIN_H = 12;               // stage px from the indicator at which the resting bar has shrunk to MIN_H (smooth taper, centred on the bar)
   var DECAY = 0.0045;                       // per ms: how fast a left-behind tick sinks back (higher = shorter trail)
@@ -50,12 +50,13 @@
     var grey = getComputedStyle(canvas).getPropertyValue('--tick-grey').trim();
     var on = cur && colours(cur), alt = dual && colours(side);
     ctx.clearRect(0, 0, ticks.width, ticks.height);
-    var marked = {}; years.forEach(function (m) { marked[m.x] = 1; });
+    var marked = {}, bot = {}; years.forEach(function (m) { marked[m.x] = 1; });
     for (var i = 0; i < N; i++) {
       var x = i * PITCH, l = lift[i], hit = on && x >= on.x0 && x < on.x1, use = on;
       if (alt && x >= alt.x0 && x < alt.x1) { hit = true; if (i % 2) use = alt; }   // overlap: ticks alternate main / side colour
       var t = Math.min(1, Math.abs(x + TICK_W / 2 - ax) / FADE), h = MIN_H + (BAR_H - MIN_H) * (1 - t * t * (3 - 2 * t));   // taper: full at the indicator, MIN_H from FADE on
       var y0 = Math.round((OFF + (BAR_H - h) / 2 - GROW.up * l) * k), y1 = Math.round((OFF + (BAR_H + h) / 2 + GROW.down * l) * k);
+      if (marked[x]) bot[x] = [y0, y1];       // the year mark follows this tick's wave
       if (y1 - y0 < 1) continue;
       if (hit) {                              // tint column for this tick's 8px slot, same height as the tick, so the background rides the wave
         var tx0 = Math.round(x * k), tx1 = Math.round(Math.min(W, x + PITCH) * k);
@@ -69,7 +70,8 @@
       var c = cur && cur.dataset.z === m.z ? on.c : dual && side.dataset.z === m.z ? alt.c : '';
       ctx.fillStyle = c || grey;
       var mw = Math.max(2, Math.round(MARK_W * k));   // 3px, centred on the tick slot (kept inside the canvas at 2017)
-      bar(Math.max(0, Math.round((m.x + TICK_W / 2 - MARK_W / 2) * k)), 0, mw, Math.round((OFF + BAR_H) * k));
+      var my1 = bot[m.x][1], my0 = Math.round((OFF - MARK_UP) * k);   // fixed top, bottom follows the wave down
+      bar(Math.max(0, Math.round((m.x + TICK_W / 2 - MARK_W / 2) * k)), my0, mw, my1 - my0);
       m.el.style.color = c;
     });
   }
@@ -228,6 +230,30 @@
   section.addEventListener('pointermove', move);
   section.addEventListener('pointerenter', move);
   section.addEventListener('pointerleave', function () { px = -1; kick(); });   // keep the last zone + indicators, only the wave settles
+
+  /* scroll parallax on the photos (same feel as the hero images): each drifts against the scroll by a depth factor, bigger photo =
+     nearer = faster. Offset is measured from the bar block's centre to the viewport centre, so they sit at their design spot when it is
+     centred. Transform-only (the frames use translate / rotate / scale for layout and the swap), rAF lerp toward the scroll target. */
+  var PAR = { near: .32, far: .08, smooth: .88 };
+  var depth = PHOTOS.map(function (f) { return +f.style.getPropertyValue('--w') || 120; });
+  var dMin = Math.min.apply(null, depth), dMax = Math.max.apply(null, depth);
+  depth = depth.map(function (w) { return PAR.far + (PAR.near - PAR.far) * (w - dMin) / Math.max(1, dMax - dMin); });
+  var parCur = null, parTo = 0, parRaf = 0, parLast = 0;
+  function parTarget() { var r = fit.getBoundingClientRect(); return (r.top + r.height / 2 - window.innerHeight / 2) / (canvas.getBoundingClientRect().width / W || 1); }
+  function parApply(o) { PHOTOS.forEach(function (f, i) { f.style.transform = 'translate3d(0,' + (depth[i] * o).toFixed(2) + 'px,0)'; }); }
+  function parFrame(t) {
+    parRaf = 0;
+    var dt = Math.min((t - parLast) / 16.667, 4) || 1; parLast = t;
+    parCur += (parTo - parCur) * (1 - Math.pow(PAR.smooth, dt));
+    if (Math.abs(parTo - parCur) < .1) { parCur = parTo; parApply(parCur); return; }
+    parApply(parCur); parRaf = requestAnimationFrame(parFrame);
+  }
+  function parallax() {
+    parTo = parTarget();
+    if (parCur === null || reduced) { parCur = parTo; parApply(parCur); return; }
+    if (!parRaf) { parLast = performance.now(); parRaf = requestAnimationFrame(parFrame); }
+  }
+  if (!reduced) { window.addEventListener('scroll', parallax, { passive: true }); window.addEventListener('resize', parallax); parallax(); }
 
   place(main[0].offsetWidth / 2);            // always one zone active: start on zone 1
   scrub();

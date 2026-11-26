@@ -20,13 +20,13 @@
 .exp-zone[data-z="1"] { left: 0; width: 488px; }
 .exp-zone[data-z="2"] { left: 488px; width: 728px; --c: #007be5; --tint: rgba(13, 153, 255, .16); }
 .exp-zone[data-z="3"] { left: 1216px; width: 986px; --c: #9747ff; --tint: rgba(151, 71, 255, .16); }
-/* zone 4 overlaps the end of zone 3 (2026: Product Design Lead at VSF + course instructor at UX Foundation, 31 ticks). In the overlap both
+/* zone 4 overlaps the end of zone 3 (2026: Design Engineer Lead at VSF + course instructor at UX Foundation, 31 ticks). In the overlap both
    indicators show (zone 3 above the bar, zone 4 hanging below, 3 ticks apart) and the ticks alternate purple / pink. */
 .exp-zone[data-z="4"] { left: 1954px; width: 248px; --c: #ff24bd; --tint: rgba(255, 36, 189, .16); }
 /* year marks (Figma 3988:21461): 2px line from 75px above the bar down to its bottom, drawn on the tick canvas; the year in Caveat sits
    at its top right. The active zone lights its own mark in the zone colour (zone 4 lights "now"). */
 .exp-years { position: absolute; inset: 0; pointer-events: none; }
-.exp-yr { position: absolute; top: 117px; font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); color: var(--tick-grey); white-space: nowrap; transition: color .2s ease; }
+.exp-yr { position: absolute; top: 78px; font: var(--type-note-handwritten-font); letter-spacing: var(--type-note-handwritten-ls); color: var(--tick-grey); white-space: nowrap; transition: color .2s ease; }
 .exp-yr--end { translate: calc(-100% - 14px) 0; }   /* "now" sits left of the last mark so it stays inside the stage */
 /* photos around the timeline (Figma 3988:20772): white 5px frame, soft shadow, tilted. Centred on --x/--y (stage px, bar = 0..2202 / bar top 160).
    On a zone change experience.js swaps their pictures (pool of 11, assets/home/experience/p01-p11) with a small flip, staggered. */
