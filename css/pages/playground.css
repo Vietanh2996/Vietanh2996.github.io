@@ -48,7 +48,8 @@
 .pg-text { display: flex; flex-direction: column; gap: 8px; padding: 0 16px; }
 .pg-name { margin: 0; font: var(--type-heading-title-font); letter-spacing: var(--type-heading-title-ls); color: var(--text-strong); }
 .pg-kind { margin: 0; font: 700 32px/28px var(--type-family-caveat); color: var(--text-secondary, rgba(0, 0, 0, .5)); }
-.pg-aside { margin-left: 6px; white-space: nowrap; font-size: 24px; font-weight: 400; display: inline-block; rotate: -3deg; }   /* playful note: KTO is the one recent project in the archive */
+.pg-aside { margin-left: 6px; white-space: nowrap; font-size: 24px; font-weight: 400; display: inline-block; rotate: -3deg; color: #0d5eff; }   /* playful note: KTO is the one recent project in the archive */
+html[data-theme="dark"] .pg-aside { color: #6b9dff; }   /* same hand-note blue as the case pages, lifted for the dark canvas */
 
 /* spotlight satellites: the best scenes, each a small light browser window (positions set by js/pages/playground.js) */
 .pg-comp { z-index: 3; pointer-events: none; }
