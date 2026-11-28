@@ -127,3 +127,7 @@
 }
 .sp-opt { z-index: 1; width: max-content; }
 .skill-chip--opt { width: max-content; transform: rotate(var(--rot, 0deg)); cursor: default; }
+
+/* TEST: Uxum Regular for the About sentence + skill chips (face declared in marquee.css). Revert: drop this block.
+   The side-bearing trim in about.js reads the computed font, and reruns on document.fonts.ready, so it follows. */
+.ab-t, .skill-chip { font-family: "Uxum", var(--type-family-bdo); font-weight: 400; }

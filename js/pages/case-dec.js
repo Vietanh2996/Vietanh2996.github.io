@@ -17,7 +17,7 @@
       n = (n + tabs.length) % tabs.length; select(n); tabs[n].focus(); e.preventDefault();
     });
   });
-  var imgs = root.querySelectorAll('.dec-stage img');
+  var imgs = root.querySelectorAll('.dec-stage [data-opt]');
   root.querySelectorAll('input[name=dec-opt]').forEach(function (r) {
     r.addEventListener('change', function () {
       imgs.forEach(function (im) { im.hidden = im.getAttribute('data-opt') !== r.value; });
@@ -25,7 +25,8 @@
   });
 })();
 
-/* DEC s04: phones spread from the centre one once when the group scrolls into view (desktop only).
+/* DEC s04: phones spread from the centre one every time the group scrolls into view (desktop only);
+   once it is fully off screen it resets so the next visit replays it.
    Hand-written open spring copied from spotlight.js: k=650, c=32, m=1, semi-implicit Euler, 1/240 s substeps, dt cap 1/30 s. */
 (function () {
   var wrap = document.querySelector('.dec-phones');
@@ -50,9 +51,14 @@
       o.el.style.transform = 'scale(' + (0.94 + 0.06 * p).toFixed(4) + ')';
     }
   }
-  wrap.classList.add('is-primed');
-  for (i = 0; i < 3; i++) draw(u[i]);
-  var lastT = 0;
+  var lastT = 0, raf = 0, state = 'reset'; /* reset | run | done */
+  function reset() {
+    if (raf) cancelAnimationFrame(raf); raf = 0;
+    wrap.classList.add('is-primed');
+    for (var j = 0; j < 3; j++) { u[j].p = 0; u[j].v = 0; u[j].done = false; draw(u[j]); }
+    state = 'reset';
+  }
+  reset();
   function tick(now) {
     var dt = Math.min((now - lastT) / 1000, 1 / 30), busy = false, n, h, s, j, o;
     lastT = now;
@@ -69,19 +75,22 @@
       if (now < o.at || Math.abs(o.p - 1) >= 0.001 || Math.abs(o.v) >= 0.01) busy = true;
       draw(o);
     }
-    if (busy) { requestAnimationFrame(tick); return; }
+    if (busy) { raf = requestAnimationFrame(tick); return; }
+    raf = 0; state = 'done';
     for (j = 0; j < 3; j++) {
       u[j].el.style.transform = ''; u[j].el.style.opacity = ''; u[j].el.style.willChange = '';
     }
     wrap.classList.remove('is-primed');
   }
   var io = new IntersectionObserver(function (ents) {
-    if (!ents[0].isIntersecting) return;
-    io.disconnect();
+    var e = ents[ents.length - 1];
+    if (!e.isIntersecting) { if (state !== 'reset') reset(); return; }
+    if (state !== 'reset' || e.intersectionRatio < 0.35) return;
+    state = 'run';
     var t0 = performance.now();
     for (var j = 0; j < 3; j++) u[j].at = t0 + DELAY[j];
     lastT = t0;
-    requestAnimationFrame(tick);
-  }, { threshold: 0.35 });
+    raf = requestAnimationFrame(tick);
+  }, { threshold: [0, 0.35] });
   io.observe(wrap);
 })();

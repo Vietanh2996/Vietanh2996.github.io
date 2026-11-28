@@ -1,0 +1,254 @@
+/* ==========================================================================
+   Design tokens for the whole site (index.html, work/*.html). Load FIRST on every page.
+   Proposal approved 2026-11-28: _review/ds-proposal.html
+
+   TWO TIERS, NO GLOBAL PALETTE
+     1. Theme   --theme-*   raw values, two modes: Light (:root) and Dark (html[data-theme="dark"]).
+                            Dark mode overrides ONLY this tier. Never use --theme-* in component CSS.
+     2. Alias   --object-*  text and icons
+                --bg-*      backgrounds
+                --border-*  borders and dividers
+                --paint-*   gradients and image fills (the "paint style" group)
+     Component CSS uses only alias tokens. Raw colours stay in a component only for illustration colours
+     (cursor chips, Work thumbnail scrims, compare knob...), each marked "illustration" where it is used.
+
+   TEXT STYLES = CLASSES IN THE HTML
+     .t-<role>-<variant>   role = size step, variant = font. All variants of one role share --<role>-size / -lh / -ls,
+                           so editing a role here changes it everywhere. Component CSS never declares font-family/size/weight/
+                           line-height/letter-spacing (only layout).
+       Display  D1 160 · D2 140 · D3 72
+       Heading  H1 56 · H2 48 · H3 40 · H4 36
+       Title    T1 28 · T2 24 · T3 20 · T4 17
+       Body     B1 18 · B2 16 · B3 14 · B4 12     fixed px, regular (.t-b3) or medium (.t-b3-m)
+       Note     N1 80 · N2 32 · N3 28             Caveat 700
+       UI       UI1 15 · UI2 13 · UI3 11          Inter, fake Figma chrome only
+       Fun      80                                Bangers, the sticker
+     Variants: ux = Uxum 400, cal = Cal Sans 400, bdo = BDO Grotesk 500 (-2%), mono = IBM Plex Mono 500.
+
+   SCALING
+     Display / Heading / Title / Note sizes are design px at 1920, multiplied by --u, with a mobile floor:
+       size = max(floor, design * --u)
+     Home: --u = 1px (the home stage scales as a whole). Case pages (css/base/case.css): --u = --case-u
+     (min(100vw,1600px)/1920) and below 1024px --u = 0px, so every style sits on its floor.
+     Body and UI styles are fixed px.
+   ========================================================================== */
+
+/* ---------- fonts (Cal Sans, Inter, IBM Plex Mono, Bangers come from Google Fonts in each page's <head>) ---------- */
+/* VFK - Uxum 1.002 (1B): Vietnamese Light / Regular / Bold */
+@font-face { font-family: "Uxum"; font-weight: 300; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Light.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Bold.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "BDO Grotesk"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Regular.otf") format("opentype"); }
+@font-face { font-family: "BDO Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/BDOGrotesk-Medium.otf") format("opentype"); }
+/* Caveat 700 with full Vietnamese (Google's Caveat lacks hỏi / ơ ư): VFK - Caveat Bold 1.008 (8A), OFL (see VFK-Caveat-OFL.txt) */
+@font-face { font-family: "Caveat"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Caveat-Bold.woff2?v=8a") format("woff2"); }
+
+:root {
+  /* ======================= 1. THEME · Light ======================= */
+  --theme-ink: #000;
+  --theme-ink-60: rgba(0, 0, 0, .6);
+  --theme-ink-40: rgba(0, 0, 0, .4);
+  --theme-ink-30: rgba(0, 0, 0, .3);
+  --theme-ink-16: rgba(0, 0, 0, .16);
+  --theme-ink-10: rgba(0, 0, 0, .1);
+  --theme-canvas: #f5f5f5;
+  --theme-surface-1: #fff;
+  --theme-surface-2: #f2f2f2;
+  --theme-surface-3: #e6e6e6;
+  --theme-line: #e6e6e6;
+  --theme-blue: #0d5eff;
+  --theme-red: #f24822;
+  --theme-green: #16b24a;
+  --theme-green-subtle: #e8f6ec;
+  --theme-green-soft: #b4ecc8;
+  --theme-crimson: #e60a32;
+  --theme-crimson-subtle: #fde6ea;
+  --theme-crimson-soft: #ffb4b4;
+  --theme-mark: rgba(255, 241, 171, .6);
+  --theme-overlay: rgba(229, 229, 229, .5);
+  --theme-card: linear-gradient(180deg, #f9f9f9, #fff);
+  --theme-dots: url("../../assets/home/thumb/bg-dot.png");
+  --theme-dots-size: 16px;
+  --theme-shadow-alpha: .1;
+  /* same in both modes (Figma chrome colours) */
+  --theme-white: #fff;
+  --theme-figma-blue: #0d99ff;
+  --theme-purple: #9747ff;
+  --theme-yellow: #ffcd29;
+  --theme-near-black: #1e1e1e;
+  --theme-flap: linear-gradient(180deg, #eb445f, #e20a88);
+  --theme-ai: linear-gradient(90deg, #0d5eff 0%, #12c4ff 55%, #ffe600 100%);
+
+  /* ======================= 2. ALIAS ======================= */
+  /* Object: text, icons */
+  --object-primary: var(--theme-ink);
+  --object-secondary: var(--theme-ink-60);
+  --object-tertiary: var(--theme-ink-40);
+  --object-disabled: var(--theme-ink-16);
+  --object-onbrand: var(--theme-white);
+  --object-brand: var(--theme-blue);
+  --object-selected: var(--theme-figma-blue);
+  --object-highlight: var(--theme-red);
+  --object-success: var(--theme-green);
+  --object-danger: var(--theme-crimson);
+
+  /* Background */
+  --bg-canvas: var(--theme-canvas);
+  --bg-layer-1: var(--theme-surface-1);
+  --bg-layer-2: var(--theme-surface-2);
+  --bg-layer-3: var(--theme-surface-3);
+  --bg-tint: var(--theme-ink-10);
+  --bg-inverse: var(--theme-near-black);
+  --bg-overlay: var(--theme-overlay);
+  --bg-selected: var(--theme-figma-blue);
+  --bg-accent: var(--theme-purple);
+  --bg-highlight: var(--theme-red);
+  --bg-warning: var(--theme-yellow);
+  --bg-mark: var(--theme-mark);
+  --bg-success-subtle: var(--theme-green-subtle);
+  --bg-success-soft: var(--theme-green-soft);
+  --bg-danger-subtle: var(--theme-crimson-subtle);
+  --bg-danger-soft: var(--theme-crimson-soft);
+
+  /* Border */
+  --border-default: var(--theme-line);
+  --border-strong: var(--theme-ink-30);
+  --border-inverse: var(--theme-white);
+  --border-selected: var(--theme-figma-blue);
+  --border-highlight: var(--theme-red);
+  --border-success: var(--theme-green);
+  --border-danger: var(--theme-crimson);
+
+  /* Paint: gradients, image fills */
+  --paint-ai: var(--theme-ai);
+  --paint-card: var(--theme-card);
+  --paint-flap: var(--theme-flap);
+  --paint-canvas-dots: var(--theme-dots);
+  --paint-canvas-dots-size: var(--theme-dots-size);
+
+  /* Effects (not colours; follow the mode through --theme-shadow-alpha) */
+  --shadow-chrome: 0 0 .5px rgba(0, 0, 0, calc(var(--theme-shadow-alpha) * 1.8)), 0 3px 8px rgba(0, 0, 0, var(--theme-shadow-alpha)), 0 1px 3px rgba(0, 0, 0, var(--theme-shadow-alpha));
+  --shadow-chrome-ui: 0 1px 3px rgba(0, 0, 0, var(--theme-shadow-alpha));
+  --shadow-chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, var(--theme-shadow-alpha)));
+
+  /* ======================= TYPOGRAPHY ======================= */
+  --u: 1px;
+  --font-ux: "Uxum", "Cal Sans", sans-serif;
+  --font-cal: "Cal Sans", sans-serif;
+  --font-bdo: "BDO Grotesk", "Inter", system-ui, sans-serif;   /* body stays BDO (2026-11-28); headings pick the ux variant */
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-caveat: "Caveat", cursive;
+  --font-bangers: "Bangers", cursive;
+
+  /* Display */
+  --d1-size: calc(160 * var(--u));          --d1-lh: .9;   --d1-ls: -.02em;
+  --d2-size: calc(140 * var(--u));          --d2-lh: .9;   --d2-ls: -.02em;
+  --d3-size: max(40px, calc(72 * var(--u))); --d3-lh: 1.1; --d3-ls: 0;
+  /* Heading */
+  --h1-size: max(34px, calc(56 * var(--u))); --h1-lh: 1.2;  --h1-ls: 0;
+  --h2-size: max(28px, calc(48 * var(--u))); --h2-lh: 1;    --h2-ls: 0;
+  --h3-size: max(26px, calc(40 * var(--u))); --h3-lh: 1.2;  --h3-ls: 0;
+  --h4-size: max(22px, calc(36 * var(--u))); --h4-lh: 1.22; --h4-ls: 0;
+  /* Title */
+  --t1-size: max(18px, calc(28 * var(--u))); --t1-lh: 1.3;  --t1-ls: 0;
+  --t2-size: max(16px, calc(24 * var(--u))); --t2-lh: 1.3;  --t2-ls: 0;
+  --t3-size: max(14px, calc(20 * var(--u))); --t3-lh: 1.3;  --t3-ls: 0;
+  --t4-size: max(13px, calc(17 * var(--u))); --t4-lh: 1.4;  --t4-ls: 0;
+  /* Body (fixed) */
+  --b1-size: 18px; --b1-lh: 1.33; --b1-ls: -.02em;
+  --b2-size: 16px; --b2-lh: 1.4;  --b2-ls: 0;
+  --b3-size: 14px; --b3-lh: 1.65; --b3-ls: -.01em;
+  --b4-size: 12px; --b4-lh: 1.33; --b4-ls: 0;
+  /* Note */
+  --n1-size: max(40px, calc(80 * var(--u))); --n1-lh: 1;    --n1-ls: 0;
+  --n2-size: max(22px, calc(32 * var(--u))); --n2-lh: 1.15; --n2-ls: 0;
+  --n3-size: max(20px, calc(28 * var(--u))); --n3-lh: 1.2;  --n3-ls: 0;
+  /* UI (fixed) */
+  --ui1-size: 15px; --ui1-lh: 22px; --ui1-ls: 0;
+  --ui2-size: 13px; --ui2-lh: 22px; --ui2-ls: 0;
+  --ui3-size: 11px; --ui3-lh: 16px; --ui3-ls: .005em;
+  /* Fun */
+  --fun-size: calc(80 * var(--u)); --fun-lh: 1.1; --fun-ls: 0;
+}
+
+/* ======================= 1. THEME · Dark ======================= */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-ink: #fff;
+  --theme-ink-60: rgba(255, 255, 255, .6);
+  --theme-ink-40: rgba(255, 255, 255, .45);
+  --theme-ink-30: rgba(255, 255, 255, .4);
+  --theme-ink-16: rgba(255, 255, 255, .16);
+  --theme-ink-10: rgba(255, 255, 255, .1);
+  --theme-canvas: #212121;
+  --theme-surface-1: #2c2c2c;
+  --theme-surface-2: #383838;
+  --theme-surface-3: #444;
+  --theme-line: #444;
+  --theme-blue: #6b9bff;
+  --theme-red: #ff6a4a;
+  --theme-green: #3fd07a;
+  --theme-green-subtle: #1d3326;
+  --theme-green-soft: #1f3d2a;
+  --theme-crimson: #ff5c78;
+  --theme-crimson-subtle: #4a2228;
+  --theme-crimson-soft: #4a2228;
+  --theme-mark: rgba(255, 205, 41, .28);
+  --theme-overlay: rgba(30, 30, 30, .55);
+  --theme-card: linear-gradient(180deg, #2a2a2a, #212121);
+  --theme-dots: url("../../assets/home/thumb/bg-dot-dark.png");
+  --theme-dots-size: 18px;
+  --theme-shadow-alpha: .4;
+}
+
+/* ======================= TEXT STYLES ======================= */
+/* Display */
+.t-d1-ux   { font: 400 var(--d1-size)/var(--d1-lh) var(--font-ux);   letter-spacing: var(--d1-ls); }
+.t-d1-cal  { font: 400 var(--d1-size)/var(--d1-lh) var(--font-cal);  letter-spacing: var(--d1-ls); }
+.t-d2-cal  { font: 400 var(--d2-size)/var(--d2-lh) var(--font-cal);  letter-spacing: var(--d2-ls); }
+.t-d2-mono { font: 500 var(--d2-size)/var(--d2-lh) var(--font-mono); letter-spacing: -7px; }
+.t-d3-ux   { font: 400 var(--d3-size)/var(--d3-lh) var(--font-ux);   letter-spacing: var(--d3-ls); }
+.t-d3-cal  { font: 400 var(--d3-size)/var(--d3-lh) var(--font-cal);  letter-spacing: var(--d3-ls); }
+/* Heading */
+.t-h1-ux   { font: 400 var(--h1-size)/var(--h1-lh) var(--font-ux);   letter-spacing: var(--h1-ls); }
+.t-h1-cal  { font: 400 var(--h1-size)/var(--h1-lh) var(--font-cal);  letter-spacing: var(--h1-ls); }
+.t-h2-ux   { font: 400 var(--h2-size)/var(--h2-lh) var(--font-ux);   letter-spacing: var(--h2-ls); }
+.t-h2-cal  { font: 400 var(--h2-size)/var(--h2-lh) var(--font-cal);  letter-spacing: var(--h2-ls); }
+.t-h2-bdo  { font: 500 var(--h2-size)/var(--h2-lh) var(--font-bdo);  letter-spacing: -.02em; }
+.t-h3-ux   { font: 400 var(--h3-size)/var(--h3-lh) var(--font-ux);   letter-spacing: var(--h3-ls); }
+.t-h3-cal  { font: 400 var(--h3-size)/var(--h3-lh) var(--font-cal);  letter-spacing: var(--h3-ls); }
+.t-h4-ux   { font: 400 var(--h4-size)/var(--h4-lh) var(--font-ux);   letter-spacing: var(--h4-ls); }
+.t-h4-cal  { font: 400 var(--h4-size)/var(--h4-lh) var(--font-cal);  letter-spacing: var(--h4-ls); }
+/* Title */
+.t-t1-ux   { font: 400 var(--t1-size)/var(--t1-lh) var(--font-ux);   letter-spacing: var(--t1-ls); }
+.t-t1-cal  { font: 400 var(--t1-size)/var(--t1-lh) var(--font-cal);  letter-spacing: var(--t1-ls); }
+.t-t2-ux   { font: 400 var(--t2-size)/var(--t2-lh) var(--font-ux);   letter-spacing: var(--t2-ls); }
+.t-t2-cal  { font: 400 var(--t2-size)/var(--t2-lh) var(--font-cal);  letter-spacing: var(--t2-ls); }
+.t-t3-cal  { font: 400 var(--t3-size)/var(--t3-lh) var(--font-cal);  letter-spacing: var(--t3-ls); }
+.t-t3-bdo  { font: 500 var(--t3-size)/var(--t3-lh) var(--font-bdo);  letter-spacing: var(--t3-ls); }
+.t-t4-ux   { font: 400 var(--t4-size)/var(--t4-lh) var(--font-ux);   letter-spacing: var(--t4-ls); }
+.t-t4-cal  { font: 400 var(--t4-size)/var(--t4-lh) var(--font-cal);  letter-spacing: var(--t4-ls); }
+/* Body */
+.t-b1   { font: 400 var(--b1-size)/var(--b1-lh) var(--font-bdo); letter-spacing: var(--b1-ls); }
+.t-b1-m { font: 500 var(--b1-size)/var(--b1-lh) var(--font-bdo); letter-spacing: var(--b1-ls); }
+.t-b2   { font: 400 var(--b2-size)/var(--b2-lh) var(--font-bdo); letter-spacing: var(--b2-ls); }
+.t-b2-m { font: 500 var(--b2-size)/var(--b2-lh) var(--font-bdo); letter-spacing: var(--b2-ls); }
+.t-b3   { font: 400 var(--b3-size)/var(--b3-lh) var(--font-bdo); letter-spacing: var(--b3-ls); }
+.t-b3-m { font: 500 var(--b3-size)/var(--b3-lh) var(--font-bdo); letter-spacing: var(--b3-ls); }
+.t-b4   { font: 400 var(--b4-size)/var(--b4-lh) var(--font-bdo); letter-spacing: var(--b4-ls); }
+.t-b4-m { font: 500 var(--b4-size)/var(--b4-lh) var(--font-bdo); letter-spacing: var(--b4-ls); }
+/* Note */
+.t-n1 { font: 700 var(--n1-size)/var(--n1-lh) var(--font-caveat); letter-spacing: var(--n1-ls); }
+.t-n2 { font: 700 var(--n2-size)/var(--n2-lh) var(--font-caveat); letter-spacing: var(--n2-ls); }
+.t-n3 { font: 700 var(--n3-size)/var(--n3-lh) var(--font-caveat); letter-spacing: var(--n3-ls); }
+/* UI */
+.t-ui1   { font: 600 var(--ui1-size)/var(--ui1-lh) var(--font-inter); letter-spacing: var(--ui1-ls); }
+.t-ui2   { font: 400 var(--ui2-size)/var(--ui2-lh) var(--font-inter); letter-spacing: var(--ui2-ls); }
+.t-ui2-s { font: 600 var(--ui2-size)/var(--ui2-lh) var(--font-inter); letter-spacing: var(--ui2-ls); }
+.t-ui3   { font: 500 var(--ui3-size)/var(--ui3-lh) var(--font-inter); letter-spacing: var(--ui3-ls); }
+/* Fun */
+.t-fun { font: 400 var(--fun-size)/var(--fun-lh) var(--font-bangers); letter-spacing: var(--fun-ls); }
+
+/* <b>/<strong> inside a body style keep the style and only go medium */
+:is(.t-b1, .t-b2, .t-b3, .t-b4) :is(b, strong) { font-weight: 500; }

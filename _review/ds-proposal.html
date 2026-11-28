@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đề xuất hệ text style + màu</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cal+Sans&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Uxum"; font-weight: 400; src: url("../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "BDO Grotesk"; font-weight: 400; src: url("../assets/shared/fonts/BDOGrotesk-Regular.otf") format("opentype"); }
+@font-face { font-family: "BDO Grotesk"; font-weight: 500; src: url("../assets/shared/fonts/BDOGrotesk-Medium.otf") format("opentype"); }
+@font-face { font-family: "Caveat"; font-weight: 700; src: url("../assets/shared/fonts/VFK-Caveat-Bold.woff2?v=8a") format("woff2"); }
+:root { --ink:#111; --mute:#6b6b6b; --line:#e6e6e6; --bg:#fafafa; --card:#fff; --tag-new:#0d5eff; --tag-chg:#c25e00; --tag-merge:#8638e5; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.55 "Inter", system-ui, sans-serif; }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 80px; }
+h1 { font: 600 26px/1.2 "Inter"; margin: 0 0 6px; }
+h2 { font: 600 19px/1.3 "Inter"; margin: 44px 0 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+h3 { font: 600 15px/1.3 "Inter"; margin: 26px 0 8px; }
+p, li { color: #333; } ul { padding-left: 20px; margin: 6px 0; }
+.lead { color: var(--mute); margin: 0 0 18px; }
+code { font: 500 12px/1.4 "IBM Plex Mono", monospace; background: #f0f0f0; padding: 1px 5px; border-radius: 4px; }
+.box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 13px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 10px; border-top: 1px solid var(--line); }
+thead th { background: #f4f4f4; border-top: 0; font-weight: 600; font-size: 12px; color: #444; white-space: nowrap; }
+td.spec { width: 34%; overflow: hidden; max-width: 0; }
+td.spec div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tw { overflow-x: auto; }
+.tag { display: inline-block; font: 600 10.5px/1 "Inter"; padding: 3px 6px; border-radius: 5px; margin: 1px 2px 1px 0; white-space: nowrap; }
+.t-new { background: #e5eeff; color: var(--tag-new); } .t-chg { background: #ffeedd; color: var(--tag-chg); } .t-merge { background: #f1e5ff; color: var(--tag-merge); }
+.old { color: var(--mute); font-size: 12px; }
+.grp td { background: #fbfbfb; font-weight: 600; color: #555; font-size: 12px; letter-spacing: .02em; text-transform: uppercase; }
+.sw { display: flex; gap: 4px; }
+.sw span { width: 56px; height: 34px; border-radius: 7px; border: 1px solid rgba(0,0,0,.08); display: flex; align-items: flex-end; padding: 3px 5px; font: 500 9.5px/1 "Inter"; }
+.sw .l { background-image: none; } .sw span b { font-weight: 500; }
+.sw .on-l { background: #fff; } .sw .on-d { background: #212121; }
+.chipT { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 34px; border-radius: 7px; font: 600 15px "Inter"; border: 1px solid rgba(0,0,0,.08); }
+.q li { margin-bottom: 6px; }
+.dia { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; font-size: 12.5px; }
+.dia .b { flex: 1 1 180px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.dia .b b { display: block; font-size: 12px; color: #555; margin-bottom: 4px; }
+.arrow { align-self: center; color: #999; font-size: 18px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Đề xuất hệ text style + màu semantic</h1>
+<p class="lead">Áp cho cả site (home, DEC, OneU). Dựng từ số đo computed style thật trên 3 trang ở viewport 1820, theo cấu trúc DS của chú, rút gọn: không có Global, theme chỉ có 2 mode Light/Dark. Chú duyệt xong tôi mới apply.</p>
+
+<div class="tag t-new">mới</div> là style/token chưa có ·
+<div class="tag t-chg">đổi cỡ</div> là chỗ cỡ chữ hoặc màu sẽ xê dịch khi gom ·
+<div class="tag t-merge">gộp</div> là nhiều giá trị cũ thành 1
+
+<h2>1. Cấu trúc</h2>
+<div class="dia">
+  <div class="b"><b>Tầng 1 · Theme (Light / Dark)</b>Giá trị thô, có 2 mode. Không gắn thẳng vào component.<br><code>--theme-ink-100</code>, <code>--theme-surface-0</code>, <code>--theme-blue</code>…</div>
+  <div class="arrow">→</div>
+  <div class="b"><b>Tầng 2 · Alias</b>Chỉ 3 nhóm, gắn theo vai trò:<br><code>--object-*</code> chữ, icon<br><code>--bg-*</code> nền<br><code>--border-*</code> viền</div>
+  <div class="arrow">→</div>
+  <div class="b"><b>Component / HTML</b>Chỉ dùng alias + class text style. Không màu thô, không khai font trong CSS của component.</div>
+</div>
+<ul>
+  <li><b>Đổi mode = đổi tầng 1.</b> <code>html[data-theme=dark]</code> chỉ ghi đè <code>--theme-*</code>. <code>case-dark.css</code> và phần dark trong <code>theme.css</code> (đang override từng component, khoảng 60 dòng) sẽ bị xoá.</li>
+  <li><b>Text style là class gắn thẳng vào HTML</b>: <code>&lt;h1 class="t-h1-ux"&gt;</code>. CSS component chỉ còn layout (margin, width…). Sửa cỡ H1 ở một chỗ là cả site đổi theo.</li>
+  <li><b>Tên style = vai trò cỡ + biến thể font.</b> Mỗi vai trò có một bộ token size / line-height / letter-spacing dùng chung, còn font là biến thể đi kèm: <code>t-h1-cal</code> và <code>t-h1-ux</code> cùng ăn <code>--h1-size</code>. Chỗ nào cần Cal Sans to hay Uxum to thì chú chọn biến thể, không phải đẻ style mới.</li>
+  <li><b>Cách co giãn:</b> giữ nguyên cách site đang chạy, cỡ ghi theo design 1920.
+    <ul>
+      <li>Body cố định px, ở đâu cũng vậy.</li>
+      <li>Display, Heading, Title, Note co theo <code>--u</code>. Home <code>--u = 1px</code>, case <code>--u = min(100vw,1600px)/1920</code>, mỗi style có cỡ sàn cho mobile.</li>
+    </ul></li>
+  <li><b>Gradient</b> (thanh AI, card, flap) là nhóm <code>--paint-*</code>, tương đương paint style, không thuộc 3 nhóm màu.</li>
+  <li><b>Figma:</b> text style <code>Heading/H1/Uxum</code>, <code>Body/B3/Medium</code>… bind vào biến <code>Typography/*</code>. Biến màu: collection <code>1. Theme</code> (mode Light · Dark) và <code>2. Alias</code>. Tên biến CSS = tên lá, không tiền tố, đúng luật A3.</li>
+</ul>
+
+<h2>2. Text style</h2>
+<p class="lead">Cỡ ghi theo design 1920 (px). Cột "@1600" là cỡ thật trên case page khi màn ≥1600. Specimen render ở cỡ @1600; Display thu nhỏ cho vừa bảng.</p>
+<div class="tw"><table>
+<thead><tr><th>Style · class</th><th>Biến thể font</th><th>Cỡ / LH / LS · weight</th><th>@1600 · sàn mobile</th><th>Specimen</th><th>Thay cho (cũ → mới)</th></tr></thead>
+<tbody>
+<tr class="grp"><td colspan="6">Display (rất to, chỉ home + số liệu)</td></tr>
+<tr><td><b>D1</b><br><code>t-d1-*</code></td><td>ux · cal</td><td>160 / 0.9 / −2% · 400</td><td>—, chỉ home</td><td class="spec"><div style="font:400 44px/1 Uxum;letter-spacing:-.02em">Think first <span style="font-family:'Cal Sans'">*</span></div></td><td><span class="old">marquee text Uxum 160, asterisk Cal 160</span></td></tr>
+<tr><td><b>D2</b><br><code>t-d2-*</code></td><td>cal · mono</td><td>140 / 0.9 / −2% · 400 (mono 500, ls −7px)</td><td>—, chỉ home</td><td class="spec"><div style="font:400 40px/1 'Cal Sans';letter-spacing:-.02em">AI Product <span style="font:500 40px/1 'IBM Plex Mono';letter-spacing:-2px">&lt;/Eng</span></div></td><td><span class="old">hero Cal 140 (lh .9 và lh normal) + Plex 140</span> <span class="tag t-merge">gộp lh</span></td></tr>
+<tr><td><b>D3</b><br><code>t-d3-*</code></td><td>ux · cal</td><td>72 / 1.1 / 0 · 400</td><td>60 · 40</td><td class="spec"><div style="font:400 60px/1.1 Uxum">&gt;25<span style="font-size:40px">%</span></div></td><td><span class="old">stat value DEC + OneU (Uxum 72u)</span> <span class="tag t-new">mới</span></td></tr>
+
+<tr class="grp"><td colspan="6">Heading</td></tr>
+<tr><td><b>H1</b><br><code>t-h1-*</code></td><td>ux · cal</td><td>56 / 1.2 / 0 · 400</td><td>46.7 · 34</td><td class="spec"><div style="font:400 46.7px/1.2 Uxum">Nội dung cá nhân hoá</div></td><td><span class="old">case-title, dec-head__title, oneu-s06/s11 title (56u) · pg-title home Uxum 64 · oneu-s05__name Cal 60u</span> <span class="tag t-chg">64→56, 60→56</span></td></tr>
+<tr><td><b>H2</b><br><code>t-h2-*</code></td><td>ux · cal · bdo (500, −2%)</td><td>48 / 1.0 / 0 · 400</td><td>40 · 28</td><td class="spec"><div style="font:400 40px/1 Uxum">&gt;</div><div style="font:500 40px/.95 'BDO Grotesk';letter-spacing:-.02em">Hêy! Cẩn thận,</div></td><td><span class="old">About sentence BDO 500 48/.9 · stat sym Uxum 48u</span></td></tr>
+<tr><td><b>H3</b><br><code>t-h3-*</code></td><td>ux · cal</td><td>40 / 1.2 / 0 · 400</td><td>33.3 · 26</td><td class="spec"><div style="font:400 33.3px/1.2 Uxum">Vấn đề</div></td><td><span class="old">case-h2 (40u)</span></td></tr>
+<tr><td><b>H4</b><br><code>t-h4-*</code></td><td>cal · ux</td><td>36 / 1.22 / 0 · 400</td><td>30 · 22</td><td class="spec"><div style="font:400 30px/1.22 'Cal Sans'">Multimedia &amp; Graphic</div></td><td><span class="old">exp-title Cal 36/44 (Title-XL)</span></td></tr>
+
+<tr class="grp"><td colspan="6">Title (nhỏ hơn heading, dùng trong card, bảng, nút)</td></tr>
+<tr><td><b>T1</b><br><code>t-t1-*</code></td><td>ux · cal</td><td>28 / 1.3 / 0 · 400</td><td>23.3 · 18</td><td class="spec"><div style="font:400 23.3px/1.3 Uxum">Cùng xem cấu trúc layout UI</div></td><td><span class="old">dec-breakdown__title, oneu-s13 cta text (28u) · Title-L 28 (chưa dùng)</span></td></tr>
+<tr><td><b>T2</b><br><code>t-t2-*</code></td><td>cal · ux</td><td>24 / 1.3 / 0 · 400</td><td>20 · 16</td><td class="spec"><div style="font:400 20px/1.3 'Cal Sans'">Kết nối với tôi nhé!</div></td><td><span class="old">Work title, contact, exp-co, cursor chip Cal 24 (lh 31 / 32) · stat unit Uxum 24u</span> <span class="tag t-merge">gộp lh 31/32</span></td></tr>
+<tr><td><b>T3</b><br><code>t-t3-*</code></td><td>cal · bdo (500)</td><td>20 / 1.3 / 0 · 400</td><td>16.7 · 14</td><td class="spec"><div style="font:400 16.7px/1.3 'Cal Sans'">#Human Taste, AI Speed</div><div style="font:500 16.7px/1.3 'BDO Grotesk'">Dynamic Adaptive</div></td><td><span class="old">tagline Cal 22 · dec-tab BDO 500 22u · Title-S 20</span> <span class="tag t-chg">22→20</span></td></tr>
+<tr><td><b>T4</b><br><code>t-t4-*</code></td><td>cal · ux</td><td>17 / 1.4 / 0 · 400</td><td>14.2 · 13</td><td class="spec"><div style="font:400 14.2px/1.4 'Cal Sans'">DEC Phase 1 · Làm tay · Bước 1</div><div style="font:400 14.2px/1.4 Uxum">Giảm</div></td><td><span class="old">bảng s06 (th, nhãn hàng, chip) Cal 17u · stat kicker Uxum 14 cố định</span> <span class="tag t-merge">gộp</span></td></tr>
+
+<tr class="grp"><td colspan="6">Body (BDO Grotesk, cố định px, không co theo màn)</td></tr>
+<tr><td><b>B1</b><br><code>t-b1</code> · <code>t-b1-m</code></td><td>regular · medium</td><td>18 / 1.33 / −2%</td><td>18 · 16</td><td class="spec"><div style="font:400 18px/1.33 'BDO Grotesk';letter-spacing:-.02em">(+84) 333.44.2129</div></td><td><span class="old">Body/L home (contact, w-t2)</span></td></tr>
+<tr><td><b>B2</b><br><code>t-b2</code> · <code>t-b2-m</code></td><td>regular · medium</td><td>16 / 1.4 / 0</td><td>16 · 14</td><td class="spec"><div style="font:400 16px/1.4 'BDO Grotesk'">Lĩnh vực · Loyalty, Lifestyle App</div></td><td><span class="old">case-label/value, dec-stat__desc, ô bảng s06, oneu-s05__desc (19u = 15.8) · w-desc 16/20 · legend</span> <span class="tag t-chg">15.8→16 cố định</span></td></tr>
+<tr><td><b>B3</b><br><code>t-b3</code> · <code>t-b3-m</code></td><td>regular · medium</td><td>14 / 1.65 / −1%</td><td>14 · 14</td><td class="spec"><div style="font:400 14px/1.65 'BDO Grotesk';letter-spacing:-.01em">Việc làm và nhân rộng banner, nhất là banner động…</div></td><td><span class="old">case-p, case-list, strong, dec-backstory (14 / 23.1 và 14 / 19.6) · Body/S 14/18</span> <span class="tag t-merge">gộp lh</span></td></tr>
+<tr><td><b>B4</b><br><code>t-b4</code> · <code>t-b4-m</code></td><td>regular · medium</td><td>12 / 1.33 / 0</td><td>12 · 12</td><td class="spec"><div style="font:400 12px/1.33 'BDO Grotesk'">Giá · Đếm ngược</div></td><td><span class="old">radio label DEC (13.3, đang ăn mặc định) · Body/XS</span> <span class="tag t-chg">13.3→12</span></td></tr>
+
+<tr class="grp"><td colspan="6">Note (Caveat 700, chữ viết tay)</td></tr>
+<tr><td><b>N1</b><br><code>t-n1</code></td><td>caveat</td><td>80 / 1.0 / 0</td><td>66.7 · 40</td><td class="spec"><div style="font:700 44px/1 Caveat">Tôi tìm tới một môi trường</div></td><td><span class="old">exp-quote 80</span></td></tr>
+<tr><td><b>N2</b><br><code>t-n2</code></td><td>caveat</td><td>32 / 1.15 / 0</td><td>26.7 · 22</td><td class="spec"><div style="font:700 26.7px/1.15 Caveat">Trước: Thiết kế app VinID</div></td><td><span class="old">note, exp-yr, w-part, pg-kind home (32 · lh 37/32/28) · oneu captions 32u (lh 26.7 / 23.3 / 44)</span> <span class="tag t-merge">gộp 5 lh</span></td></tr>
+<tr><td><b>N3</b><br><code>t-n3</code></td><td>caveat</td><td>28 / 1.2 / 0</td><td>23.3 · 20</td><td class="spec"><div style="font:700 23.3px/1.2 Caveat">ở đây nhé · Cấu trúc component</div></td><td><span class="old">dec-backstory link, dec-diagram__label (28u) · pg-aside Caveat <b>400</b> 24</span> <span class="tag t-chg">pg-aside 400→700</span></td></tr>
+
+<tr class="grp"><td colspan="6">UI (Inter, chỉ để giả chrome Figma: thanh trên, sidebar, toast, label ảnh)</td></tr>
+<tr><td><b>UI1</b><br><code>t-ui1</code></td><td>600</td><td>15 / 1.47 / 0</td><td>cố định</td><td class="spec"><div style="font:600 15px/1.47 Inter">Đã copy link</div></td><td><span class="old">toast 500 15/22 · nút EN/VI 600 15/15 ls 0.3px</span> <span class="tag t-merge">gộp</span></td></tr>
+<tr><td><b>UI2</b><br><code>t-ui2</code> · <code>t-ui2-s</code></td><td>400 · 600</td><td>13 / 22 / 0</td><td>cố định</td><td class="spec"><div style="font:400 13px/22px Inter">Dynamic Engagement Content <b style="font-weight:600">Work</b></div></td><td><span class="old">Figma/Regular, Figma/Strong</span></td></tr>
+<tr><td><b>UI3</b><br><code>t-ui3</code></td><td>500</td><td>11 / 16 / 0.5%</td><td>cố định</td><td class="spec"><div style="font:500 11px/16px Inter;letter-spacing:.005em">Share · 323 × 323 · OneU - Redesign</div></td><td><span class="old">Figma/Small (lh 16 và 14)</span> <span class="tag t-merge">gộp lh</span></td></tr>
+<tr><td><b>Fun</b><br><code>t-fun</code></td><td>bangers</td><td>80 / 1.1 / 0</td><td>chỉ home</td><td class="spec"><div style="font:400 30px/1.1 Inter;font-family:Bangers,Impact,sans-serif">[VIbecode]</div></td><td><span class="old">sticker, dùng một lần</span></td></tr>
+</tbody></table></div>
+<p class="old">Tổng: 21 vai trò, thay cho khoảng 45 tổ hợp đang có. Bỏ khỏi type.css vì không còn dùng: Heading/H2 · H3 BDO, Body/XL, Heading/Title-XXL, Figma/Cursor (gộp vào T2).</p>
+
+<h2>3. Màu semantic</h2>
+<p class="lead">Mỗi ô màu có 2 swatch: Light (trên nền #fff) | Dark (trên nền #212121). Màu chữ hiện bằng chữ "Aa".</p>
+
+<h3>Object (chữ, icon)</h3>
+<div class="tw"><table>
+<thead><tr><th>Token</th><th>Light | Dark</th><th>Giá trị</th><th>Dùng cho · gộp từ</th></tr></thead>
+<tbody>
+<tr><td><code>object-primary</code></td><td><div class="sw"><span class="on-l" style="color:#000">Aa</span><span class="on-d" style="color:#fff">Aa</span></div></td><td>#000 · #fff</td><td>Tiêu đề, chữ đậm, chrome. <span class="old">Gộp #000, #0c0c0c, rgba(0,0,0,.9) · dark #fff, #f5f5f5, .9</span> <span class="tag t-merge">gộp .9</span></td></tr>
+<tr><td><code>object-secondary</code></td><td><div class="sw"><span class="on-l" style="color:rgba(0,0,0,.6)">Aa</span><span class="on-d" style="color:rgba(255,255,255,.6)">Aa</span></div></td><td>rgba(0,0,0,.6) · rgba(255,255,255,.6)</td><td>Body text, số thứ tự, caption. <span class="old">Gộp .6, .55, #666, #7a7a7a, #333</span> <span class="tag t-merge">gộp 5</span></td></tr>
+<tr><td><code>object-tertiary</code></td><td><div class="sw"><span class="on-l" style="color:rgba(0,0,0,.4)">Aa</span><span class="on-d" style="color:rgba(255,255,255,.45)">Aa</span></div></td><td>rgba(0,0,0,.4) · rgba(255,255,255,.45)</td><td>Label meta, phụ chú. <span class="old">Gộp #b3b3b3 (≈.3), .5, .3 · dark .5</span> <span class="tag t-chg">nhạt/đậm hơn chút</span></td></tr>
+<tr><td><code>object-disabled</code></td><td><div class="sw"><span class="on-l" style="color:rgba(0,0,0,.16)">Aa</span><span class="on-d" style="color:rgba(255,255,255,.16)">Aa</span></div></td><td>.16 · .16</td><td>Tick Experience chưa chọn. <span class="old">object/quaternary</span></td></tr>
+<tr><td><code>object-onbrand</code></td><td><div class="sw"><span style="background:#0d5eff;color:#fff">Aa</span><span style="background:#0d5eff;color:#fff">Aa</span></div></td><td>#fff · #fff</td><td>Chữ trên nền màu (nút Share, header AI, chip AI, label ảnh)</td></tr>
+<tr><td><code>object-brand</code></td><td><div class="sw"><span class="on-l" style="color:#0d5eff">Aa</span><span class="on-d" style="color:#6b9bff">Aa</span></div></td><td>#0d5eff · #6b9bff</td><td>Link, CTA viết tay, h2 contact. <span class="old">Gộp #0d5eff, #6b9dff</span></td></tr>
+<tr><td><code>object-selected</code></td><td><div class="sw"><span class="on-l" style="color:#0d99ff">Aa</span><span class="on-d" style="color:#0d99ff">Aa</span></div></td><td>#0d99ff · #0d99ff</td><td>Tên frame Figma, lựa chọn (màu chrome Figma)</td></tr>
+<tr><td><code>object-highlight</code></td><td><div class="sw"><span class="on-l" style="color:#f24822">Aa</span><span class="on-d" style="color:#ff6a4a">Aa</span></div></td><td>#f24822 · #ff6a4a</td><td>Năm Experience, dấu *, exp-title. <span class="old">Gộp #f24822, #dc3412</span> <span class="tag t-new">dark mới</span></td></tr>
+<tr><td><code>object-success</code></td><td><div class="sw"><span class="on-l" style="color:#16b24a">Aa</span><span class="on-d" style="color:#3fd07a">Aa</span></div></td><td>#16b24a · #3fd07a</td><td>Số nhấn trong bảng, chấm "Tự động"</td></tr>
+<tr><td><code>object-danger</code></td><td><div class="sw"><span class="on-l" style="color:#e60a32">Aa</span><span class="on-d" style="color:#ff5c78">Aa</span></div></td><td>#e60a32 · #ff5c78</td><td>Stat kicker, chấm "Làm tay". <span class="old">Sửa luôn lỗi: kicker OneU dark đang giữ #e60a32</span></td></tr>
+</tbody></table></div>
+
+<h3>Background</h3>
+<div class="tw"><table>
+<thead><tr><th>Token</th><th>Light | Dark</th><th>Giá trị</th><th>Dùng cho · gộp từ</th></tr></thead>
+<tbody>
+<tr><td><code>bg-canvas</code></td><td><div class="sw"><span style="background:#f5f5f5"></span><span style="background:#212121"></span></div></td><td>#f5f5f5 · #212121</td><td>Nền trang + lưới chấm. <span class="old">Gộp #f5f5f5 home, #f8f8f8 case</span> <span class="tag t-chg">case #f8→#f5</span></td></tr>
+<tr><td><code>bg-layer-1</code></td><td><div class="sw"><span style="background:#fff"></span><span style="background:#2c2c2c"></span></div></td><td>#fff · #2c2c2c</td><td>Pill, sidebar, card, bảng, CTA pill. <span class="old">Gộp #fff · dark #2c2c2c, #262626 (bảng)</span></td></tr>
+<tr><td><code>bg-layer-2</code></td><td><div class="sw"><span style="background:#f2f2f2"></span><span style="background:#383838"></span></div></td><td>#f2f2f2 · #383838</td><td>Nền tab, hàng Process, ô ảnh Playground. <span class="old">Gộp #f2f2f2, #f0f0f0, #efefef, #fafafa, #f6f8ff · dark #2c2c2c, #383838, #3b3b3b</span> <span class="tag t-merge">gộp 5</span></td></tr>
+<tr><td><code>bg-layer-3</code></td><td><div class="sw"><span style="background:#e6e6e6"></span><span style="background:#444"></span></div></td><td>#e6e6e6 · #444</td><td>Tab đang chọn (dark), knob</td></tr>
+<tr><td><code>bg-tint</code></td><td><div class="sw"><span style="background:rgba(0,0,0,.1)"></span><span style="background:#212121;box-shadow:inset 0 0 0 40px rgba(255,255,255,.1)"></span></div></td><td>rgba(0,0,0,.1) · rgba(255,255,255,.1)</td><td>Chip skill, pill "who", cửa sổ Playground (alpha)</td></tr>
+<tr><td><code>bg-inverse</code></td><td><div class="sw"><span style="background:#1e1e1e"></span><span style="background:#1e1e1e"></span></div></td><td>#1e1e1e · #1e1e1e</td><td>Toast, khung media</td></tr>
+<tr><td><code>bg-overlay</code></td><td><div class="sw"><span style="background:rgba(229,229,229,.5)"></span><span style="background:rgba(30,30,30,.55)"></span></div></td><td>rgba(229,229,229,.5) · rgba(30,30,30,.55)</td><td>Lớp dim spotlight</td></tr>
+<tr><td><code>bg-selected</code></td><td><div class="sw"><span style="background:#0d99ff"></span><span style="background:#0d99ff"></span></div></td><td>#0d99ff</td><td>Khung chọn, tag kích thước ảnh</td></tr>
+<tr><td><code>bg-accent</code></td><td><div class="sw"><span style="background:#9747ff"></span><span style="background:#9747ff"></span></div></td><td>#9747ff</td><td>Nút Share, nền select. <span class="old">Gộp #9747ff, #8638e5</span></td></tr>
+<tr><td><code>bg-highlight</code></td><td><div class="sw"><span style="background:#f24822"></span><span style="background:#f24822"></span></div></td><td>#f24822</td><td>Badge vibe, line Experience</td></tr>
+<tr><td><code>bg-warning</code></td><td><div class="sw"><span style="background:#ffcd29"></span><span style="background:#ffcd29"></span></div></td><td>#ffcd29</td><td>Ô vuông vàng, curly fill</td></tr>
+<tr><td><code>bg-mark</code></td><td><div class="sw"><span style="background:rgba(255,241,171,.6)"></span><span style="background:#212121;box-shadow:inset 0 0 0 40px rgba(255,205,41,.28)"></span></div></td><td>rgba(255,241,171,.6) · rgba(255,205,41,.28)</td><td>Highlight chữ "Engineer"</td></tr>
+<tr><td><code>bg-success-subtle</code></td><td><div class="sw"><span style="background:#e8f6ec"></span><span style="background:#1d3326"></span></div></td><td>#e8f6ec · #1d3326</td><td>Hàng Result, chip Tự động. <span class="old">Gộp #eaf7ee, #e2f6e9</span></td></tr>
+<tr><td><code>bg-success-soft</code></td><td><div class="sw"><span style="background:#b4ecc8"></span><span style="background:#1f3d2a"></span></div></td><td>#b4ecc8 · #1f3d2a</td><td>Header cột Phase 1</td></tr>
+<tr><td><code>bg-danger-subtle</code></td><td><div class="sw"><span style="background:#fde6ea"></span><span style="background:#4a2228"></span></div></td><td>#fde6ea · #4a2228</td><td>Chip Làm tay</td></tr>
+<tr><td><code>bg-danger-soft</code></td><td><div class="sw"><span style="background:#ffb4b4"></span><span style="background:#4a2228"></span></div></td><td>#ffb4b4 · #4a2228</td><td>Header cột Banner Ads</td></tr>
+</tbody></table></div>
+
+<h3>Border</h3>
+<div class="tw"><table>
+<thead><tr><th>Token</th><th>Light | Dark</th><th>Giá trị</th><th>Dùng cho · gộp từ</th></tr></thead>
+<tbody>
+<tr><td><code>border-default</code></td><td><div class="sw"><span style="background:#fff;box-shadow:inset 0 0 0 3px #e6e6e6"></span><span style="background:#212121;box-shadow:inset 0 0 0 3px #444"></span></div></td><td>#e6e6e6 · #444</td><td>Divider chrome, viền nav, kẻ bảng, vline. <span class="old">Gộp #e6e6e6, #ececec · dark #444, .1, .12</span> <span class="tag t-merge">gộp 5</span></td></tr>
+<tr><td><code>border-strong</code></td><td><div class="sw"><span style="background:#fff;box-shadow:inset 0 0 0 3px rgba(0,0,0,.3)"></span><span style="background:#212121;box-shadow:inset 0 0 0 3px rgba(255,255,255,.4)"></span></div></td><td>rgba(0,0,0,.3) · rgba(255,255,255,.4)</td><td>Toolbar, viền radio, nút Remind. <span class="old">dark .16 / .4</span></td></tr>
+<tr><td><code>border-inverse</code></td><td><div class="sw"><span style="background:#ccc;box-shadow:inset 0 0 0 3px #fff"></span><span style="background:#ccc;box-shadow:inset 0 0 0 3px #fff"></span></div></td><td>#fff · #fff</td><td>Viền trắng quanh ảnh Experience, badge. <span class="old">Gộp #fff, .7 (pg-win), #f5f5f5 / #212121 (fr-h = viền theo canvas)</span></td></tr>
+<tr><td><code>border-selected</code></td><td><div class="sw"><span style="background:#fff;box-shadow:inset 0 0 0 3px #0d99ff"></span><span style="background:#212121;box-shadow:inset 0 0 0 3px #0d99ff"></span></div></td><td>#0d99ff</td><td>Khung chọn ảnh</td></tr>
+<tr><td><code>border-highlight</code></td><td><div class="sw"><span style="background:#fff;box-shadow:inset 0 0 0 3px #f24822"></span><span style="background:#212121;box-shadow:inset 0 0 0 3px #f24822"></span></div></td><td>#f24822</td><td>Vòng ring Experience</td></tr>
+<tr><td><code>border-success</code> · <code>border-danger</code></td><td><div class="sw"><span style="background:#fff;box-shadow:inset 0 -4px 0 #16b24a"></span><span style="background:#fff;box-shadow:inset 0 -4px 0 #e60a32"></span></div></td><td>#16b24a · #e60a32</td><td>Gạch dưới header cột bảng s06</td></tr>
+</tbody></table></div>
+
+<h3>Paint (gradient, không đổi theo mode trừ card)</h3>
+<div class="tw"><table>
+<thead><tr><th>Token</th><th>Mẫu</th><th>Dùng cho</th></tr></thead>
+<tbody>
+<tr><td><code>paint-ai</code></td><td><div class="sw"><span style="width:120px;background:linear-gradient(90deg,#0d5eff,#12c4ff 55%,#ffe600)"></span></div></td><td>Header Phase 2, chip AI. <span class="old">Gộp 2 bản (stop 55% và 60%)</span></td></tr>
+<tr><td><code>paint-card</code></td><td><div class="sw"><span style="background:linear-gradient(#f9f9f9,#fff)"></span><span style="background:linear-gradient(#2a2a2a,#212121)"></span></div></td><td>case-fig--card (có mode)</td></tr>
+<tr><td><code>paint-flap</code></td><td><div class="sw"><span style="width:120px;background:linear-gradient(#eb445f,#e20a88)"></span></div></td><td>Flap card Work</td></tr>
+</tbody></table></div>
+
+<h3>Ngoại lệ: màu minh hoạ, để nguyên trong component</h3>
+<p>Mấy màu này là một phần của hình minh hoạ, cố ý không đổi theo mode và không gom vào alias (tương đương Utility nhưng không tạo token):</p>
+<ul>
+  <li>Cursor chip "Claude-chan" #d97757 / #b65a3d và "You" #ea10ac / #cb0b96</li>
+  <li>Chữ nâu trên thumbnail Work rgba(92,61,48,.75 / .48), chữ trắng .8 trên ảnh</li>
+  <li>Nền đen <code>pg-media</code>, nền knob/thanh so sánh ảnh OneU (#007be5, #f2f2f4)</li>
+  <li>Màu trong ảnh/sprite</li>
+</ul>
+
+<h2>4. Chú chốt giúp tôi mấy điểm</h2>
+<ol class="q">
+  <li><b>Các chỗ "đổi cỡ"</b>:
+    <ul>
+      <li>Throwbacks 64→56</li>
+      <li>OneU "Năng động" 60→56</li>
+      <li>Tagline và tab 22→20</li>
+      <li>Chữ 19u (15.8px) thành B2 16 cố định</li>
+      <li>Radio label 13.3→12</li>
+    </ul>
+    Nhận hết hay giữ chỗ nào thì tôi tách thành style riêng.</li>
+  <li><b>object-tertiary</b>: gộp #b3b3b3 với .5 thành một mức .4. Hay tách 2 mức: tertiary .3 và .5?</li>
+  <li><b>bg-layer-2</b>: gộp cả nền CTA xanh nhạt #f6f8ff thành xám #f2f2f2. Hay chú muốn thêm <code>bg-brand-subtle</code>?</li>
+  <li><b>Tên class</b>: dùng <code>t-h1-ux</code> / <code>t-b3-m</code> như trên, hay gọn hơn <code>h1-ux</code> / <code>b3-m</code>?</li>
+</ol>
+
+<h2>5. Apply sau khi duyệt</h2>
+<ol>
+  <li>Viết <code>css/base/tokens.css</code>:
+    <ul>
+      <li>Theme light/dark và alias màu</li>
+      <li>Token typography và class <code>t-*</code></li>
+    </ul>
+    File này thay phần biến trong <code>type.css</code>, <code>thumb.css</code>, <code>about.css</code>, <code>spotlight.css</code>, <code>case.css</code>, <code>theme.css</code>, <code>case-dark.css</code>.</li>
+  <li>Script gắn class text style vào HTML theo bảng map, rồi gỡ khai font khỏi CSS component.</li>
+  <li>Thay mọi màu thô trong CSS bằng alias. Xoá các override dark theo component.</li>
+  <li>Chụp trước/sau từng trang, cả light và dark, để soi chỗ lệch ngoài các mục "đổi cỡ" đã duyệt.</li>
+</ol>
+</main>
+</body>
+</html>

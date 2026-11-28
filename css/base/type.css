@@ -163,3 +163,18 @@
 .t-body-xl { font: var(--type-body-xl-font); letter-spacing: var(--type-body-xl-ls); }
 .t-body-s { font: var(--type-body-s-font); letter-spacing: var(--type-body-s-ls); }
 .t-body-xs { font: var(--type-body-xs-font); letter-spacing: var(--type-body-xs-ls); }
+
+/* ===== TEST (2026-11-28): every BDO Grotesk use -> Uxum. Revert = delete this whole block (BEGIN..END). ===== BEGIN */
+@font-face { font-family: "Uxum"; font-weight: 300; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Light.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Bold.woff2?v=1b") format("woff2"); }
+/* Body text (body-* tokens, case body, plain font-family uses) stays BDO; only headings / label / marquee go Uxum. */
+:root {
+  --type-family-uxum-test: "Uxum", "BDO Grotesk", "Inter", system-ui, sans-serif;
+  --type-heading-h1-font: 500 48px/.9 var(--type-family-uxum-test);
+  --type-heading-h2-font: 500 36px/40px var(--type-family-uxum-test);
+  --type-heading-h3-font: 500 28px/32px var(--type-family-uxum-test);
+  --type-label-glyph-font: 500 20px/1 var(--type-family-uxum-test);
+  --type-display-marquee-font: 500 160px/.9 var(--type-family-uxum-test);
+}
+/* ===== TEST Uxum ===== END */

@@ -1,10 +1,6 @@
-/* VFK - Uxum 1.002 (1B): Việt hoá Light / Regular / Bold */
-@font-face { font-family: "Uxum"; font-weight: 300; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Light.woff2?v=1b") format("woff2"); }
-@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
-@font-face { font-family: "Uxum"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Bold.woff2?v=1b") format("woff2"); }
 /* ==========================================================================
    Case study frame (shared by every work/<case>.html).
-   Load after css/base/type.css. Source: Figma file L019S5a1cfWPNCtASIazaY, frame 1828:9464 (OneU).
+   Load after css/base/tokens.css. Source: Figma file L019S5a1cfWPNCtASIazaY, frame 1828:9464 (OneU).
 
    Scale: design is 1920 wide, content column 250 -> 1670 (1420). From 1024px up everything is sized in
    "design units": 1u = min(100vw, 1600px) / 1920 (so it shrinks with the viewport, never grows past 1600px).
@@ -25,14 +21,13 @@
      .case-meta           5-column meta row (Domain / Team / Contribution / Scope / Year)
        .case-meta__item     one column: .case-label + .case-value
 
-   TEXT
-     .case-title          page title h1        56u / 1.2  Cal Sans 400   (Figma Uxum Regular 56)
-     .case-h2             section heading      40u / 1.2  Cal Sans 400   (Figma Uxum Bold 40)
-     .case-p              body paragraph       22u / 32u  BDO 400, -0.01em       (Figma Darker Grotesque Medium 32)
-       .case-p--strong      bold paragraph                BDO 500        (Figma Darker Grotesque Bold 32)
-     .case-list           bullet list (ul), same size as .case-p
-     .case-label          meta label           19u / 24u  BDO 400, #b3b3b3
-     .case-value          meta value           19u / 24u  BDO 400, #000; each line is a <span> (block, 8u apart)
+   TEXT (layout + colour only; the type comes from the text style class in the HTML, css/base/tokens.css)
+     .case-title  t-h1-ux   page title h1
+     .case-h2     t-h3-ux   section heading
+     .case-p      t-b3      body paragraph (.case-p--strong + t-b3-m)
+     .case-list   t-b3      bullet list (ul)
+     .case-label  t-b2      meta label, object-tertiary
+     .case-value  t-b2      meta value, object-primary; each line is a <span> (block, 8u apart)
      .case-logo           brand logo img (svg has glow padding: sized to its natural box, nudged to align)
 
    FIGURES
@@ -41,7 +36,7 @@
        .case-fig--hero      aspect-ratio 1419/829 (OneU hero); copy this pattern for other fixed ratios
        .case-fig--bleed     full viewport width, break out of the 1420 column
 
-   Tokens: --case-u, --case-font-*, --case-*-size/lh, --case-gap. Defined here from --type-family-* (type.css untouched).
+   Tokens: --case-u, --case-gap, --case-w. Type scale: --u = --case-u (0px below 1024 so text styles sit on their floor).
    ========================================================================== */
 
 :root {
@@ -51,21 +46,8 @@
   --case-gap: calc(106 * var(--case-u));
   --case-col-gap: calc(20 * var(--case-u));
 
-  --case-font-display: "Uxum", var(--type-family-cal);   /* TEST: Uxum Regular (Figma font); revert to var(--type-family-cal) */
-  --case-font-text: var(--type-family-bdo);
-
-  --case-title-size: max(34px, calc(56 * var(--case-u)));
-  --case-h2-size: max(26px, calc(40 * var(--case-u)));
-  --case-p-size: 14px;   /* body text: fixed 14 (user chốt; 16+ đọc to quá) */
-  --case-p-lh: calc(32 / 22);
-  --case-p-ls: -0.01em;
-  --case-meta-size: max(13px, calc(19 * var(--case-u)));
-  --case-meta-lh: calc(24 / 19);
-
-  --case-ink: #000;
-  --case-ink-soft: #b3b3b3;
-  --case-ink-secondary: rgba(0, 0, 0, .6);   /* màu chữ body: 1 tone trên --text-secondary (.5), = --case-ink-muted dark */
-  --case-card-bg: linear-gradient(180deg, #f9f9f9, #fff);
+  --u: var(--case-u);            /* text style scale (css/base/tokens.css) */
+  --theme-canvas: #fff;          /* case pages keep a plain white page in light mode (user, 2026-11-15); dark stays #212121 */
   --case-card-radius: calc(64 * var(--case-u));
 }
 
@@ -78,11 +60,9 @@
 /* ---------- page: dot background (Figma Background 3750:31824: #f8f8f8 + 2x2 #ddd dot every 16px) ---------- */
 .case {
   margin: 0;
-  color: var(--case-ink);
-  font-family: var(--case-font-text);
-  font-weight: 400;
-  background-color: #fff;
-  /* dot grid removed (user, 2026-11-15): plain white (#fff) */
+  color: var(--object-primary);
+  font-family: var(--font-bdo);
+  background-color: var(--bg-canvas);
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
@@ -105,21 +85,14 @@
 .case-meta__item { min-width: 0; }
 
 /* ---------- text ---------- */
-.case-title { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-title-size); line-height: 1.2; letter-spacing: 0; text-wrap: balance; }
-.case-h2 { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-h2-size); line-height: 1.2; letter-spacing: 0; }
-.case-p, .case-list { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-p-size); line-height: var(--case-p-lh); letter-spacing: var(--case-p-ls); }
+.case-title { text-wrap: balance; }
 .case-p + .case-p { margin-top: calc(32 * var(--case-u)); }
-/* MÀU CHỮ BODY: mọi chữ body (kể cả chữ nhấn strong) dùng --case-ink-secondary. Class body riêng của case nào thì thêm vào đây,
-   không tự đặt màu trong css/pages (dark mode chỉ cần đổi token). Tiêu đề, meta value, bảng, chú thích Caveat giữ màu riêng. */
-.case-p, .case-list, .oneu-p24, .oneu-s05__desc, .oneu-stat__desc, .dec-read, .dec-backstory, .dec-stat__desc { color: var(--case-ink-secondary); }
-.case-p--strong { font-weight: 500; }
-/* Tiếng Việt nhiều dấu chồng: giãn dòng hơn bản EN */
-:root:lang(vi) :is(.case-p, .case-list, .oneu-p24, .dec-read) { line-height: 1.65; }
+/* MÀU CHỮ BODY: mọi chữ body (kể cả chữ nhấn strong) dùng --object-secondary. Class body riêng của case nào thì thêm vào đây. */
+.case-p, .case-list, .oneu-p24, .oneu-s05__desc, .oneu-stat__desc, .dec-read, .dec-backstory, .dec-stat__desc { color: var(--object-secondary); }
 .case-list { list-style: disc; padding-left: 1.1em; }
 .case-list li + li { margin-top: calc(8 * var(--case-u)); }
-.case-label, .case-value { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-meta-size); line-height: var(--case-meta-lh); letter-spacing: 0; }
-.case-label { color: var(--case-ink-soft); margin-bottom: calc(9 * var(--case-u)); }
-.case-value { color: var(--case-ink); }
+.case-label { color: var(--object-tertiary); margin-bottom: calc(9 * var(--case-u)); }
+.case-value { color: var(--object-primary); }
 .case-value > span { display: block; }
 .case-value > span + span { margin-top: calc(8 * var(--case-u)); }
 
@@ -129,7 +102,7 @@
 
 /* ---------- figures ---------- */
 .case-fig img { width: 100%; height: auto; }
-.case-fig--card { background: var(--case-card-bg); border-radius: var(--case-card-radius); overflow: hidden; }
+.case-fig--card { background: var(--paint-card); border-radius: var(--case-card-radius); overflow: hidden; }
 .case-fig--hero { aspect-ratio: 1419 / 829; }   /* keeps the card size while the image is missing */
 .case-fig--bleed { width: var(--case-vw); margin-left: calc(50% - var(--case-vw) / 2); }
 .case-fig--bleed img { width: 100%; }
@@ -138,13 +111,11 @@
 @media (max-width: 1023px) {
   :root {
     --case-u: 1px;
+    --u: 0px;            /* text styles sit on their mobile floor */
+    --b1-size: 16px;
+    --b2-size: 14px;
     --case-w: 100%;
     --case-gap: 64px;
-    --case-title-size: 34px;
-    --case-h2-size: 28px;
-    --case-p-size: 14px;
-    --case-p-lh: 1.45;
-    --case-meta-size: 14px;
     --case-card-radius: 24px;
   }
   .case-main { width: auto; margin: 0; padding: 0 20px; }
