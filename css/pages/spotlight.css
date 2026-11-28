@@ -85,7 +85,7 @@ body.is-spotlight .dim-overlay {
   --d-in: 40ms; --d-out: 15ms;
 }
 .layer--note {
-  left: 28px; top: 539px; width: 470px; height: 160px;
+  left: -87px; top: 539px; width: 700px; height: 160px;   /* widened from 470 (same center x 263; balance only works up to 6 lines) so the intro wraps less */
   --dx: 11.46px; --dy: -211.97px; --s0: .4; --r0: -12deg;
   --d-in: 80ms; --d-out: 0ms;
 }
@@ -195,9 +195,10 @@ body.is-spotlight .dim-overlay {
 
 /* ---------- handwritten note under the person (Figma 3789:32186, in the 820x550 composition) ---------- */
 .note {
-  margin: 0; width: 470px;
+  margin: 0; width: 700px;
   font: var(--type-note-handwritten-font); line-height: 1; /* exception: kept at 1 (32px); Figma style says 37px */
   letter-spacing: var(--type-note-handwritten-ls); text-align: center;
+  text-wrap: balance;   /* even line lengths; compound words are glued with &nbsp; in the copy so they never split */
   color: var(--ink); text-decoration: none;
 }
 

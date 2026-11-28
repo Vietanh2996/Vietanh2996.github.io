@@ -2,16 +2,17 @@
    first paint (saved choice, else en). Static text: elements with data-i18n="key" get innerHTML from DICT[lang][key]; the English
    original is read from the page the first time, so DICT.en only needs keys whose English is NOT in the HTML.
    Text built by other scripts (chips, work cards, intro, experience quotes) listens for the "langchange" event on document
-   and reads window.I18N.lang / I18N.t(key, fallback). */
+   and reads window.I18N.lang / I18N.t(key, fallback).
+   Other pages (work/*.html) add their own copy via window.I18N_PAGE = { vi: {...} } loaded before this file;
+   key 'page.title' there also switches document.title. */
 (function () {
   'use strict';
   var root = document.documentElement, KEY = 'lang';
   var DICT = {
     vi: {
       'card.title': 'Kết nối với tôi nhé!',
-      'about.note': 'Xin chào, hiện tôi đang làm Lead Design Engineer tại Hà Nội, Việt Nam, với hơn 9 năm kinh nghiệm trong ngành design, trong đó 5 năm gần đây làm Product Design và Design Engineering. Tôi xây dựng Design System và quy trình làm việc cùng AI cho team, để rút ngắn con đường từ thiết kế đến sản phẩm chạy thật.',
-      'hero.hi': 'Xin chào, tôi là một',
-      'about.hi1': 'Êy! Cẩn thận đây,',
+      'about.note': 'Xin&nbsp;chào, mình là Việt&nbsp;Anh, Design&nbsp;Engineer&nbsp;Lead tại Hà&nbsp;Nội. Mình có 9&nbsp;năm kinh&nbsp;nghiệm ngành design, trong&nbsp;đó hơn&nbsp;5&nbsp;năm gần&nbsp;đây làm vị&nbsp;trí Product&nbsp;Design và Design&nbsp;Engineering. Hiện mình đang xây Design&nbsp;System và đưa AI vào quy&nbsp;trình làm&nbsp;việc của team&nbsp;product, để tăng&nbsp;năng&nbsp;suất cho cả&nbsp;team và rút&nbsp;ngắn đường từ thiết&nbsp;kế đến sản&nbsp;phẩm&nbsp;thật.',
+      'about.hi1': 'Hêy! Cẩn thận,',
       'about.hi2': 'đang tới để',
       'about.design': 'thiết kế',
       'about.build': 'xây dựng',
@@ -26,6 +27,9 @@
     },
     en: {}
   };
+  var PAGE = window.I18N_PAGE || {};
+  Object.keys(PAGE).forEach(function (l) { DICT[l] = DICT[l] || {}; Object.keys(PAGE[l]).forEach(function (k) { DICT[l][k] = PAGE[l][k]; }); });
+  if (DICT.vi['page.title']) DICT.en['page.title'] = document.title;
   var nodes = [].slice.call(document.querySelectorAll('[data-i18n]'));
   nodes.forEach(function (el) { DICT.en[el.dataset.i18n] = el.innerHTML; });
   var btn = document.querySelector('.lang-toggle');
@@ -36,6 +40,7 @@
   function apply(l) {
     root.lang = l; I18N.lang = l;
     nodes.forEach(function (el) { var v = t(el.dataset.i18n); if (v != null && el.innerHTML !== v) el.innerHTML = v; });
+    if (DICT.en['page.title']) document.title = t('page.title');
     if (btn) btn.setAttribute('aria-label', l === 'vi' ? 'Switch to English' : 'Chuyển sang tiếng Việt');
     document.dispatchEvent(new CustomEvent('langchange', { detail: { lang: l } }));
   }

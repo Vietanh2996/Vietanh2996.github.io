@@ -42,7 +42,7 @@
     { items: [   // "and ship with [..]"
       { label: 'Claude Code',    tint: 'orange', glyph: 'CC', icon: 'assets/home/icons/skill/claude-code.svg' },
       { label: 'Figma MCP',      tint: 'purple', glyph: 'FM', icon: 'assets/home/icons/skill/figma-mcp.svg' },
-      { label: 'My own platform', tint: 'red',   glyph: 'VA', icon: 'assets/home/icons/skill/my-own-platform.svg' }
+      { label: 'Self-built platform', tint: 'red',   glyph: 'VA', icon: 'assets/home/icons/skill/my-own-platform.svg' }
     ] }
   ];
 

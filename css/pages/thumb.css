@@ -66,10 +66,17 @@ body::before {
 .thumb-stage > *:not(.cursor), .hero-cluster > * { position: absolute; }
 .pill-left, .sidebar-right, .zoom-help, .toolbar { position: fixed; pointer-events: none; }
 /* FigJam chrome: fixed to the viewport edges, sized by --chrome-scale (not the stage scale).
-   z 3 at rest: above the page (stage z 2). Spotlight open: z 0, so .dim-overlay (z 1) dims it and the stage (z 2) sits on top.
-   Restoring to z 3 waits 180ms (= the overlay's fade-out) so the chrome never flashes undimmed mid-fade. */
-.pill-left, .sidebar-right, .zoom-help, .toolbar { --s: var(--chrome-scale, 1); scale: var(--s); z-index: 3; transition: z-index 0s linear 180ms; }
-body.is-spotlight .pill-left, body.is-spotlight .sidebar-right, body.is-spotlight .zoom-help, body.is-spotlight .toolbar { z-index: 0; transition: z-index 0s; }
+   z 3 always: above the page (stage z 2) and the spotlight dim (.dim-overlay z 1), like real Figma chrome that cards never cover
+   (user, 2026-11-28: dropping it under the stage while a spotlight was open made the toolbar jump over the cards at every open / close).
+   Spotlight open (body.is-spotlight): the chrome dims itself instead, on the overlay's timing (in 200ms, out 180ms). */
+.pill-left, .sidebar-right, .zoom-help, .toolbar {
+  --s: var(--chrome-scale, 1); scale: var(--s); z-index: 3;
+  transition: opacity 180ms ease-out, filter 180ms ease-out;
+}
+body.is-spotlight :is(.pill-left, .sidebar-right, .zoom-help, .toolbar) {
+  opacity: .35; filter: var(--chrome-drop) blur(3px);
+  transition: opacity 200ms ease-out, filter 200ms ease-out;
+}
 
 /* hero text cluster: transparent wrapper (same box as the stage); only the intro entrance transforms it */
 .hero-cluster { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 458px; pointer-events: none; }

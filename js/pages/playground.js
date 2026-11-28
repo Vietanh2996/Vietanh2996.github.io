@@ -1,4 +1,4 @@
-/* Visual Playground cards on the shared spotlight engine (js/pages/spotlight.js): hover / focus a card -> the page blurs and the
+/* Visual Playground cards on the shared spotlight engine (js/pages/spotlight.js): click a card (click anywhere again to close) -> the page blurs and the
    project's best scenes (data-scenes on the card) fly out of it as small browser windows, laid out beside the card where there is room.
    Also sets --pg-h on .pg-fit to the canvas' real height so the section reserves the right space. */
 (function () {
@@ -87,11 +87,11 @@
       if (!on) { cancelAnimationFrame(raf); raf = 0; loops.forEach(function (l) { l.reset(); }); }
     }
     var units = sats.map(function (el, i) {
-      return { el: el, dIn: DIN[i % 5], dOut: DOUT[i % 5], amp: 10 + 4 * i, tilt: 0, kf: 1 - .1 * i,
+      return { el: el, dIn: DIN[i % 5], dOut: DOUT[i % 5], amp: 2 + .5 * i, tilt: 0, kf: .5 - .05 * i, spin: .12,   // gentle drift: the screens must stay readable
                sat: { dx: 0, dy: 0, s0: .3, r0: -2 * ROT[i % 4] } };
     });
     var inst = SP.create({
-      comp: comp, source: card, space: canvas, spaceW: SW, units: units,
+      comp: comp, source: card, space: canvas, spaceW: SW, units: units, clickOnly: true,
       layout: function (self) {
         var m = measure(media);
         if (!m.w) return null;
@@ -103,11 +103,18 @@
         talls.forEach(function (i) { cols.push({ w: TW, items: [i], tall: true }); });
         for (var j = 0; j < wides.length; j += 2) cols.push({ w: W, items: wides.slice(j, j + 2) });
         var roomL = m.x - GAP - EDGE, roomR = SW - EDGE - (m.x + m.w + GAP);
-        var both = roomL >= TW && roomR >= TW && talls.length && wides.length;
-        var sideOf = function (c) { return both ? (c.tall ? -1 : 1) : (roomR >= roomL ? 1 : -1); };
-        var used = { '-1': 0, '1': 0 }, k = { x1: m.x, y1: m.y, x2: m.x + m.w, y2: m.y + m.h }, ti = 0, wi = 0;
+        // each column goes to the side that still has room for it (widest columns placed first); if neither fits, the roomier side
+        var room = { '-1': roomL, '1': roomR }, used = { '-1': 0, '1': 0 }, sides = [];
+        cols.map(function (c, ci) { return ci; }).sort(function (a, b2) { return cols[b2].w - cols[a].w; }).forEach(function (ci) {
+          var c = cols[ci], fitR = used[1] + c.w <= room[1], fitL = used[-1] + c.w <= room[-1];
+          var side = fitR && fitL ? (room[1] - used[1] >= room[-1] - used[-1] ? 1 : -1) : fitR ? 1 : fitL ? -1 :
+                     (room[1] - used[1] >= room[-1] - used[-1] ? 1 : -1);
+          sides[ci] = side; used[side] += c.w + CG;
+        });
+        used = { '-1': 0, '1': 0 };
+        var k = { x1: m.x, y1: m.y, x2: m.x + m.w, y2: m.y + m.h }, ti = 0, wi = 0;
         cols.forEach(function (c, ci) {
-          var side = sideOf(c), off = used[side];
+          var side = sides[ci], off = used[side];
           used[side] += c.w + CG;
           var x = side > 0 ? m.w + GAP + off : -GAP - off - c.w;
           c.items.forEach(function (i, r) {

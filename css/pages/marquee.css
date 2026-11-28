@@ -23,7 +23,10 @@
 }
 .m-group { display: flex; flex: none; }
 .m-item { display: flex; flex: none; align-items: center; height: 144px; padding-right: 49px; white-space: nowrap; color: var(--text-strong); letter-spacing: -.02em; }
-.m-text { font: var(--type-display-marquee-font); letter-spacing: var(--type-display-marquee-ls); }
+/* TEST: Uxum for the marquee text (index does not load case.css, so the face is declared here). Revert: drop the @font-face and the font-family line. */
+@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
+.m-text { font: var(--type-display-marquee-font); letter-spacing: var(--type-display-marquee-ls);
+  font-family: "Uxum", var(--type-family-bdo); font-weight: 400; }
 .m-star { font: var(--type-display-asterisk-font); letter-spacing: var(--type-display-asterisk-ls); color: #F24822; margin-left: 16px; }
 @keyframes marquee-loop { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {

@@ -92,7 +92,7 @@
 .dec-stat__sym { font-size: max(30px, calc(48 * var(--case-u))); line-height: 1.2; }
 .dec-stat__val { font-size: max(48px, calc(72 * var(--case-u))); line-height: calc(80 / 72); }
 .dec-stat__unit { font-size: max(16px, calc(24 * var(--case-u))); line-height: 1.2; white-space: normal; max-width: 6em; margin-left: calc(4 * var(--case-u)); }
-.dec-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); color: #666; }
+.dec-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); }  /* màu: --case-ink-secondary (case.css) */
 @media (max-width: 1023px) {
   .dec-backstory { flex-wrap: wrap; gap: 0 8px; margin-top: 12px; }
   .dec-head { margin-left: 0; gap: 16px; margin-bottom: 24px; }

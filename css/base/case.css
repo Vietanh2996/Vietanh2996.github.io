@@ -1,4 +1,7 @@
-@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/Uxum-Regular.otf") format("opentype"); }
+/* VFK - Uxum 1.002 (1B): Việt hoá Light / Regular / Bold */
+@font-face { font-family: "Uxum"; font-weight: 300; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Light.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 400; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Regular.woff2?v=1b") format("woff2"); }
+@font-face { font-family: "Uxum"; font-weight: 700; font-style: normal; font-display: swap; src: url("../../assets/shared/fonts/VFK-Uxum-Bold.woff2?v=1b") format("woff2"); }
 /* ==========================================================================
    Case study frame (shared by every work/<case>.html).
    Load after css/base/type.css. Source: Figma file L019S5a1cfWPNCtASIazaY, frame 1828:9464 (OneU).
@@ -53,7 +56,7 @@
 
   --case-title-size: max(34px, calc(56 * var(--case-u)));
   --case-h2-size: max(26px, calc(40 * var(--case-u)));
-  --case-p-size: 16px;   /* body text: fixed 16 (user: 17-20 read too big) */
+  --case-p-size: 14px;   /* body text: fixed 14 (user chốt; 16+ đọc to quá) */
   --case-p-lh: calc(32 / 22);
   --case-p-ls: -0.01em;
   --case-meta-size: max(13px, calc(19 * var(--case-u)));
@@ -61,6 +64,7 @@
 
   --case-ink: #000;
   --case-ink-soft: #b3b3b3;
+  --case-ink-secondary: rgba(0, 0, 0, .6);   /* màu chữ body: 1 tone trên --text-secondary (.5), = --case-ink-muted dark */
   --case-card-bg: linear-gradient(180deg, #f9f9f9, #fff);
   --case-card-radius: calc(64 * var(--case-u));
 }
@@ -105,7 +109,12 @@
 .case-h2 { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-h2-size); line-height: 1.2; letter-spacing: 0; }
 .case-p, .case-list { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-p-size); line-height: var(--case-p-lh); letter-spacing: var(--case-p-ls); }
 .case-p + .case-p { margin-top: calc(32 * var(--case-u)); }
+/* MÀU CHỮ BODY: mọi chữ body (kể cả chữ nhấn strong) dùng --case-ink-secondary. Class body riêng của case nào thì thêm vào đây,
+   không tự đặt màu trong css/pages (dark mode chỉ cần đổi token). Tiêu đề, meta value, bảng, chú thích Caveat giữ màu riêng. */
+.case-p, .case-list, .oneu-p24, .oneu-s05__desc, .oneu-stat__desc, .dec-read, .dec-backstory, .dec-stat__desc { color: var(--case-ink-secondary); }
 .case-p--strong { font-weight: 500; }
+/* Tiếng Việt nhiều dấu chồng: giãn dòng hơn bản EN */
+:root:lang(vi) :is(.case-p, .case-list, .oneu-p24, .dec-read) { line-height: 1.65; }
 .case-list { list-style: disc; padding-left: 1.1em; }
 .case-list li + li { margin-top: calc(8 * var(--case-u)); }
 .case-label, .case-value { font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-meta-size); line-height: var(--case-meta-lh); letter-spacing: 0; }
@@ -133,7 +142,7 @@
     --case-gap: 64px;
     --case-title-size: 34px;
     --case-h2-size: 28px;
-    --case-p-size: 16px;
+    --case-p-size: 14px;
     --case-p-lh: 1.45;
     --case-meta-size: 14px;
     --case-card-radius: 24px;

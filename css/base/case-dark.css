@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Dark theme for the case pages (work/*.html). Load LAST. Same switch as home: html[data-theme="dark"] is set before first paint
+   by the inline <head> script and toggled by js/pages/theme.js (button in .pref-combo, css/base/pref-combo.css).
+   Palette follows home's dark chrome (css/base/theme.css): canvas #212121, surfaces #2c2c2c. Images stay as they are.
+   ========================================================================== */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --case-ink: #fff;
+  --case-ink-soft: rgba(255, 255, 255, .5);
+  --case-ink-secondary: rgba(255, 255, 255, .6);
+  --case-ink-muted: rgba(255, 255, 255, .6);   /* stands in for light-mode #666 */
+  --case-card-bg: linear-gradient(180deg, #2a2a2a, #212121);
+}
+html[data-theme="dark"] .case { background-color: #212121; }
+
+/* top bar (css/base/case-nav.css keeps its light tokens on .case-nav) */
+html[data-theme="dark"] .case-nav {
+  --bg-white: #2c2c2c; --bg-subtle: #383838; --border-default: #444;
+  --text-default: rgba(255, 255, 255, .9); --text-strong: #fff;
+  --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .4));
+}
+html[data-theme="dark"] :is(.pl-chev, .sr-chev, .pl-page img) { filter: invert(1); }
+
+/* text that was hard-coded #000 / #666 in css/pages/case-oneu.css */
+html[data-theme="dark"] :is(.oneu-s09__cta-text, .oneu-s11__title, .oneu-head__title, .oneu-stat__num) { color: var(--case-ink); }
+html[data-theme="dark"] :is(.oneu-s06__num, .oneu-s07__label, .oneu-s07__caption, .oneu-s10__cap, .oneu-s11__num, .oneu-s11__cap,
+  .oneu-head__num, .case-compare__labels .case-p--strong) { color: var(--case-ink-muted); }
+
+/* handwritten pills (CTA) */
+html[data-theme="dark"] :is(.oneu-s09__cta, .oneu-s13__cta) { background: #2c2c2c; }   /* xám trung tính = --bg-white dark, không ngả xanh */
+html[data-theme="dark"] :is(.oneu-s09__cta-note, .oneu-s13__cta-note) { color: #6b9bff; }
+
+/* OneU logos: the "one" letters are #231F20 in the SVG -> white copies (same file, only that fill changed) */
+html[data-theme="dark"] .case-logo[src$="s01-logo-oneu.svg"] { content: url("../../assets/work/oneu/s01-logo-oneu-dark.svg"); }
+html[data-theme="dark"] .oneu-s05__logo { content: url("../../assets/work/oneu/s05-logo-dark.svg"); }
+
+/* ---------- DEC (work/dec.html): colours hard-coded in css/pages/case-dec.css ---------- */
+html[data-theme="dark"] :is(.dec-head__title, .dec-stat__num, .dec-stat__unit) { color: var(--case-ink); }
+html[data-theme="dark"] :is(.dec-head__num, .dec-diagram__label) { color: var(--case-ink-muted); }
+html[data-theme="dark"] .dec-backstory a { color: #6b9bff; }
+html[data-theme="dark"] .dec-stat__kicker { color: #ff5c78; }
+/* comparison table: surface #262626 on the #212121 canvas, pastel tints darkened but same hue */
+html[data-theme="dark"] .dec-table { color: rgba(255, 255, 255, .9); background: #262626; }
+html[data-theme="dark"] :is(.dec-table th, .dec-table td) { border-top-color: rgba(255, 255, 255, .1); }
+html[data-theme="dark"] .dec-th--a { background: #4a2228; color: #fff; }
+html[data-theme="dark"] .dec-th--b { background: #1f3d2a; color: #fff; }
+html[data-theme="dark"] :is(.dec-table tr.is-process th, .dec-table tr.is-process td) { background: #2c2c2c; }
+html[data-theme="dark"] :is(.dec-table tr.is-result th, .dec-table tr.is-result td) { background: #1d3326; }
+html[data-theme="dark"] .dec-table b { color: #3fd07a; }
+html[data-theme="dark"] .dec-chip--manual { background: #4a2228; color: #ff5c78; }
+html[data-theme="dark"] .dec-chip--auto { background: #1f3d2a; color: #3fd07a; }
+html[data-theme="dark"] :is(.dec-chip--manual span, .dec-chip--auto span) { color: #fff; }
+/* layout demo: tabs + radio list */
+html[data-theme="dark"] .dec-tabs { background: #2c2c2c; }
+html[data-theme="dark"] .dec-tab { color: rgba(255, 255, 255, .6); }
+html[data-theme="dark"] .dec-tab[aria-selected=true] { background: #444; color: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .4); }
+html[data-theme="dark"] .dec-vline { background: rgba(255, 255, 255, .12); }
+html[data-theme="dark"] .dec-radio { color: var(--case-ink); border-bottom-color: rgba(255, 255, 255, .12); }
+html[data-theme="dark"] .dec-radio__dot { border-color: rgba(255, 255, 255, .4); }
+html[data-theme="dark"] .dec-radio input:checked ~ .dec-radio__dot { border-color: #fff; }
+html[data-theme="dark"] .dec-radio input:checked ~ .dec-radio__dot::after { background: #fff; }
+html[data-theme="dark"] .dec-radio:has(input:checked) { border-bottom-color: #fff; }

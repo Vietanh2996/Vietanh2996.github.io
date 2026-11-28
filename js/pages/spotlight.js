@@ -15,10 +15,12 @@
    Unit config (cfg.units[i]):
      el, dIn, dOut        element + stagger delays (ms)
      amp, tilt, kf        parallax: px at full deflection, 1 = rotateX/Y tilt, spring stiffness factor
+     spin                 satellites only: factor on the pointer-follow rotation (default 1)
      sat: {dx, dy, s0, r0} satellite: flies from (dx,dy) away, scale s0, rotate r0 -> rest; opacity p/.35; hidden at rest
      draw(u)              custom drawing for non-satellite units (reads u.p, u.px, u.py)
    cfg hooks: layout(inst) -> {open, keep} (open: {circle:{x,y,r}} or {rect:{x1,y1,x2,y2}} or live fn; keep: {x1,y1,x2,y2}),
-              onShown(on), dimWhenOther.
+              onShown(on), dimWhenOther,
+              clickOnly: no hover / focus opening; click (or Enter / Space) on the source opens it, the next click anywhere closes it.
    ?zones draws the zones, ?tune shows the spring panel (bottom-right). */
 (function () {
   'use strict';
@@ -45,7 +47,7 @@
     var units = self.units = cfg.units.map(function (o) {
       var u = { el: o.el, p: 0, v: 0, target: 0, pend: null, dIn: o.dIn, dOut: o.dOut, vis: null,
                 sat: !!o.sat, draw: o.draw || null,
-                amp: o.amp, tilt: o.tilt, kf: o.kf, ax: 0, ay: 0, avx: 0, avy: 0, px: 0, py: 0, rx: 0, ry: 0, rz: 0 };
+                amp: o.amp, tilt: o.tilt, kf: o.kf, spin: o.spin == null ? 1 : o.spin, ax: 0, ay: 0, avx: 0, avy: 0, px: 0, py: 0, rx: 0, ry: 0, rz: 0 };
       if (o.sat) { u.dx = o.sat.dx; u.dy = o.sat.dy; u.s0 = o.sat.s0; u.r0 = o.sat.r0; }
       return u;
     });
@@ -60,7 +62,7 @@
           w = clamp(p, 0, 1) * SPRING.parAmt;
           u.px = u.ax * u.amp * w; u.py = u.ay * u.amp * w;
           if (u.tilt) { w = clamp(p, 0, 1) * SPRING.parTilt; u.ry = u.ax * w; u.rx = -u.ay * w; }
-          else if (u.sat) u.rz = u.ax * clamp(p, 0, 1) * SPRING.parTilt * 1.5;
+          else if (u.sat) u.rz = u.ax * clamp(p, 0, 1) * SPRING.parTilt * 1.5 * u.spin;
         }
         if (p > 0.001 || u.target || u.pend) any = true;
         if (u.sat) {
@@ -182,6 +184,7 @@
     // ---------- touch: tap toggles ----------
     source.addEventListener('pointerdown', function (e) { lastTouch = isTouchEvent(e); });
     source.addEventListener('click', function () {
+      if (cfg.clickOnly) { self.open(); lastTouch = false; return; }   // closing is the document click (manager)
       if (lastTouch || hoverTouch.matches) {
         self.isOpen ? self.close() : self.open();
       } else {
@@ -189,7 +192,13 @@
       }
       lastTouch = false;
     });
+    if (cfg.clickOnly) source.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      self.isOpen ? self.close() : self.open();
+    });
     self.touchOutside = function (e) {
+      if (cfg.clickOnly) return;
       if (!self.isOpen || !isTouchEvent(e)) return;
       var t = e.target;
       if (!(t.closest && t.closest('.sp-layer, .person, .sp-clone') && comp.contains(t)) && !source.contains(t)) self.close();
@@ -197,7 +206,7 @@
 
     // ---------- keyboard ----------
     source.addEventListener('focus', function () {
-      if (skipFocus || lastTouch || hoverTouch.matches) return;
+      if (cfg.clickOnly || skipFocus || lastTouch || hoverTouch.matches) return;
       self.open();
     });
     function onFocusOut(e) {
@@ -239,15 +248,17 @@
   function evaluateAll() {
     if (lastX === null) return;
     var i, inst, hit = null;
+    if (active && active.cfg.clickOnly) { active.updatePar(); return; }   // a clicked-open overlay ignores hover until the closing click
     for (i = 0; i < instances.length; i++) {
       inst = instances[i];
       inst._p = inst.toStage(lastX, lastY);
+      if (inst.cfg.clickOnly) continue;
       if (!hit && inst.inOpen(inst._p)) hit = inst;
     }
     if (hit) { hit.pointerInside = true; hit.open(); }
     for (i = 0; i < instances.length; i++) {
       inst = instances[i];
-      if (inst === hit) continue;
+      if (inst === hit || inst.cfg.clickOnly) continue;
       if (inst.inKeep(inst._p)) {
         inst.pointerInside = true;
         // out -> in -> out at the edge: follow live while the person is still visibly out
@@ -268,11 +279,17 @@
   document.documentElement.addEventListener('pointerleave', function (e) {
     if (isTouchEvent(e)) return;
     lastX = lastY = null;
-    instances.forEach(function (inst) { inst.pointerInside = false; if (inst.isOpen) inst.close(); });
+    instances.forEach(function (inst) { inst.pointerInside = false; if (inst.isOpen && !inst.cfg.clickOnly) inst.close(); });
   });
   document.addEventListener('pointerdown', function (e) {
     for (var i = 0; i < instances.length; i++) instances[i].touchOutside(e);
   });
+  // click-only overlay: the first click anywhere (card, windows, backdrop) only closes it, it never reaches what is under it
+  document.addEventListener('click', function (e) {
+    if (!active || !active.cfg.clickOnly) return;
+    e.preventDefault(); e.stopPropagation();
+    active.close();
+  }, true);
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && active) active.escape();
   });

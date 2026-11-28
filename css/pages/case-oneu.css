@@ -24,7 +24,7 @@
 /* ---------- s05 ---------- */
 .oneu-s05 { margin-bottom: calc(233 * var(--case-u)); }               /* Figma: diagram bottom 5678 -> s06 heading 5911 */
 .oneu-s05__cols { margin-top: calc(70 * var(--case-u)); }
-.oneu-s05__p { margin-top: calc(39 * var(--case-u)); max-width: calc(359 * var(--case-u)); }
+.oneu-s05__p { margin-top: calc(39 * var(--case-u)); }   /* fill cột (bỏ max-width 359u từ Figma: chữ body giờ cố định 14px) */
 .oneu-s05__cols .case-h2 { line-height: 1.2; }
 
 .oneu-s05__diagram { position: relative; margin-top: calc(187 * var(--case-u)); aspect-ratio: 1420 / 651; }
@@ -35,7 +35,7 @@
 .oneu-s05__art .oneu-s05__logo { left: 36.165%; top: 34.404%; translate: none; width: 27.834%; height: 38.888%; }
 
 .oneu-s05__pillar { position: absolute; z-index: 1; transform: translateX(-50%); text-align: center; }
-.oneu-s05__name { font-family: var(--case-font-text); font-weight: 500; font-size: calc(60 * var(--case-u)); line-height: 1.1; letter-spacing: -0.04em; white-space: nowrap; }
+.oneu-s05__name { font-family: var(--type-family-cal); font-weight: 400; font-size: calc(60 * var(--case-u)); line-height: 1.1; letter-spacing: 0; white-space: nowrap; }
 .oneu-s05__desc { font-family: var(--case-font-text); font-weight: 500; font-size: var(--case-meta-size); line-height: var(--case-meta-lh); margin: calc(32 * var(--case-u)) auto 0; }
 /* center x / top (name box) in % of 1420x651; description width as in Figma */
 .oneu-s05__pillar--dynamic      { left: 15.387%; top: 6.5%;  width: calc(413 * var(--case-u)); }
@@ -71,7 +71,7 @@
   /* raster is "contain"ed (scaled 651/966, centred), so the logo % differ from desktop */
   .oneu-s05__art .oneu-s05__logo { position: absolute; left: 40.677%; top: 39.489%; width: 18.758%; height: 26.207%; }
   .oneu-s05__pillar { position: static; transform: none; width: auto; }
-  .oneu-s05__name { font-size: 24px; letter-spacing: -0.03em; }
+  .oneu-s05__name { font-size: 24px; letter-spacing: 0; }
   .oneu-s05__desc { font-size: 14px; line-height: 1.35; margin-top: 8px; }
   .oneu-s05__pillar--dynamic { order: 1; } .oneu-s05__pillar--benefit { order: 2; }
   .oneu-s05__pillar--trendy { order: 3; } .oneu-s05__pillar--personalized { order: 4; }
@@ -91,14 +91,17 @@
 .oneu-s09 { margin-bottom: calc(21 * var(--case-u)); }   /* CTA bottom 9957 -> grid 9978 */
 .oneu-s09__read { width: calc(939 * var(--case-u)); margin-left: calc(240 * var(--case-u)); }
 .oneu-s09__read .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
+/* tag CTA kiểu sticker dán: nghiêng nhẹ + bóng mềm sát mép (dùng chung s09 / s13) */
+:root { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.25); }   /* = Figma drop shadow 1/1/0.5 25% */
+html[data-theme="dark"] { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.5); }
 .oneu-s09__cta {
-  display: flex; align-items: flex-end; gap: calc(8 * var(--case-u)); width: fit-content; max-width: 100%;
+  display: flex; align-items: baseline; gap: calc(8 * var(--case-u)); width: fit-content; max-width: 100%;
   margin: calc(56 * var(--case-u)) 0 0 calc(227 * var(--case-u));
   padding: calc(16 * var(--case-u)) calc(32 * var(--case-u));
   background: #f6f8ff; border-radius: calc(28 * var(--case-u));
   -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
-  box-shadow: 1px 1px .5px rgba(0,0,0,.25);
-  transform: rotate(-.5deg); transform-origin: left center;
+  box-shadow: var(--oneu-sticker-shadow);
+  transform: rotate(-1deg); transform-origin: left center;   /* Figma Suggestion CTA 2333:48694: nghiêng ~1° */
   cursor: default; user-select: none;
 }
 .oneu-s09__cta-text { font-family: var(--case-font-display); font-size: max(16px, calc(28 * var(--case-u))); line-height: 1.2; color: #000; white-space: nowrap; }
@@ -124,7 +127,7 @@
 @media (max-width: 1023px) {
   .oneu-s09 { margin-bottom: 32px; }
   .oneu-s09__read, .oneu-s11__read { width: auto; margin-left: 0; }
-  .oneu-s09__cta { margin: 24px 0 0 0; padding: 12px 20px; border-radius: 20px; flex-wrap: wrap; row-gap: 0; transform: rotate(-.5deg); }
+  .oneu-s09__cta { margin: 24px 0 0 0; padding: 12px 20px; border-radius: 20px; flex-wrap: wrap; row-gap: 0; transform: rotate(-1deg); }
   .oneu-s09__cta-text { white-space: normal; }
   .oneu-s10__cap { bottom: 2%; }
   .oneu-s11__head { margin-left: 0; grid-template-columns: 36px 1fr; column-gap: 10px; font-size: 26px; }
@@ -142,9 +145,9 @@
 
 /* ---------- s13 ---------- */
 .oneu-s13__text { width: calc(939 * var(--case-u)); margin-left: calc(241 * var(--case-u)); }
-.oneu-s13__cta { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: calc(var(--oneu-s13-cta-gap, 30) * var(--case-u)) auto 0; padding: calc(16 * var(--case-u)) calc(32 * var(--case-u)); background: #f6f8ff; border-radius: calc(28 * var(--case-u)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); filter: drop-shadow(1px 1px .5px rgba(0,0,0,.25)); cursor: default; }
-.oneu-s13__cta-text { font-family: var(--case-font-display); font-size: max(17px, calc(28 * var(--case-u))); line-height: normal; white-space: nowrap; }
-.oneu-s13__cta-note { font-family: var(--type-family-caveat, "Caveat", cursive); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: normal; color: #0d5eff; text-decoration: underline; text-decoration-skip-ink: none; white-space: nowrap; }
+.oneu-s13__cta { display: flex; align-items: baseline; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: calc(var(--oneu-s13-cta-gap, 30) * var(--case-u)) auto 0; padding: calc(14.5 * var(--case-u)) calc(32 * var(--case-u)) calc(17.5 * var(--case-u));   /* lệch 1.5 lên: Caveat đẩy baseline xuống, bù để chữ hoa Uxum giữa khung */ background: #f6f8ff; border-radius: calc(28 * var(--case-u)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); box-shadow: var(--oneu-sticker-shadow); transform: rotate(-1deg); color: inherit; text-decoration: none; cursor: pointer; }   /* Figma Suggestion CTA 2333:48694: nghiêng ~1° */
+.oneu-s13__cta-text { font-family: var(--case-font-display); font-size: max(17px, calc(28 * var(--case-u))); line-height: 1; white-space: nowrap; }
+.oneu-s13__cta-note { font-family: var(--type-family-caveat, "Caveat", cursive); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; color: #0d5eff; text-decoration: underline; text-decoration-skip-ink: none; white-space: nowrap; }
 .oneu-s13__banners { margin-top: calc(81 * var(--case-u)); }
 
 /* ---------- s14 ---------- */
@@ -179,13 +182,13 @@
 .oneu-stat__num { display: flex; align-items: center; gap: calc(4 * var(--case-u)); margin-top: calc(8 * var(--case-u)) !important; font-family: var(--case-font-display); color: #000; white-space: nowrap; }
 .oneu-stat__sym { font-size: max(30px, calc(48 * var(--case-u))); line-height: 1.2; }
 .oneu-stat__val { font-size: max(48px, calc(72 * var(--case-u))); line-height: calc(80 / 72); }
-.oneu-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); color: #666; }
+.oneu-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); }  /* màu: --case-ink-secondary (case.css) */
 
 @media (max-width: 1023px) {
   .oneu-head { margin-left: 0; gap: 16px; }
   .oneu-head__num { width: auto; }
   .oneu-p24, .oneu-s13__text, .oneu-s15__stats { width: auto; margin-left: 0; }
-  .oneu-s13__cta { flex-wrap: wrap; padding: 12px 22px; border-radius: 28px; margin-top: 32px; gap: 4px 8px; }
+  .oneu-s13__cta { flex-wrap: wrap; padding: 11px 22px 13px; border-radius: 28px; margin-top: 32px; gap: 4px 8px; }
   .oneu-s13__cta-text { white-space: normal; text-align: center; font-size: 18px; }
   .oneu-s13__cta-note { font-size: 22px; }
   .oneu-s13__banners { margin-top: 32px; }
@@ -278,7 +281,7 @@
   .oneu-s03 { margin-bottom: calc(381 * var(--case-u)); }
   .oneu-s04 { margin-bottom: calc(149 * var(--case-u)); }
   .oneu-s05 { margin-bottom: calc(313 * var(--case-u)); }
-  .oneu-s06 { margin-bottom: calc(353 * var(--case-u)); }
+  .oneu-s06 { margin-bottom: var(--case-gap); }   /* 106u chuẩn (Figma 353u hở quá, ảnh s07 đã có ~41px trống trên) */
   .oneu-s07 { margin-bottom: calc(153 * var(--case-u)); }
   .oneu-s08 { margin-bottom: calc(63 * var(--case-u)); }
   .oneu-s09 { margin-bottom: calc(40 * var(--case-u)); }   /* CTA removed (user, 2026-11-15): image pulled up to the text */

@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}if(t!=="dark")t="light";document.documentElement.setAttribute("data-theme",t)})()</script>
+<script>(function(){var l;try{l=localStorage.getItem("lang")}catch(e){}document.documentElement.lang=l==="vi"?"vi":"en"})()</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The New Journey: From VinID → OneU</title>
 <link rel="icon" type="image/png" href="../assets/shared/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/base/type.css?v=vfk1">
-<link rel="stylesheet" href="../css/base/case.css">
+<link rel="stylesheet" href="../css/base/type.css?v=vfk8a">
+<link rel="stylesheet" href="../css/base/case.css?v=vfkux1g">
 <link rel="stylesheet" href="../css/base/case-nav.css">
 <link rel="stylesheet" href="../css/base/case-marquee.css">
-<link rel="stylesheet" href="../css/pages/case-oneu.css">
+<link rel="stylesheet" href="../css/pages/case-oneu.css?v=st8">
+<link rel="stylesheet" href="../css/base/pref-combo.css">
+<link rel="stylesheet" href="../css/base/case-dark.css?v=dk1">
+<script src="../js/pages/case-oneu-i18n.js" defer></script>
+<script src="../js/pages/lang.js?v=15" defer></script>
+<script src="../js/pages/theme.js" defer></script>
 <script src="../js/base/pill-swap.js" defer></script>
 <script src="../js/base/case-nav.js" defer></script>
 <script src="../js/base/case-sprite.js" defer></script>
@@ -27,9 +34,17 @@
       <span class="pl-file"><span class="pl-track" id="pl-track"><span class="pl-item">Work</span></span></span>
     </a>
     <span class="pl-div"></span>
-    <span class="pl-page"><img src="../assets/shared/icons/pages.svg" alt=""><span class="pl-name">The New Journey: From VinID → OneU</span></span>
+    <span class="pl-page"><img src="../assets/shared/icons/pages.svg" alt=""><span class="pl-name" data-i18n="oneu.s01.1">The New Journey: From VinID → OneU</span></span>
   </div>
   <div class="sidebar-right">
+    <div class="pref-combo">
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">
+      <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></svg>
+      <svg class="tt-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg>
+    </button>
+    <span class="pc-div" aria-hidden="true"></span>
+    <button class="lang-toggle" type="button" aria-label="Chuyển sang tiếng Việt"><span class="lt-code lt-en">EN</span><span class="lt-code lt-vi">VI</span></button>
+    </div>
     <div class="sr-avatar"><img class="sr-av" src="../assets/shared/avatars/avatar-1.png" alt=""><img class="sr-av" src="../assets/shared/avatars/avatar-2.png" alt=""><img class="sr-av" src="../assets/shared/avatars/avatar-you.png" alt=""><img class="sr-chev" src="../assets/shared/icons/chevron.svg" alt=""></div>
     <button class="sr-share" type="button">Share</button>
   </div>
@@ -44,27 +59,27 @@
 
   <section class="case-s case-s--first case-s--tight" id="s01">
     <img class="case-logo" src="../assets/work/oneu/s01-logo-oneu.svg" alt="OneU logo" width="230" height="65">
-    <h1 class="case-title">The New Journey: From VinID → OneU</h1>
+    <h1 class="case-title" data-i18n="oneu.s01.1">The New Journey: From VinID → OneU</h1>
     <div class="case-meta">
       <div class="case-meta__item">
-        <p class="case-label">Domain</p>
-        <div class="case-value"><span>Loyalty, Lifestyle App</span></div>
+        <p class="case-label" data-i18n="oneu.s01.2">Domain</p>
+        <div class="case-value"><span data-i18n="oneu.s01.3">Loyalty, Lifestyle App</span></div>
       </div>
       <div class="case-meta__item">
-        <p class="case-label">Team</p>
-        <div class="case-value"><span>4 Product Designers</span><span>1 Design Lead</span><span>2 Artists</span><span>3 Product Owners</span><span>12 Developers</span></div>
+        <p class="case-label" data-i18n="oneu.s01.4">Team</p>
+        <div class="case-value"><span data-i18n="oneu.s01.5">4 Product Designers</span><span data-i18n="oneu.s01.6">1 Design Lead</span><span data-i18n="oneu.s01.7">2 Artists</span><span data-i18n="oneu.s01.8">3 Product Owners</span><span data-i18n="oneu.s01.9">12 Developers</span></div>
       </div>
       <div class="case-meta__item">
-        <p class="case-label">Contribution</p>
-        <div class="case-value"><span>Visual Direction</span><span>Design System</span><span>UI Concept / Wireframe</span><span>UX Research</span></div>
+        <p class="case-label" data-i18n="oneu.s01.10">Contribution</p>
+        <div class="case-value"><span data-i18n="oneu.s01.11">Visual Direction</span><span data-i18n="oneu.s01.12">Design System</span><span data-i18n="oneu.s01.13">UI Concept / Wireframe</span><span data-i18n="oneu.s01.14">UX Research</span></div>
       </div>
       <div class="case-meta__item">
-        <p class="case-label">Scope</p>
-        <div class="case-value"><span>Revamp App</span></div>
+        <p class="case-label" data-i18n="oneu.s01.15">Scope</p>
+        <div class="case-value"><span data-i18n="oneu.s01.16">Revamp App</span></div>
       </div>
       <div class="case-meta__item">
-        <p class="case-label">Year</p>
-        <div class="case-value"><span>2023 - 2024</span></div>
+        <p class="case-label" data-i18n="oneu.s01.17">Year</p>
+        <div class="case-value"><span data-i18n="oneu.s01.18">2023 - 2024</span></div>
       </div>
     </div>
   </section>
@@ -77,34 +92,34 @@
 
   <section class="case-s oneu-s03" id="s03">
   <div class="case-row">
-    <h2 class="case-h2">Project Overview</h2>
+    <h2 class="case-h2" data-i18n="oneu.s03.1">Project Overview</h2>
     <div class="oneu-s03__body">
-      <p class="case-p">OneU is the strategic transformation of VinID into a lifestyle and loyalty platform — becoming an extended digital arm of Techcombank. The goal is to build a connected ecosystem that integrates reward points, payments, anders into a unified journey of value for both existing (ETB) and new (NTB) customers.</p>
-      <p class="case-p case-p--strong">Objective:<br>To create a cohesive lifestyle platform that strengthens the relationship between users and Techcombank through seamless point redemption, payments, and exclusiveers — all in one place.</p>
+      <p class="case-p" data-i18n="oneu.s03.2">OneU is the strategic transformation of VinID into a lifestyle and loyalty platform — becoming an extended digital arm of Techcombank. The goal is to build a connected ecosystem that integrates reward points, payments, anders into a unified journey of value for both existing (ETB) and new (NTB) customers.</p>
+      <p class="case-p case-p--strong" data-i18n="oneu.s03.3">Objective:<br>To create a cohesive lifestyle platform that strengthens the relationship between users and Techcombank through seamless point redemption, payments, and exclusiveers — all in one place.</p>
     </div>
   </div>
   <div class="case-row">
-    <h2 class="case-h2">Challenge</h2>
+    <h2 class="case-h2" data-i18n="oneu.s03.4">Challenge</h2>
     <div class="oneu-s03__body">
-      <p class="case-p">VinID was previously perceived as a limited “points – redemption” super app with little emphasis on lifestyle integration or banking ecosystem synergy.</p>
-      <p class="case-p case-p--strong">Users often felt:</p>
+      <p class="case-p" data-i18n="oneu.s03.5">VinID was previously perceived as a limited “points – redemption” super app with little emphasis on lifestyle integration or banking ecosystem synergy.</p>
+      <p class="case-p case-p--strong" data-i18n="oneu.s03.6">Users often felt:</p>
       <ul class="case-list">
-        <li>The experience was outdated and uninspiring.</li>
-        <li>The lack of account connectivity reduced personalization.</li>
-        <li>The interface did not reflect the modern lifestyle image Techcombank wanted to convey.</li>
+        <li data-i18n="oneu.s03.7">The experience was outdated and uninspiring.</li>
+        <li data-i18n="oneu.s03.8">The lack of account connectivity reduced personalization.</li>
+        <li data-i18n="oneu.s03.9">The interface did not reflect the modern lifestyle image Techcombank wanted to convey.</li>
       </ul>
-      <p class="case-p case-p--strong">Key Goals for OneU:</p>
+      <p class="case-p case-p--strong" data-i18n="oneu.s03.10">Key Goals for OneU:</p>
       <ul class="case-list">
-        <li>Attract and retain users through a more engaging, benefit-driven experience.</li>
-        <li>Unify the two platforms — Techcombank (transactions) and OneU (lifestyle) — into “one journey.”</li>
-        <li>Enable multi-channel point integration (e.g., T-Pay, Wealth ID, Merchant...).</li>
+        <li data-i18n="oneu.s03.11">Attract and retain users through a more engaging, benefit-driven experience.</li>
+        <li data-i18n="oneu.s03.12">Unify the two platforms — Techcombank (transactions) and OneU (lifestyle) — into “one journey.”</li>
+        <li data-i18n="oneu.s03.13">Enable multi-channel point integration (e.g., T-Pay, Wealth ID, Merchant...).</li>
       </ul>
     </div>
   </div>
   <div class="case-row">
-    <h2 class="case-h2">Design Process</h2>
+    <h2 class="case-h2" data-i18n="oneu.s03.14">Design Process</h2>
     <div class="oneu-s03__body">
-      <p class="case-p">This project was a cross-functional effort that brought together teams from Marketing, Branding, Product, and Visual Design. We aligned early to define a unified direction — not just for the app, but across all customer touchpoints — ensuring consistency in both experience and brand expression.</p>
+      <p class="case-p" data-i18n="oneu.s03.15">This project was a cross-functional effort that brought together teams from Marketing, Branding, Product, and Visual Design. We aligned early to define a unified direction — not just for the app, but across all customer touchpoints — ensuring consistency in both experience and brand expression.</p>
     </div>
   </div>
 </section>
@@ -119,19 +134,19 @@
 </section>
 
   <section class="case-s oneu-s05" id="s05">
-    <h2 class="case-title">From Brand Core to User Touchpoints</h2>
+    <h2 class="case-title" data-i18n="oneu.s05.1">From Brand Core to User Touchpoints</h2>
     <div class="case-cols3 oneu-s05__cols">
       <div>
-        <h3 class="case-h2">Find the New OneU Characteristic</h3>
-        <p class="case-p oneu-s05__p">We aligned cross-functional teams to define OneU’s personality — dynamic, youthful, and value-focused — as the foundation for all design decisions.</p>
+        <h3 class="case-h2" data-i18n="oneu.s05.2">Find the New OneU Characteristic</h3>
+        <p class="case-p oneu-s05__p" data-i18n="oneu.s05.3">We aligned cross-functional teams to define OneU’s personality — dynamic, youthful, and value-focused — as the foundation for all design decisions.</p>
       </div>
       <div>
-        <h3 class="case-h2">Redesign the Visual &amp; Experience System</h3>
-        <p class="case-p oneu-s05__p">We revamped the entire visual and experience system, from color, typography, and iconography to personalized, dynamic, and benefit-led UX principles.</p>
+        <h3 class="case-h2" data-i18n="oneu.s05.4">Redesign the Visual &amp; Experience System</h3>
+        <p class="case-p oneu-s05__p" data-i18n="oneu.s05.5">We revamped the entire visual and experience system, from color, typography, and iconography to personalized, dynamic, and benefit-led UX principles.</p>
       </div>
       <div>
-        <h3 class="case-h2">Apply Across Every Touchpoint</h3>
-        <p class="case-p oneu-s05__p">We applied this personality consistently across features, UI flows, and external communication — ensuring every user interaction felt distinctly OneU.</p>
+        <h3 class="case-h2" data-i18n="oneu.s05.6">Apply Across Every Touchpoint</h3>
+        <p class="case-p oneu-s05__p" data-i18n="oneu.s05.7">We applied this personality consistently across features, UI flows, and external communication — ensuring every user interaction felt distinctly OneU.</p>
       </div>
     </div>
 
@@ -143,20 +158,20 @@
         <img class="oneu-s05__logo" src="../assets/work/oneu/s05-logo.svg" alt="" width="322" height="253">
       </div>
       <div class="oneu-s05__pillar oneu-s05__pillar--dynamic">
-        <h3 class="oneu-s05__name">Dynamic</h3>
-        <p class="oneu-s05__desc">Feed me something fresh and exciting every time I open the app</p>
+        <h3 class="oneu-s05__name" data-i18n="oneu.s05.8">Dynamic</h3>
+        <p class="oneu-s05__desc" data-i18n="oneu.s05.9">Feed me something fresh and exciting every time I open the app</p>
       </div>
       <div class="oneu-s05__pillar oneu-s05__pillar--benefit">
-        <h3 class="oneu-s05__name">Benefit-led</h3>
-        <p class="oneu-s05__desc">Bring me real value — great deals, points, and easy rewards</p>
+        <h3 class="oneu-s05__name" data-i18n="oneu.s05.10">Benefit-led</h3>
+        <p class="oneu-s05__desc" data-i18n="oneu.s05.11">Bring me real value — great deals, points, and easy rewards</p>
       </div>
       <div class="oneu-s05__pillar oneu-s05__pillar--trendy">
-        <h3 class="oneu-s05__name">Trendy</h3>
-        <p class="oneu-s05__desc">Feeling trendy, modern, and match my lifestyle vibe</p>
+        <h3 class="oneu-s05__name" data-i18n="oneu.s05.12">Trendy</h3>
+        <p class="oneu-s05__desc" data-i18n="oneu.s05.13">Feeling trendy, modern, and match my lifestyle vibe</p>
       </div>
       <div class="oneu-s05__pillar oneu-s05__pillar--personalized">
-        <h3 class="oneu-s05__name">Personalized</h3>
-        <p class="oneu-s05__desc">Just suggest what fits me best</p>
+        <h3 class="oneu-s05__name" data-i18n="oneu.s05.14">Personalized</h3>
+        <p class="oneu-s05__desc" data-i18n="oneu.s05.15">Just suggest what fits me best</p>
       </div>
     </div>
   </section>
@@ -165,14 +180,14 @@
     <div class="oneu-s06__inner">
       <div class="oneu-s06__head">
         <span class="oneu-s06__num" aria-hidden="true">01</span>
-        <h2 class="oneu-s06__title">Visual Direction &amp; Design System</h2>
+        <h2 class="oneu-s06__title" data-i18n="oneu.s06.1">Visual Direction &amp; Design System</h2>
       </div>
       <div class="oneu-s06__body">
-        <p class="case-p">This app revamp marked a complete overhaul of our visual and UI design system. Guided by our brand personality pillars, we crafted a fresh and trendy visual identity — one that feels dynamic and fully personalized across every touchpoint</p>
-        <p class="case-p case-p--strong">“Dynamic” is the core design philosophy behind OneU</p>
-        <p class="case-p">We wanted everything on the platform — from content to products — to feel alive and constantly evolving. That meant our visual elements had to move with the same energy.</p>
-        <p class="case-p"><strong class="case-p--strong">Take the connected app icon set as an example.</strong><br>We moved away from the old static, minimalistic style and embraced a more expressive, fluid visual language. Each icon was redrawn with a unique perspective, as if captured mid-motion. Supporting elements were added to create depth and enhance the feeling of movement — turning static visuals into living moments.</p>
-        <p class="case-p">Shout-out to our two amazing visual artists behind OneU’s icon set. Their creativity and attention to detail brought our dynamic design philosophy to life — crafting a bold, expressive icon system that truly moves with the brand.</p>
+        <p class="case-p" data-i18n="oneu.s06.2">This app revamp marked a complete overhaul of our visual and UI design system. Guided by our brand personality pillars, we crafted a fresh and trendy visual identity — one that feels dynamic and fully personalized across every touchpoint</p>
+        <p class="case-p case-p--strong" data-i18n="oneu.s06.3">“Dynamic” is the core design philosophy behind OneU</p>
+        <p class="case-p" data-i18n="oneu.s06.4">We wanted everything on the platform — from content to products — to feel alive and constantly evolving. That meant our visual elements had to move with the same energy.</p>
+        <p class="case-p" data-i18n="oneu.s06.5"><strong class="case-p--strong">Take the connected app icon set as an example.</strong><br>We moved away from the old static, minimalistic style and embraced a more expressive, fluid visual language. Each icon was redrawn with a unique perspective, as if captured mid-motion. Supporting elements were added to create depth and enhance the feeling of movement — turning static visuals into living moments.</p>
+        <p class="case-p" data-i18n="oneu.s06.6">Shout-out to our two amazing visual artists behind OneU’s icon set. Their creativity and attention to detail brought our dynamic design philosophy to life — crafting a bold, expressive icon system that truly moves with the brand.</p>
       </div>
     </div>
   </section>
@@ -180,10 +195,10 @@
   <section class="case-s oneu-s07" id="s07">
     <figure class="case-fig case-fig--bleed oneu-s07__fig">
       <img src="../assets/work/oneu/s07-icons-banners.webp" alt="Before and after icon table with banner grid" width="1922" height="1323">
-      <p class="oneu-s07__label oneu-s07__label--before">Before</p>
-      <p class="oneu-s07__label oneu-s07__label--after">And after</p>
+      <p class="oneu-s07__label oneu-s07__label--before" data-i18n="oneu.s07.1">Before</p>
+      <p class="oneu-s07__label oneu-s07__label--after" data-i18n="oneu.s07.2">And after</p>
     </figure>
-    <p class="oneu-s07__caption">Illustration: Connected app &amp; in-app Banner by Oneu’s artist</p>
+    <p class="oneu-s07__caption" data-i18n="oneu.s07.3">Illustration: Connected app &amp; in-app Banner by Oneu’s artist</p>
   </section>
 
   <section class="case-s oneu-s08" id="s08">
@@ -211,38 +226,38 @@
 
   <section class="case-s oneu-s09" id="s09">
   <div class="oneu-s09__read">
-    <p class="case-p case-p--strong">Let’s talk about my favorite part: the Design System</p>
-    <p class="case-p">The VinID Design System was once well-known within the local design community.</p>
-    <p class="case-p">However, as the product evolved, so did the needs — and the existing system could no longer keep up with the day-to-day demands of OneU’s Product Designers.</p>
-    <p class="case-p">The app revamp presented the perfect opportunity. We reimagined and launched a brand-new Design System, built from the ground up based on real usage insights and habits gathered from OneU’s internal design team.</p>
-    <p class="case-p">The result: a more flexible, scalable, and designer-friendly system that powers both consistency and creativity.</p>
+    <p class="case-p case-p--strong" data-i18n="oneu.s09.1">Let’s talk about my favorite part: the Design System</p>
+    <p class="case-p" data-i18n="oneu.s09.2">The VinID Design System was once well-known within the local design community.</p>
+    <p class="case-p" data-i18n="oneu.s09.3">However, as the product evolved, so did the needs — and the existing system could no longer keep up with the day-to-day demands of OneU’s Product Designers.</p>
+    <p class="case-p" data-i18n="oneu.s09.4">The app revamp presented the perfect opportunity. We reimagined and launched a brand-new Design System, built from the ground up based on real usage insights and habits gathered from OneU’s internal design team.</p>
+    <p class="case-p" data-i18n="oneu.s09.5">The result: a more flexible, scalable, and designer-friendly system that powers both consistency and creativity.</p>
   </div>
 </section>
 
   <section class="case-s case-s--tight oneu-s10" id="s10">
   <figure class="case-fig case-fig--bleed oneu-s10__fig">
     <img class="fade-y" style="--fade: calc(451 * var(--case-u))" src="../assets/work/oneu/s10-design-system-grid.webp" alt="OneU Design System component grid" width="1920" height="2162">
-    <figcaption class="oneu-s10__cap">This is just 10% of the total OneU Design System.</figcaption>
+    <figcaption class="oneu-s10__cap" data-i18n="oneu.s10.1">This is just 10% of the total OneU Design System.</figcaption>
   </figure>
 </section>
 
   <section class="case-s oneu-s11" id="s11">
-  <h2 class="oneu-s11__head"><span class="oneu-s11__num">02</span><span class="oneu-s11__title">Personalized &amp; Dynamic</span></h2>
+  <h2 class="oneu-s11__head"><span class="oneu-s11__num">02</span><span class="oneu-s11__title" data-i18n="oneu.s11.1">Personalized &amp; Dynamic</span></h2>
   <div class="oneu-s11__read">
-    <p class="case-p">To create a smooth connection between the banking app (Techcombank Mobile) and the lifestyle app (OneU), we synced the user’s membership level from Techcombank and showed it at the top of OneU’s home screen.</p>
-    <p class="case-p">This small detail helped make the experience feel more <strong>personal</strong>.</p>
+    <p class="case-p" data-i18n="oneu.s11.2">To create a smooth connection between the banking app (Techcombank Mobile) and the lifestyle app (OneU), we synced the user’s membership level from Techcombank and showed it at the top of OneU’s home screen.</p>
+    <p class="case-p" data-i18n="oneu.s11.3">This small detail helped make the experience feel more <strong>personal</strong>.</p>
   </div>
   <figure class="case-fig case-fig--bleed oneu-s11__fig">
     <img class="fade-bottom" style="--fade: calc(379 * var(--case-u))" src="../assets/work/oneu/s11-personalized-dynamic.webp" alt="Personalized and dynamic OneU screens" width="1920" height="830">
-    <span class="oneu-s11__cap" style="left: calc(284 * var(--case-u))">Techcombank Homepage</span>
-    <span class="oneu-s11__cap" style="left: calc(1224 * var(--case-u))">OneU Homepage</span>
+    <span class="oneu-s11__cap" style="left: calc(284 * var(--case-u))" data-i18n="oneu.s11.4">Techcombank Homepage</span>
+    <span class="oneu-s11__cap" style="left: calc(1224 * var(--case-u))" data-i18n="oneu.s11.5">OneU Homepage</span>
   </figure>
 </section>
 
   <section class="case-s oneu-s12" id="s12">
     <div class="oneu-s12__text">
-      <p class="case-p">Based on the key visuals (KV) of each Techcombank membership tier, we adapted and integrated them into the OneU homepage.</p>
-      <p class="case-p">But we didn’t stop there — the entire content and product experience within the app also changes <strong>dynamically</strong> according to the user’s tier, ensuring it aligns with their persona and needs.</p>
+      <p class="case-p" data-i18n="oneu.s12.1">Based on the key visuals (KV) of each Techcombank membership tier, we adapted and integrated them into the OneU homepage.</p>
+      <p class="case-p" data-i18n="oneu.s12.2">But we didn’t stop there — the entire content and product experience within the app also changes <strong>dynamically</strong> according to the user’s tier, ensuring it aligns with their persona and needs.</p>
     </div>
     <figure class="case-fig case-fig--bleed oneu-s12__fig">
       <div class="oneu-s12__stage">
@@ -270,14 +285,14 @@
 
     <section class="case-s oneu-s13" id="s13">
     <div class="oneu-s13__text">
-      <p class="case-p">Together with Dynamic Engagement Content (DEC) — a dynamic alternative to static, boring banners — we designed AI-powered scenarios to deliver the most relevant and up-to-date information to users every time they open OneU.</p>
-      <p class="case-p">Instead of showing one-size-fits-all content, DEC adapts in real time to user data, habits, and context — making the experience feel fresh and personal on every visit.</p>
+      <p class="case-p" data-i18n="oneu.s13.1">Together with Dynamic Engagement Content (DEC) — a dynamic alternative to static, boring banners — we designed AI-powered scenarios to deliver the most relevant and up-to-date information to users every time they open OneU.</p>
+      <p class="case-p" data-i18n="oneu.s13.2">Instead of showing one-size-fits-all content, DEC adapts in real time to user data, habits, and context — making the experience feel fresh and personal on every visit.</p>
     </div>
     <!-- No real link yet: kept as a disabled pill. Needs Caveat (Google Fonts) for the handwritten label. -->
-    <span class="oneu-s13__cta" role="link" aria-disabled="true">
-      <span class="oneu-s13__cta-text">See how we improved OneU’s DEC</span>
-      <span class="oneu-s13__cta-note">Take a look!</span>
-    </span>
+    <a class="oneu-s13__cta" href="dec.html">
+      <span class="oneu-s13__cta-text" data-i18n="oneu.s13.3">See how we improved OneU’s DEC</span>
+      <span class="oneu-s13__cta-note" data-i18n="oneu.s13.4">Take a look!</span>
+    </a>
     <figure class="case-fig case-fig--bleed oneu-s13__banners case-marquee" role="img" aria-label="Strip of DEC campaign banners">
       <div class="case-marquee__track">
         <img src="../assets/shared/case/s13-dec-banners-loop.webp" alt="" width="2274" height="214">
@@ -288,8 +303,8 @@
   </section>
 
     <section class="case-s oneu-s14" id="s14">
-    <div class="oneu-head"><span class="oneu-head__num">03</span><h2 class="oneu-head__title">Benefit-led &amp; Trendy</h2></div>
-    <p class="oneu-p24 oneu-s14__p1">VinID was originally designed for a more mature audience — adults with families — so its visual style leaned towards safety, seriousness, and a somewhat outdated look and feel.</p>
+    <div class="oneu-head"><span class="oneu-head__num">03</span><h2 class="oneu-head__title" data-i18n="oneu.s14.1">Benefit-led &amp; Trendy</h2></div>
+    <p class="oneu-p24 oneu-s14__p1" data-i18n="oneu.s14.2">VinID was originally designed for a more mature audience — adults with families — so its visual style leaned towards safety, seriousness, and a somewhat outdated look and feel.</p>
     <div class="case-compare" data-compare>
       <div class="case-compare__stage">
         <div class="case-compare__layer case-compare__layer--after">
@@ -302,30 +317,30 @@
         <input class="case-compare__range" type="range" min="0" max="100" step="1" value="50" aria-label="Compare before and after: drag to reveal">
       </div>
       <div class="case-compare__labels">
-        <p class="case-p case-p--strong">Before: VinID App Design</p>
-        <p class="case-p case-p--strong">After: OneU App Design</p>
+        <p class="case-p case-p--strong" data-i18n="oneu.s14.3">Before: VinID App Design</p>
+        <p class="case-p case-p--strong" data-i18n="oneu.s14.4">After: OneU App Design</p>
       </div>
     </div>
-    <p class="oneu-p24 oneu-s14__p2">As we shifted toward a lifestyle-focused direction with OneU, it became clear that we needed a fresh, modern face — one that feels younger, trendier, and more dynamic to better connect with our new target users.</p>
+    <p class="oneu-p24 oneu-s14__p2" data-i18n="oneu.s14.5">As we shifted toward a lifestyle-focused direction with OneU, it became clear that we needed a fresh, modern face — one that feels younger, trendier, and more dynamic to better connect with our new target users.</p>
   </section>
 
     <section class="case-s oneu-s15" id="s15">
-    <div class="oneu-head"><span class="oneu-head__num">04</span><h2 class="oneu-head__title">Impact &amp; Results</h2></div>
+    <div class="oneu-head"><span class="oneu-head__num">04</span><h2 class="oneu-head__title" data-i18n="oneu.s15.1">Impact &amp; Results</h2></div>
     <div class="oneu-s15__stats">
       <div class="oneu-stat">
-        <p class="oneu-stat__kicker">Increase</p>
+        <p class="oneu-stat__kicker" data-i18n="oneu.s15.2">Increase</p>
         <p class="oneu-stat__num"><span class="oneu-stat__sym">&gt;</span><span class="oneu-stat__val">12</span><span class="oneu-stat__sym">%</span></p>
-        <p class="oneu-stat__desc">voucher redemptions within the first 2 months after redesign</p>
+        <p class="oneu-stat__desc" data-i18n="oneu.s15.3">voucher redemptions within the first 2 months after redesign</p>
       </div>
       <div class="oneu-stat">
-        <p class="oneu-stat__kicker">Get total</p>
+        <p class="oneu-stat__kicker" data-i18n="oneu.s15.4">Get total</p>
         <p class="oneu-stat__num"><span class="oneu-stat__sym">~</span><span class="oneu-stat__val">25</span><span class="oneu-stat__sym">%</span></p>
-        <p class="oneu-stat__desc">linked account conversions driven by Voucher U-Point flow</p>
+        <p class="oneu-stat__desc" data-i18n="oneu.s15.5">linked account conversions driven by Voucher U-Point flow</p>
       </div>
       <div class="oneu-stat">
-        <p class="oneu-stat__kicker">Achieved</p>
+        <p class="oneu-stat__kicker" data-i18n="oneu.s15.6">Achieved</p>
         <p class="oneu-stat__num"><span class="oneu-stat__sym">&gt;</span><span class="oneu-stat__val">15</span><span class="oneu-stat__sym">% CTR</span></p>
-        <p class="oneu-stat__desc">for Dynamic Engagement Content, far exceeding the standard ads benchmark of ~2%</p>
+        <p class="oneu-stat__desc" data-i18n="oneu.s15.7">for Dynamic Engagement Content, far exceeding the standard ads benchmark of ~2%</p>
       </div>
     </div>
   </section>

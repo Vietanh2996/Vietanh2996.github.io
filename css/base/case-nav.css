@@ -5,7 +5,7 @@
 .case-nav {
   --s: clamp(.75, tan(atan2(100vw, 1920px)), .9);
   --bg-white: #fff; --border-default: #e6e6e6; --text-default: rgba(0, 0, 0, .9);
-  --purple: #9747ff; --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1));
+  --purple: #9747ff; --bg-subtle: #f0f0f0; --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1));
 }
 .pill-left, .sidebar-right {
   position: fixed; z-index: 50; scale: var(--s); pointer-events: none; box-sizing: border-box;
@@ -15,7 +15,7 @@
 }
 .pill-left {
   left: calc(12px * var(--s)); transform-origin: 0 0; height: 48px; padding: 8px; border-radius: 13px;
-  max-width: calc(100vw / var(--s) - 137px - 40px);   /* never run under the sidebar: long page name ellipsizes */
+  max-width: calc(100vw / var(--s) - 137px - 105px - 40px);   /* never run under the sidebar + theme/language bar: long page name ellipsizes */
 }
 .pl-back {
   display: flex; align-items: center; flex: none; height: 32px; padding: 0 4px 0 0; border-radius: 5px;
@@ -34,7 +34,7 @@
 .pl-page img { width: 24px; height: 24px; flex: none; }
 .pl-name {
   min-width: 0; margin: 0 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font: 400 13px/22px var(--type-family-inter, "Inter", system-ui, sans-serif); color: #000;
+  font: 400 13px/22px var(--type-family-inter, "Inter", system-ui, sans-serif); color: var(--text-strong, #000);
 }
 .sidebar-right {
   right: calc(12px * var(--s)); transform-origin: 100% 0; width: max-content; justify-content: flex-end; gap: 8px;
