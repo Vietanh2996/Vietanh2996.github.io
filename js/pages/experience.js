@@ -159,8 +159,12 @@
     var flip = x + 35 + I.label.offsetWidth > W;
     if (mobile()) {                          // phones: the canvas is cropped, so flip when the label would run past the screen edge
       var s = canvas.getBoundingClientRect().width / W;
-      flip = (parseFloat(canvas.style.left) || 0) + (x + 35 + I.label.offsetWidth) * s > fit.clientWidth - 8;
-    }
+      var cl = parseFloat(canvas.style.left) || 0, lw = I.label.offsetWidth, fw = fit.clientWidth;
+      flip = cl + (x + 35 + lw) * s > fw - 8;
+      var l0 = cl + (flip ? x - 35 - lw : x + 35) * s;                  // label's left edge on screen
+      var dx = Math.max(8 - l0, Math.min(0, fw - 8 - (l0 + lw * s)));   // too wide for either side: slide it back inside the screen
+      I.label.style.translate = dx ? (dx / s).toFixed(1) + 'px 0' : '';
+    } else I.label.style.translate = '';
     I.el.classList.toggle('is-flip', flip);
   }
 
@@ -229,16 +233,17 @@
   }
   /* phones (fit-stage mobile mode): no hover, so the page scroll scrubs along the bar (the section is tall, the bar block sticky) and the
      canvas pans so the active point stays centred; the quote follows the viewport centre. */
-  var mq = window.__mobileFit && window.__mobileFit.mq;
+  var mq = window.__mobileFit && window.__mobileFit.mq, photos = canvas.querySelector('.exp-photos');
   function mobile() { return !!(mq && mq.matches); }
   function pan(x) {
     var fw = fit.clientWidth, s = canvas.getBoundingClientRect().width / W, g = 16;
     var left = Math.max(fw - W * s - g, Math.min(g, fw / 2 - x * s));
     canvas.style.left = left.toFixed(1) + 'px';
     if (quote) quote.parentElement.style.left = ((fw / 2 - left) / s).toFixed(1) + 'px';
+    if (photos) photos.style.left = ((g - left) / s).toFixed(1) + 'px';   // photos stay put on screen (phone layout in mobile.css)
   }
   function scrub() {
-    if (!mobile()) { if (canvas.style.left) { canvas.style.left = ''; if (quote) quote.parentElement.style.left = ''; draw(); } return; }
+    if (!mobile()) { if (canvas.style.left) { canvas.style.left = ''; if (quote) quote.parentElement.style.left = ''; if (photos) photos.style.left = ''; draw(); } return; }
     var r = section.getBoundingClientRect(), span = r.height - window.innerHeight;
     var p = span > 0 ? Math.max(0, Math.min(1, -r.top / span)) : 0, x = 2 + p * (W - 4);
     pan(x); px = place(x); kick();
@@ -281,7 +286,8 @@
   }
   function launch() {
     var cr = canvas.getBoundingClientRect(), fr = fit.getBoundingClientRect(), s = cr.width / W || 1;
-    flyC = [(fr.left + fr.width / 2 - cr.left) / s, (fr.top + fr.height / 2 - cr.top) / s];   // centre of the visible block, in canvas px
+    var pl = photos ? photos.offsetLeft : 0;    // phones: .exp-photos is shifted against the pan
+    flyC = [(fr.left + fr.width / 2 - cr.left) / s - pl, (fr.top + fr.height / 2 - cr.top) / s];   // centre of the visible block, in .exp-photos px
     flyT0 = performance.now(); var g = ++flyGen; requestAnimationFrame(function (n) { flyFrame(n, g); });
   }
   if (!reduced && window.IntersectionObserver) {

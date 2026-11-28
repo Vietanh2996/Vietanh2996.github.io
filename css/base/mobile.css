@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Phones (<= 767px) for the home page. Load after theme.css.
+   Phones (<= 767px, breakpoints in css/base/tokens.css) for the home page. Tablet 768-1023 keeps the desktop stage (user, 2026-11-29). Load after theme.css.
    Desktop renders every section as a 1920-wide stage shrunk to fit; on a phone that leaves ~20% type. Here each section keeps its stage
    but scales to its own CONTENT width (the rest of the 1920 stage is cropped), and a few stage elements are re-placed for a portrait screen.
    Hero + Experience scale in js/pages/fit-stage.js (data-mobile-w); About / Marquee / Work override --stage-scale here
@@ -7,14 +7,26 @@
    ========================================================================== */
 @media (max-width: 767px) {
 
-  /* ---------- chrome: only the top bars (file / page name, theme toggle, share) ---------- */
-  .toolbar, .zoom-help, .sr-avatar { display: none !important; }
+  /* ---------- chrome: only the top bars (file / page name, avatars + share) and the theme + language combo ---------- */
+  .toolbar, .zoom-help { display: none !important; }
+  /* top bars at Figma's phone size: chrome scale .668 (js/pages/fit-stage.js MOBILE.chrome), 22px from the top, 11 / 10px from the sides */
+  .pill-left { left: 11px; top: 22px; }
+  .sidebar-right { right: 10px; top: 22px; }
 
-  /* ---------- hero: the headline cluster fills the width (data-mobile-w 700); photos move above / below it ---------- */
-  .hero-img--apps { left: 590px; top: -150px; width: 330px; height: 330px; }
-  .hero-img--dark { left: 1000px; top: -90px; width: 330px; height: 330px; }
-  .hero-img--street { left: 590px; top: calc(760px - var(--street-lift, 80px)); width: 420px; height: 280px; }
-  .hero-img--moto { left: 1035px; top: 800px; width: 300px; height: 300px; }
+  /* ---------- hero: Figma "Frame 2147228540" (VA - Portfolio, 390x844, node 4023:76933). Numbers = Figma px at 390 mapped onto the stage
+     (stage left -295.97, top 145.83, scale (390 - 32) / 700); the stage stays centred, so other widths keep the same arrangement ---------- */
+  .hero-img--moto { left: 569px; top: -70px; width: 238.5px; height: 238.5px; }                            /* top left, small */
+  .hero-img--dark { left: 1013px; top: -66px; width: 349.5px; height: 349.5px; }                           /* top right */
+  .hero-img--street { left: 426px; top: calc(923px - var(--street-lift, 80px)); width: 552px; height: 368px; }   /* bottom left, bleeds off the edge */
+  .hero-img--apps { left: 1093px; top: 982px; width: 357px; height: 357px; }                               /* bottom right, bleeds off the edge */
+
+  /* ---------- theme + language: bottom centre. The combo lives inside .sidebar-right (scaled by --s, so position: fixed can't escape it);
+     these offsets undo that box: right edge of the bar = 100vw - 10px, top = 22px ---------- */
+  .sidebar-right .pref-combo {
+    right: calc((50vw - 10px) / var(--s));
+    top: calc((100dvh - 16px - env(safe-area-inset-bottom, 0px) - 22px) / var(--s));
+    translate: 50% -100%;
+  }
 
   /* ---------- About: own scale (content ~900 stage px wide), the 2-chip row breaks into two lines ---------- */
   .stage-section.about {
@@ -23,7 +35,7 @@
     height: calc(900px * var(--about-scale));
   }
   .about-skill { width: 900px; }
-  .skill-row:first-child { flex-wrap: wrap; row-gap: 20px; }
+  .skill-row:first-child { flex-wrap: wrap; row-gap: 10px; }   /* 10, not 20: the empty ::after line break gets a row gap on both sides, so the lines end up 20 apart like the rest */
   .skill-row:first-child > :nth-child(-n + 2) { order: 1; }
   .skill-row:first-child > :nth-child(n + 3) { order: 3; }
   .skill-row:first-child::after { content: ""; order: 2; flex-basis: 100%; }
@@ -33,18 +45,58 @@
   .stage-section.experience {
     --k: tan(atan2(100vw - 32px, 860px));   /* = the bar block's scale (data-mobile-w 860) */
     display: block; height: 320svh; overflow-x: clip;
-    padding: calc(640px * var(--k)) 0 calc(380px * var(--k));
+    padding: calc(640px * var(--k)) 0 calc(720px * var(--k));   /* bottom: the photos under the bar reach ~960 */
   }
-  /* the canvas is cropped to ~860px, so the photos above the bar land on the quote: lift those (y < 0) 240px clear of it */
-  .exp-ph { top: calc(var(--y) * 1px - 240px * clamp(0, -1 * var(--y), 1)); }
+  /* photos: the canvas pans with the scroll, so experience.js shifts .exp-photos back (x 0 = left gutter on screen) and they stay put.
+     Phone layout in the ~860 stage px that show: 4 above the quote, 4 under the bar, clear of the quote / title / bar and of zone 4's
+     label, which hangs under the bar (top 236, ~130 tall). */
+  .exp-ph { left: calc(var(--mx) * 1px); top: calc(var(--my) * 1px); }
+  .exp-ph:nth-child(1) { --mx: 780; --my: -600; }   /* 130x174 */
+  .exp-ph:nth-child(2) { --mx: 555; --my: -465; }   /* 150 circle */
+  .exp-ph:nth-child(3) { --mx: 745; --my: 610; }    /* 120 circle */
+  .exp-ph:nth-child(4) { --mx: 85; --my: -470; }    /* 110 circle */
+  .exp-ph:nth-child(5) { --mx: 115; --my: 650; }    /* 160 circle */
+  .exp-ph:nth-child(6) { --mx: 310; --my: -610; }   /* 128x162 */
+  .exp-ph:nth-child(7) { --mx: 430; --my: 800; }    /* 261x164 */
+  .exp-ph:nth-child(8) { --mx: 735; --my: 880; }    /* 96x123 */
   .exp-fit { position: sticky; top: calc(50svh - 130px * var(--stage-scale, 1)); }
 
+  /* ---------- wandering cursors: the wander keyframes / rest spot run over --vw (set on #cursor-layer by thumb.js); shrink it by the
+     name chip width (+ a few px) so the chip never runs off the right edge. --cur-pad is read by img-enter.js / cursor-guide.js too. ---------- */
+  .cursor { --cursor-scale: .45; }       /* smaller than desktop's .7 so they cover less content */
+  .cursor--yellow { --cur-pad: 74px; }   /* chip width at that scale + a few px */
+  .cursor--pink { --cur-pad: 58px; }
+  .cursor--pink, .cursor--yellow {
+    --vw: calc(100vw - var(--cur-pad));
+    --rx: min(calc(var(--vw) / 2 + (var(--tx) - 960px) * var(--stage-scale, 1) - 5.7px), calc(var(--vw) - 12px));   /* rest spot clamped too */
+  }
+
   /* ---------- Marquee: text ~1/3.4 of the design size ---------- */
-  .stage-section.marquee { --stage-scale: tan(atan2(100vw, 1300px)); }
+  .stage-section.marquee { --stage-scale: tan(atan2(100vw, 820px)); }
 
   /* ---------- Work: the two folders stack in one column, each ~80% of the screen width ---------- */
-  .stage-section.work { --stage-scale: min(.9, tan(atan2(100vw - 64px, 315px))); }
+  .stage-section.work { --stage-scale: min(.64, tan(atan2(100vw - 64px, 315px))); }
   .stage-section.work .work-fit { height: calc(780px * var(--stage-scale, 1)); }
   #work-card { left: 802.5px !important; top: 40px !important; }
   #work-card-b { left: 802.5px !important; top: 420px !important; }
+
+  /* ---------- Playground: the 1920 canvas (and its hidden spotlight windows) is wider than the screen here; clip it so the page never scrolls sideways.
+     clip, not hidden: no scroll box, and the canvas can still rise above .dim-overlay ---------- */
+  /* ---------- Throwbacks (playground): 2 columns. Own scale: the 720px grid (2 x 340 cards + 40 gap) fills the width;
+     type bumped so it reads at ~.48 (title ~42px, card names ~15px on a 375 screen) ---------- */
+  .stage-section.playground { overflow-x: clip; }   /* scale: data-mobile-w="720" on .pg-fit (js/pages/fit-stage.js) */
+  .pg-head { margin-bottom: 72px; }
+  .pg-title { font-size: 76px; line-height: 1.1; }
+  .pg-sub { font-size: 36px; line-height: 1.2; white-space: normal; max-width: 720px; }
+  .pg-grid { width: 720px; margin: 0 auto; gap: 64px 32px; }   /* cards are 460 x zoom .74 = 340.4, so 2 + 32 fit in 720 */
+  .pg-name { font-size: 36px; line-height: 1.15; }
+  .pg-kind { font-size: 36px; line-height: 1.1; }
+  .pg-aside { font-size: 30px; }
+
+  /* ---------- About avatar spotlight: contact card in one column (4 rows) and a narrower note, so the open composition is narrower and can
+     zoom bigger around the face (js/pages/about.js keeps the avatar circle where it is). Layer boxes in design px of #avatar-comp. ---------- */
+  .layer--card { left: 425px; top: 150px; width: 290px; height: 200px; }
+  .card { width: auto; }
+  .card-row { flex-direction: column; gap: 5px; }
+  .layer--note { left: -17px; width: 560px; height: 200px; }
 }

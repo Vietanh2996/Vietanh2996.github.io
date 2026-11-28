@@ -9,3 +9,6 @@ html[data-theme="dark"] :is(.pl-chev, .sr-chev, .pl-page img) { filter: invert(1
 /* OneU logos: the "one" letters are #231F20 in the SVG -> white copies (same file, only that fill changed) */
 html[data-theme="dark"] .case-logo[src$="s01-logo-oneu.svg"] { content: url("../../assets/work/oneu/s01-logo-oneu-dark.svg"); }
 html[data-theme="dark"] .oneu-s05__logo { content: url("../../assets/work/oneu/s05-logo-dark.svg"); }
+
+/* DEC layout demo: the selected tab must read lighter than its track (light: white on #f2f2f2); layer-1 is darker than layer-2 in dark */
+html[data-theme="dark"] .dec-tab[aria-selected=true] { background: var(--bg-layer-3); }

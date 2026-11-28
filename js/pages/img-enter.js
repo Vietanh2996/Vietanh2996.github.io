@@ -82,7 +82,8 @@
   function grabTip(it, g, x, y, rot) { return tipAt(it, g, x, y, rot, it.d.gx, it.d.gy); }
   function restTip(cursor) {     // where the CSS wander loop rests (mirrors .cursor--pink/yellow --rx/--ry, scroll top)
     var cs = getComputedStyle(cursor), S = parseFloat(getComputedStyle(root).getPropertyValue('--stage-scale')) || 1;
-    return { x: layer.clientWidth / 2 + (parseFloat(cs.getPropertyValue('--tx')) - 960) * S, y: layer.clientHeight / 2 + (parseFloat(cs.getPropertyValue('--ty')) - 540) * S };
+    var pad = parseFloat(cs.getPropertyValue('--cur-pad')) || 0, vw = layer.clientWidth - pad;   // phones: mobile.css shrinks --vw by the chip and clamps --rx
+    return { x: Math.min(vw / 2 + (parseFloat(cs.getPropertyValue('--tx')) - 960) * S, pad ? vw - 6.3 : Infinity), y: layer.clientHeight / 2 + (parseFloat(cs.getPropertyValue('--ty')) - 540) * S };
   }
   function putCursor(c, x, y, rot) {
     c.style.translate = (x - HX).toFixed(2) + 'px ' + (y - HY).toFixed(2) + 'px';

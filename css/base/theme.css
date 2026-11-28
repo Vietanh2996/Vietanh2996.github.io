@@ -4,8 +4,32 @@
    This file only inverts black chrome icons (a token cannot recolour an <img>) and holds the cursor chat bits.
    ========================================================================== */
 
+/* LEGACY dark values (restored 2026-11-29): home component CSS (thumb / about / spotlight / work / experience / playground)
+   still reads these old names, not the tokens.css aliases. Delete this block once those files move to --object-* / --bg-*. */
+html[data-theme="dark"] {
+  --canvas: #212121;
+  --canvas-tile: url("../../assets/home/thumb/bg-dot-dark.png");
+  --canvas-tile-size: 18px;
+
+  --text-strong: #fff;
+  --text-default: rgba(255, 255, 255, .9);
+  --text-muted: rgba(255, 255, 255, .6);
+  --text-secondary: rgba(255, 255, 255, .5);
+  --text-tertiary: rgba(255, 255, 255, .16);
+  --object-quaternary: rgba(255, 255, 255, .16);
+  --border-default: #444;        /* thumb.css :root still sets #e6e6e6, which would beat tokens.css */
+  --bg-white: #2c2c2c;           /* chrome surfaces: pills, toolbar, zoom, contact card, tagline */
+  --bg-subtle: #383838;
+  --bg-alpha-black-10: rgba(255, 255, 255, .1);
+  --ink: #f5f5f5;
+  --dim: rgba(30, 30, 30, .55);
+  --engineer-highlight: rgba(255, 205, 41, .28);
+  --chrome-drop: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .4));
+  --chrome-ui-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+}
+
 /* single-colour (black) chrome icons -> white; colourful illustrations (marker, sticky, shapes, emoji, move) stay as they are */
-html[data-theme="dark"] :is(.pl-logo img, .pl-chev, .sr-chev, .pl-page img, .zoom-plus, .help img, .ins-plus img, .tb-flat img, .tb-move img:last-child, .ins--align img) {
+html[data-theme="dark"] :is(.pl-logo img, .pl-chev, .sr-chev, .pl-page img, .zoom-plus, .ins-plus img, .tb-flat img, .tb-move img:last-child, .ins--align img) {
   filter: invert(1);
 }
 

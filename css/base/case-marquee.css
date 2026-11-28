@@ -3,5 +3,8 @@
 .case-marquee { --cm-h: max(calc(214 * var(--case-u)), 120px); height: calc(var(--cm-h) + 2px); overflow: hidden; overflow: clip; }
 .case-marquee__track { display: flex; width: max-content; height: var(--cm-h); will-change: transform; animation: case-marquee-loop 40s linear infinite; }
 .case-marquee__track img { display: block; flex: none; width: auto; height: var(--cm-h); max-width: none; }
+/* marquee luôn tràn full màn, không theo trần 1600 của .case-fig--bleed (user, 2026-11-28/29) */
+/* mọi nấc: parent luôn canh giữa 100vw (desktop margin, tablet/phone padding đều đối xứng) nên 50% - 50vw ra đúng mép màn */
+.case-marquee.case-fig--bleed { width: 100vw; margin-left: calc(50% - 50vw); }
 @keyframes case-marquee-loop { to { transform: translateX(-33.3333%); } }
 @media (prefers-reduced-motion: reduce) { .case-marquee__track { animation: none; } }

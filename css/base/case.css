@@ -4,7 +4,8 @@
 
    Scale: design is 1920 wide, content column 250 -> 1670 (1420). From 1024px up everything is sized in
    "design units": 1u = min(100vw, 1600px) / 1920 (so it shrinks with the viewport, never grows past 1600px).
-   Below 1024px the layout becomes one column at real px (target 390).
+   Below 1024px everything is real px: tablet 768–1023 (wider gutters, 2/3-column grids) and phone ≤767 (one column, target 390).
+   Breakpoints: css/base/tokens.css header.
 
    PAGE SHELL
      body.case            page: dot background, base font, no horizontal scroll
@@ -28,6 +29,7 @@
      .case-list   t-b3      bullet list (ul)
      .case-label  t-b2      meta label, object-tertiary
      .case-value  t-b2      meta value, object-primary; each line is a <span> (block, 8u apart)
+     .link-hand           handwritten brand link + hover arrow (see the block near the end)
      .case-logo           brand logo img (svg has glow padding: sized to its natural box, nudged to align)
 
    FIGURES
@@ -36,7 +38,8 @@
        .case-fig--hero      aspect-ratio 1419/829 (OneU hero); copy this pattern for other fixed ratios
        .case-fig--bleed     full viewport width, break out of the 1420 column
 
-   Tokens: --case-u, --case-gap, --case-w. Type scale: --u = --case-u (0px below 1024 so text styles sit on their floor).
+   Tokens: --case-u, --case-gap, --case-w, --case-pad (side gutter below 1024: phone 20px, tablet 40px, 0 on desktop;
+   page CSS that bleeds out of the gutter must use calc(-1 * var(--case-pad)), never a hard -20px). Type scale: --u = --case-u (0px below 1024 so text styles sit on their floor; B1/B2 16/14 on phone only).
    ========================================================================== */
 
 :root {
@@ -45,10 +48,20 @@
   --case-w: calc(1420 * var(--case-u));
   --case-gap: calc(106 * var(--case-u));
   --case-col-gap: calc(20 * var(--case-u));
+  --case-pad: 0px;               /* side gutter of .case-main below 1024 */
 
   --u: var(--case-u);            /* text style scale (css/base/tokens.css) */
   --theme-canvas: #fff;          /* case pages keep a plain white page in light mode (user, 2026-11-15); dark stays #212121 */
   --case-card-radius: calc(64 * var(--case-u));
+
+  /* LEGACY aliases (2026-11-28): case-oneu.css / case-dec.css still read these old tokens in ~18 rules
+     (s06 title, stats, s05 desc, dec table...). Mapped onto tokens.css until those rules move to t-* classes; then delete. */
+  --case-font-display: var(--font-ux);
+  --case-font-text: var(--font-bdo);
+  --case-title-size: var(--h1-size);                       /* 56u, floor 34 */
+  --case-p-size: var(--b3-size); --case-p-lh: var(--b3-lh); --case-p-ls: var(--b3-ls);
+  --case-meta-size: max(14px, calc(19 * var(--u)));        /* 19u, floor 14 */
+  --case-meta-lh: calc(24 / 19);
 }
 
 /* ---------- light reset ---------- */
@@ -107,8 +120,37 @@
 .case-fig--bleed { width: var(--case-vw); margin-left: calc(50% - var(--case-vw) / 2); }
 .case-fig--bleed img { width: 100%; }
 
-/* ---------- mobile (390 target) ---------- */
-@media (max-width: 1023px) {
+/* ---------- tablet 768–1023 (breakpoints: css/base/tokens.css header) ----------
+   Real px like phone (--case-u 1px, --u 0 = text on its floor, which is where desktop sits at 1024), but wider gutters,
+   2-column .case-row, 3-column .case-cols3 / .case-meta, and B1/B2 stay at desktop size 18/16. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --case-u: 1px;
+    --u: 0px;
+    --case-w: 100%;
+    --case-gap: 80px;
+    --case-col-gap: 24px;
+    --case-card-radius: 32px;
+    --case-pad: 40px;
+  }
+  .case-main { width: auto; margin: 0; padding: 0 var(--case-pad); }
+  .case-s--first { padding-top: 64px; }
+  .case-s--tight { margin-bottom: 40px; }
+  .case-row { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); row-gap: 24px; }
+  .case-cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 24px; }
+  .case-read, .case-read--left { width: auto; margin-left: 0; }
+  .case-p + .case-p { margin-top: 20px; }
+  .case-list li + li { margin-top: 6px; }
+  .case-logo { width: 180px; margin: -8px 0 20px 0; }
+  .case-title + .case-meta { margin-top: 40px; }
+  .case-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+  .case-label { margin-bottom: 6px; }
+  .case-value > span + span { margin-top: 6px; }
+  .case-fig--bleed { width: calc(100% + 2 * var(--case-pad)); margin-left: calc(-1 * var(--case-pad)); }
+}
+
+/* ---------- phone ≤767 (390 target) ---------- */
+@media (max-width: 767px) {
   :root {
     --case-u: 1px;
     --u: 0px;            /* text styles sit on their mobile floor */
@@ -117,8 +159,9 @@
     --case-w: 100%;
     --case-gap: 64px;
     --case-card-radius: 24px;
+    --case-pad: 20px;
   }
-  .case-main { width: auto; margin: 0; padding: 0 20px; }
+  .case-main { width: auto; margin: 0; padding: 0 var(--case-pad); }
   .case-s--first { padding-top: 48px; }
   .case-s--tight { margin-bottom: 32px; }
   .case-row, .case-cols3 { grid-template-columns: 1fr; row-gap: 16px; }
@@ -130,8 +173,21 @@
   .case-meta { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
   .case-label { margin-bottom: 4px; }
   .case-value > span + span { margin-top: 4px; }
-  .case-fig--bleed { width: calc(100% + 40px); margin-left: -20px; }
+  .case-fig--bleed { width: calc(100% + 2 * var(--case-pad)); margin-left: calc(-1 * var(--case-pad)); }
 }
+
+/* ===== .link-hand : link chữ viết tay (Caveat 700, màu brand) + mũi tên vẽ tay trượt ra khi hover =====
+   Dùng: <a class="link-hand" href="...">by going here</a>  (dec s01)
+   Hoặc làm nhãn trong một link to hơn: <a href="..."> ... <span class="link-hand">Take a look!</span></a>  (oneu s13): hover cả link cha là chạy.
+   Cỡ chữ: mặc định 28u (sàn 20px); muốn khác thì đặt font-size ở class riêng của chỗ dùng. Máy cảm ứng (không hover): mũi tên hiện sẵn. */
+.link-hand { display: inline-flex; align-items: baseline; font-family: var(--type-family-caveat, "Caveat", cursive); font-weight: 700; font-size: max(20px, calc(28 * var(--case-u))); color: var(--object-brand); text-decoration: none; text-decoration-skip-ink: none; white-space: nowrap; }
+.link-hand::after { content: ""; flex: none; position: relative; top: .03em;   /* tâm arrow = giữa x-height Caveat (~.4em) */ width: 0; height: .46em; margin-left: 0; opacity: 0; transform: translateX(-.25em); background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7.4c4.4-.3 9-.5 13.6-.3'/%3E%3Cpath d='M11 2.4c1.7 1.5 3.2 2.8 4.8 4.6-1.7 1.4-3.2 2.8-4.6 4.6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7.4c4.4-.3 9-.5 13.6-.3'/%3E%3Cpath d='M11 2.4c1.7 1.5 3.2 2.8 4.8 4.6-1.7 1.4-3.2 2.8-4.6 4.6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: width .25s cubic-bezier(.2, .8, .2, 1), margin-left .25s cubic-bezier(.2, .8, .2, 1), opacity .2s, transform .25s cubic-bezier(.2, .8, .2, 1); }
+.link-hand:is(:hover, :focus-visible), a:is(:hover, :focus-visible) > .link-hand { text-decoration: underline; }
+.link-hand:is(:hover, :focus-visible)::after, a:is(:hover, :focus-visible) > .link-hand::after { width: .6em; margin-left: .25em; opacity: 1; transform: none; }
+@media (hover: none) { .link-hand::after { width: .6em; margin-left: .25em; opacity: 1; transform: none; } }
 
 /* ===== .case-sprite : light frame-by-frame "GIF" (WebP strip stepped in CSS) =====
    Static image is wrapped in a positioned box; the strip div overlays it at the GIF's place (all % of the static image).

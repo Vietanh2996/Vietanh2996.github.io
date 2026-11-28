@@ -20,8 +20,8 @@
     stage.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
       dragging = true;
-      stage.setPointerCapture(e.pointerId);
       fromX(e.clientX);
+      try { stage.setPointerCapture(e.pointerId); } catch (_) {}   // capture can throw (stale pointerId); the jump to the tap point must still happen
       e.preventDefault();
     });
     // mouse: the bar follows on plain hover too (user, 2026-11-16); outside the stage no events -> bar stays put. Touch still needs a drag.

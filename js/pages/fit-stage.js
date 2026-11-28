@@ -7,9 +7,9 @@
   var fits = document.querySelectorAll('[data-stage-w]');
   var FIT = window.__fit = { ui: 1.2, max: 1.1 };   // hero stage content: ui = size multiplier; max = cap on the fit before ui (1 = never bigger than the 1920 design × ui)
   var CHROME = window.__chromeFit = { ui: 1, max: .9 };   // fixed chrome + cursors (and the non-hero stages): keep the old on-screen size, independent of FIT
-  /* phones (<= 767px): a stage with data-mobile-w scales so that many stage px fill the width minus a 16px gutter each side (the rest of the
+  /* phones (<= 767px, see css/base/tokens.css; tablet keeps the desktop stage): a stage with data-mobile-w scales so that many stage px fill the width minus a 16px gutter each side (the rest of the
      1920 stage is cropped), instead of shrinking the whole stage. Chrome gets a fixed readable size. */
-  var MOBILE = window.__mobileFit = { mq: window.matchMedia('(max-width: 767px)'), gutter: 16, chrome: .8 };
+  var MOBILE = window.__mobileFit = { mq: window.matchMedia('(max-width: 767px)'), gutter: 16, chrome: .668, heroW: 390 - 32, heroH: 844 };
   function fitAll() {
     for (var i = 0; i < fits.length; i++) {
       var el = fits[i], w = +el.dataset.stageW, h = +el.dataset.stageH, s;
@@ -20,6 +20,8 @@
       s = contain ? Math.min(raw, FIT.max) * FIT.ui : c;             // cap first, then multiply: big screens end up exactly like the capped 1920 view
       if (MOBILE.mq.matches && el.dataset.mobileW) {
         s = (document.documentElement.clientWidth - 2 * MOBILE.gutter) / +el.dataset.mobileW;
+        // full-screen hero: also fit the height, as if the screen were the 390x844 Figma frame (tablets / short screens would crop the photos)
+        if (contain) s = Math.min(s, el.clientHeight * MOBILE.heroW / MOBILE.heroH / +el.dataset.mobileW);
         c = MOBILE.chrome;
       }
       el.style.setProperty('--stage-scale', s);

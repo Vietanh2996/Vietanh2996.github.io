@@ -98,13 +98,13 @@ body.is-spotlight :is(.pill-left, .sidebar-right, .zoom-help, .toolbar) {
 .headline { margin: 0; inset: 0; pointer-events: none; }
 .headline span { position: absolute; white-space: pre; color: var(--text-strong); }
 .hl-hi { font: var(--type-display-hero-font); letter-spacing: 0; /* exception: current look is 0; Figma style says -2% */ left: calc(653.55px + var(--hi-dx, 0px)); top: 205px; }
-.hl-ai { font: var(--type-display-hero-font); left: 401px; top: 375px; line-height: .9; /* exception: kept at .9; Figma style says normal */ letter-spacing: var(--type-display-hero-ls); }
+.hl-ai { font: var(--type-display-hero-font); left: 384.6px; top: 375px; line-height: .9; /* exception: kept at .9; Figma style says normal */ letter-spacing: 0; } /* letter-spacing 0 (was -2%, user 2026-11-29: too tight): line 32.8px wider, left moved 16.4px to stay centred; .select moved 9.5px with "Product" */
 .hl-eng { font: var(--type-display-code-font); letter-spacing: var(--type-display-code-ls); left: 537.85px; top: 543.14px; } /* letter-spacing -7px (was -15.4): line is 92.4px wider, left moved 46.2px to stay centred; yellow + framing below widened to match */
 .hl-yellow { left: 697.6px; top: 548.77px; width: 623.149px; height: 131px; background: var(--engineer-highlight); }
 .framing { left: 515.75px; top: 518.15px; width: 930.4px; height: 192px; }
 
 /* purple text selection with two caret handles */
-.select { left: 528.5px; top: 361.15px; width: 543px; height: 154px; pointer-events: none; }
+.select { left: 524.6px; top: 361.15px; width: 552px; /* highlight pads the ink of "Product" evenly: ~19 stage px each side */ height: 154px; pointer-events: none; }
 .select-bg { position: absolute; inset: 13px 16px 16px 19px; background: var(--accent-purple-solid); opacity: .2; }
 .handle { position: absolute; width: 32px; display: flex; flex-direction: column; align-items: center; }
 .handle img { width: 32px; height: 32px; margin-bottom: -2px; flex: none; }
@@ -162,8 +162,10 @@ body.is-spotlight :is(.pill-left, .sidebar-right, .zoom-help, .toolbar) {
 .zoom-minus { position: relative; width: 32px; height: 32px; border-right: 1px solid var(--border-default); }
 .zoom-minus i { position: absolute; left: 10px; top: 15.5px; width: 11px; height: 1px; background: var(--text-default); }
 .zoom-plus { width: 30px; height: 32px; }
-.help { position: relative; width: 32px; height: 32px; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .1)); }
-.help img { position: absolute; left: -25%; right: -25%; top: -15.63%; width: 150%; height: 150%; }
+/* circle drawn in CSS on the same --bg-white as .zoom (the old SVG baked a white circle that went pure black under the dark-mode invert) */
+.help { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-white); color: var(--text-default);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .1), 0 3px 8px rgba(0, 0, 0, .1), 0 0 .5px rgba(0, 0, 0, .18); }
+.help svg { display: block; width: 100%; height: 100%; }
 
 /* ---------- bottom toolbar ---------- */
 .toolbar {
@@ -244,6 +246,10 @@ body.is-spotlight :is(.pill-left, .sidebar-right, .zoom-help, .toolbar) {
    25px = the arrow at --cursor-scale .7; hotspot 5 4 = the arrow tip at that size */
 @media (hover: hover) and (pointer: fine) { html, html * { cursor: url("../../assets/home/thumb/cursor-green-native.svg") 5 4, auto !important; } }
 @media (prefers-reduced-motion: reduce) { .cursor--pink, .cursor--yellow { animation: none; } }
+/* cursor chat (js/pages/cursor-guide.js) with no room below the arrow (combo at the bottom on phones): opens above it, small corner at the tip.
+   .is-flip (opens to the left) lives in css/base/theme.css */
+.cursor-chip.is-chat.is-up { top: auto; bottom: 50px; border-radius: 33.5px 33.5px 33.5px 3.5px; }
+.cursor-chip.is-chat.is-up.is-flip { border-radius: 33.5px 33.5px 3.5px 33.5px; }
 
 @keyframes wander-pink {
   0% { translate: var(--rx) var(--ry); animation-timing-function: cubic-bezier(.5,0,.2,1); }

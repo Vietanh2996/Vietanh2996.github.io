@@ -10,7 +10,7 @@
 }
 .pill-left {
   left: calc(12px * var(--s)); transform-origin: 0 0; height: 48px; padding: 8px; border-radius: 13px;
-  max-width: calc(100vw / var(--s) - 137px - 105px - 40px);   /* never run under the sidebar + theme/language bar: long page name ellipsizes */
+  max-width: calc(100vw / var(--s) - 179px - 105px - 48px);   /* never run under the sidebar (179 wide) + theme/language bar (97 + 8 gap): long page name ellipsizes. Was 137: overlapped the combo by ~20px on phones (2026-11-29) */
 }
 .pl-back {
   display: flex; align-items: center; flex: none; height: 32px; padding: 0 4px 0 0; border-radius: 5px;
@@ -42,4 +42,4 @@
   background: var(--bg-accent); color: var(--object-onbrand); white-space: nowrap;   /* t-ui3 */
 }
 /* room under the fixed bar for the first section */
-@media (max-width: 1023px) { .case .case-s--first { padding-top: 96px; } }
+@media (max-width: 1023px) { .case .case-s--first { padding-top: 96px; } }   /* phone + tablet: bar ~57px tall at --s .75 */

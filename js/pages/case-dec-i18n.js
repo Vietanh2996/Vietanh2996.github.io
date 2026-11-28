@@ -7,7 +7,7 @@ window.I18N_PAGE = {
     "case.back": "Về trang chủ",
     "dec.s01.1": "Dynamic Engagement Content",
     "dec.s01.2": "Dynamic Engagement Content:<br>Nội dung cá nhân hoá, vận hành bằng AI",
-    "dec.s01.3": "Nếu bạn chưa đọc phần trước, có thể xem lại <a href=\"oneu.html\">ở đây nhé</a>",
+    "dec.s01.3": "Nếu bạn chưa đọc phần trước, có thể xem lại <a class=\"link-hand\" href=\"oneu.html\">ở đây nhé</a>",
     "dec.s01.4": "Lĩnh vực",
     "dec.s01.5": "Loyalty, Lifestyle App",
     "dec.s01.6": "Team",

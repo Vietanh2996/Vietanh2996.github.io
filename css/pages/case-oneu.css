@@ -13,10 +13,6 @@
 /* s04 phone = 5-frame sprite (Figma "Home OneU" variants: OneU / Techcombank / Inspire / Priority / Private, 0.8s each); normal blend (not the multiply used by the s08 GIFs), soft fade on the bottom edge */
 .oneu-s04__fig .oneu-s04__phone { mix-blend-mode: normal; overflow: hidden; }
 
-@media (max-width: 1023px) {
-  .oneu-s03 .case-row + .case-row { margin-top: 32px; }
-  .oneu-s03__body > * + * { margin-top: 16px; }
-}
 
 /* OneU case, sections s05-s07. Load after css/base/case.css. Needs Google Font "Caveat" (wght 700) for .oneu-s07__caption:
    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> (also add to work/oneu.html head). */
@@ -47,42 +43,18 @@
 .oneu-s06__inner { width: calc(1060 * var(--case-u)); margin-left: calc(120 * var(--case-u)); }
 .oneu-s06__head { display: flex; gap: calc(40 * var(--case-u)); }
 .oneu-s06__num, .oneu-s06__title { font-family: var(--case-font-display); font-weight: 400; font-size: var(--case-title-size); line-height: 1.2; letter-spacing: 0; }
-.oneu-s06__num { flex: 0 0 calc(80 * var(--case-u)); color: #666; }
+.oneu-s06__num { flex: 0 0 calc(80 * var(--case-u)); color: var(--object-secondary); }
 .oneu-s06__body { width: calc(939 * var(--case-u)); margin: calc(57 * var(--case-u)) 0 0 calc(120 * var(--case-u)); }
 .oneu-s06__body .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
 .oneu-s06__body strong { font-weight: 500; }
 
 /* ---------- s07 ---------- */
 .oneu-s07__fig { position: relative; container-type: inline-size; }
-.oneu-s07__label { position: absolute; top: 25.7%; transform: translateX(-50%); margin: 0; white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(10px, 1.667cqw); line-height: 1; color: #666; }  /* Figma 32/28 on a 1920 canvas */
+.oneu-s07__label { position: absolute; top: 25.7%; transform: translateX(-50%); margin: 0; white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(10px, 1.667cqw); line-height: 1; color: var(--object-secondary); }  /* Figma 32/28 on a 1920 canvas */
 .oneu-s07__label--before { left: 25.1%; }
 .oneu-s07__label--after { left: 73.85%; }
-.oneu-s07__caption { margin-top: calc(24 * var(--case-u)); text-align: center; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: #666; }
+.oneu-s07__caption { margin-top: calc(24 * var(--case-u)); text-align: center; font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: var(--object-secondary); }
 
-/* ---------- mobile ---------- */
-@media (max-width: 1023px) {
-  .oneu-s05 { margin-bottom: 64px; }
-  .oneu-s05__cols { margin-top: 32px; row-gap: 32px; }
-  .oneu-s05__p { margin-top: 12px; max-width: none; }
-  .oneu-s05__diagram { margin-top: 40px; aspect-ratio: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 16px; }
-  .oneu-s05__art { position: static; grid-column: 1 / -1; width: 100%; aspect-ratio: 1157 / 651; }
-  .oneu-s05__art { position: relative; }
-  .oneu-s05__art img { position: static; translate: none; width: 100%; height: 100%; object-fit: contain; }
-  /* raster is "contain"ed (scaled 651/966, centred), so the logo % differ from desktop */
-  .oneu-s05__art .oneu-s05__logo { position: absolute; left: 40.677%; top: 39.489%; width: 18.758%; height: 26.207%; }
-  .oneu-s05__pillar { position: static; transform: none; width: auto; }
-  .oneu-s05__name { font-size: 24px; letter-spacing: 0; }
-  .oneu-s05__desc { font-size: 14px; line-height: 1.35; margin-top: 8px; }
-  .oneu-s05__pillar--dynamic { order: 1; } .oneu-s05__pillar--benefit { order: 2; }
-  .oneu-s05__pillar--trendy { order: 3; } .oneu-s05__pillar--personalized { order: 4; }
-
-  .oneu-s06__inner { width: auto; margin-left: 0; }
-  .oneu-s06__head { flex-direction: column; gap: 4px; }
-  .oneu-s06__num { flex: none; }
-  .oneu-s06__body { width: auto; margin: 24px 0 0; }
-  .oneu-s06__body .case-p + .case-p { margin-top: 16px; }
-  .oneu-s07__caption { margin-top: 12px; font-size: 18px; line-height: 1.2; }
-}
 
 /* s09-s11 of the OneU case. Needs Caveat (Google Fonts): <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> (Cal Sans link already in oneu.html).
    Figma: s09 text x490 w939 (=240u from column), CTA x477 y9883, s10 grid y9978 h2162, caption overlay y12045, s11 head x370 y12187, image y12565 */
@@ -98,56 +70,49 @@ html[data-theme="dark"] { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.5); }
   display: flex; align-items: baseline; gap: calc(8 * var(--case-u)); width: fit-content; max-width: 100%;
   margin: calc(56 * var(--case-u)) 0 0 calc(227 * var(--case-u));
   padding: calc(16 * var(--case-u)) calc(32 * var(--case-u));
-  background: #f6f8ff; border-radius: calc(28 * var(--case-u));
+  background: var(--bg-layer-2); border-radius: calc(28 * var(--case-u));
   -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
   box-shadow: var(--oneu-sticker-shadow);
   transform: rotate(-1deg); transform-origin: left center;   /* Figma Suggestion CTA 2333:48694: nghiêng ~1° */
   cursor: default; user-select: none;
 }
-.oneu-s09__cta-text { font-family: var(--case-font-display); font-size: max(16px, calc(28 * var(--case-u))); line-height: 1.2; color: #000; white-space: nowrap; }
-.oneu-s09__cta-note { font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1.1; color: #0d5eff; white-space: nowrap; }
+.oneu-s09__cta-text { font-family: var(--case-font-display); font-size: max(16px, calc(28 * var(--case-u))); line-height: 1.2; color: var(--object-primary); white-space: nowrap; }
+.oneu-s09__cta-note { font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1.1; color: var(--object-brand); white-space: nowrap; }
 
 /* ---- s10 ---- */
 .oneu-s10__fig { position: relative; }
 .oneu-s10__cap {
   position: absolute; left: 0; right: 0; bottom: 3.1%; text-align: center; padding: 0 20px;
-  font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; color: #666;
+  font-family: var(--type-family-caveat); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; color: var(--object-secondary);
 }
 
 /* ---- s11 ---- */
 .oneu-s11__head { display: grid; grid-template-columns: calc(80 * var(--case-u)) 1fr; column-gap: calc(40 * var(--case-u)); margin-left: calc(120 * var(--case-u)); font-family: var(--case-font-display); font-weight: 400; font-size: max(26px, calc(56 * var(--case-u))); line-height: 1.2; }
-.oneu-s11__num { color: #666; }
-.oneu-s11__title { color: #000; }
+.oneu-s11__num { color: var(--object-secondary); }
+.oneu-s11__title { color: var(--object-primary); }
 .oneu-s11__read { width: calc(939 * var(--case-u)); margin: calc(48 * var(--case-u)) 0 0 calc(240 * var(--case-u)); }
 .oneu-s11__read .case-p + .case-p { margin-top: calc(16 * var(--case-u)); }
 .oneu-s11__read strong { font-weight: 500; }
 .oneu-s11__fig { margin-top: calc(88 * var(--case-u)); position: relative; padding-bottom: calc(159 * var(--case-u)); }  /* image is cropped at Figma y830; captions sit at y894 of the 989 frame */
-.oneu-s11__cap { position: absolute; top: calc(894 * var(--case-u)); transform: translateX(-50%); white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-size: max(10px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: #666; }
+.oneu-s11__fig { container-type: inline-size; }   /* caps below 1024 sit in cqw of the bleed figure */
+.oneu-s11__cap--tcb { left: 14.7917%; }    /* Figma x284 of 1920: centre of phone 1 */
+.oneu-s11__cap--oneu { left: 63.75%; }     /* Figma x1224 of 1920: centre of phones 2-4 */
+.oneu-s11__cap { position: absolute; top: calc(894 * var(--case-u)); transform: translateX(-50%); white-space: nowrap; font-family: "Caveat", cursive; font-weight: 700; font-size: max(10px, calc(32 * var(--case-u))); line-height: calc(28 / 32); color: var(--object-secondary); }
 
-@media (max-width: 1023px) {
-  .oneu-s09 { margin-bottom: 32px; }
-  .oneu-s09__read, .oneu-s11__read { width: auto; margin-left: 0; }
-  .oneu-s09__cta { margin: 24px 0 0 0; padding: 12px 20px; border-radius: 20px; flex-wrap: wrap; row-gap: 0; transform: rotate(-1deg); }
-  .oneu-s09__cta-text { white-space: normal; }
-  .oneu-s10__cap { bottom: 2%; }
-  .oneu-s11__head { margin-left: 0; grid-template-columns: 36px 1fr; column-gap: 10px; font-size: 26px; }
-  .oneu-s11__read { margin-top: 20px; }
-  .oneu-s11__fig { margin-top: 32px; }
-}
 
-/* oneu s13-s15 + shared .case-compare. Uses case.css tokens (--case-u etc). Mobile breakpoint 1023px like case.css. */
+/* oneu s13-s15 + shared .case-compare. Uses case.css tokens (--case-u etc). Breakpoints: see the RESPONSIVE block at the end. */
 
 /* shared "03 Title" heading: number 80u + gap 40u, block x370 (120u from the column), body x491 */
 .oneu-head { display: flex; gap: calc(40 * var(--case-u)); margin-left: calc(120 * var(--case-u)); font-family: var(--case-font-display); font-size: var(--case-title-size); line-height: 1.2; font-weight: 400; }
-.oneu-head__num { width: calc(80 * var(--case-u)); flex: none; color: #666; }
-.oneu-head__title { margin: 0; font: inherit; color: #000; }
+.oneu-head__num { width: calc(80 * var(--case-u)); flex: none; color: var(--object-secondary); }
+.oneu-head__title { margin: 0; font: inherit; color: var(--object-primary); }
 .oneu-p24 { width: calc(939 * var(--case-u)); margin: 0 0 0 calc(241 * var(--case-u)); font-family: var(--case-font-text); font-weight: 400; font-size: var(--case-p-size); line-height: var(--case-p-lh); letter-spacing: var(--case-p-ls); }
 
 /* ---------- s13 ---------- */
 .oneu-s13__text { width: calc(939 * var(--case-u)); margin-left: calc(241 * var(--case-u)); }
-.oneu-s13__cta { display: flex; align-items: baseline; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: calc(var(--oneu-s13-cta-gap, 30) * var(--case-u)) auto 0; padding: calc(14.5 * var(--case-u)) calc(32 * var(--case-u)) calc(17.5 * var(--case-u));   /* lệch 1.5 lên: Caveat đẩy baseline xuống, bù để chữ hoa Uxum giữa khung */ background: #f6f8ff; border-radius: calc(28 * var(--case-u)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); box-shadow: var(--oneu-sticker-shadow); transform: rotate(-1deg); color: inherit; text-decoration: none; cursor: pointer; }   /* Figma Suggestion CTA 2333:48694: nghiêng ~1° */
+.oneu-s13__cta { display: flex; align-items: baseline; justify-content: center; gap: 8px; width: fit-content; max-width: 100%; margin: calc(var(--oneu-s13-cta-gap, 30) * var(--case-u)) auto 0; padding: calc(14.5 * var(--case-u)) calc(32 * var(--case-u)) calc(17.5 * var(--case-u));   /* lệch 1.5 lên: Caveat đẩy baseline xuống, bù để chữ hoa Uxum giữa khung */ background: var(--bg-layer-2); border-radius: calc(28 * var(--case-u)); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); box-shadow: var(--oneu-sticker-shadow); transform: rotate(-1deg); color: inherit; text-decoration: none; cursor: pointer; }   /* Figma Suggestion CTA 2333:48694: nghiêng ~1° */
 .oneu-s13__cta-text { font-family: var(--case-font-display); font-size: max(17px, calc(28 * var(--case-u))); line-height: 1; white-space: nowrap; }
-.oneu-s13__cta-note { font-family: var(--type-family-caveat, "Caveat", cursive); font-weight: 700; font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; color: #0d5eff; text-decoration: underline; text-decoration-skip-ink: none; white-space: nowrap; }
+.oneu-s13__cta-note { font-size: max(20px, calc(32 * var(--case-u))); line-height: 1; }   /* "Take a look!" = comp .link-hand (case.css), chỉ đổi cỡ */
 .oneu-s13__banners { margin-top: calc(81 * var(--case-u)); }
 
 /* ---------- s14 ---------- */
@@ -172,40 +137,18 @@ html[data-theme="dark"] { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.5); }
 .case-compare__stage:has(.case-compare__range:focus-visible) .case-compare__knob { outline: 3px solid #0d5eff; outline-offset: 3px; }
 .case-compare__labels { display: flex; justify-content: space-between; gap: 16px; width: var(--case-w); margin: calc(24 * var(--case-u)) auto 0; }
 .case-compare__labels .case-p { margin: 0; }
-.case-compare__labels .case-p--strong { font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); letter-spacing: 0; color: #666; }   /* Figma 2181:65569 / 2185:66430: Caveat Bold 32/28 #666, same as .oneu-s07__caption */
+.case-compare__labels .case-p--strong { font-family: "Caveat", cursive; font-weight: 700; font-style: italic; font-size: max(20px, calc(32 * var(--case-u))); line-height: calc(28 / 32); letter-spacing: 0; color: var(--object-secondary); }   /* Figma 2181:65569 / 2185:66430: Caveat Bold 32/28 #666, same as .oneu-s07__caption */
 
 /* ---------- s15 ---------- */
 .oneu-s15__stats { display: flex; justify-content: space-between; width: calc(939 * var(--case-u)); margin: calc(48 * var(--case-u)) 0 0 calc(241 * var(--case-u)); }
 .oneu-stat { width: calc(292 * var(--case-u)); }
 .oneu-stat p { margin: 0; }
 .oneu-stat__kicker { font-family: var(--case-font-display); font-size: var(--case-p-size); line-height: var(--case-p-lh); color: #e60a32; }
-.oneu-stat__num { display: flex; align-items: center; gap: calc(4 * var(--case-u)); margin-top: calc(8 * var(--case-u)) !important; font-family: var(--case-font-display); color: #000; white-space: nowrap; }
+.oneu-stat__num { display: flex; align-items: center; gap: calc(4 * var(--case-u)); margin-top: calc(8 * var(--case-u)) !important; font-family: var(--case-font-display); color: var(--object-primary); white-space: nowrap; }
 .oneu-stat__sym { font-size: max(30px, calc(48 * var(--case-u))); line-height: 1.2; }
 .oneu-stat__val { font-size: max(48px, calc(72 * var(--case-u))); line-height: calc(80 / 72); }
 .oneu-stat__desc { font-family: var(--case-font-text); font-size: var(--case-meta-size); line-height: var(--case-meta-lh); }  /* màu: --case-ink-secondary (case.css) */
 
-@media (max-width: 1023px) {
-  .oneu-head { margin-left: 0; gap: 16px; }
-  .oneu-head__num { width: auto; }
-  .oneu-p24, .oneu-s13__text, .oneu-s15__stats { width: auto; margin-left: 0; }
-  .oneu-s13__cta { flex-wrap: wrap; padding: 11px 22px 13px; border-radius: 28px; margin-top: 32px; gap: 4px 8px; }
-  .oneu-s13__cta-text { white-space: normal; text-align: center; font-size: 18px; }
-  .oneu-s13__cta-note { font-size: 22px; }
-  .oneu-s13__banners { margin-top: 32px; }
-  .oneu-s14__p1 { margin-top: 20px; }
-  .oneu-s14 .case-compare { margin-top: 32px; width: calc(100% + 40px); margin-left: -20px; }
-  .oneu-s14__p2 { margin-top: 24px; }
-  /* phone: taller box, images sized by height, centered, so the phone stays readable */
-  .case-compare__stage { aspect-ratio: auto; height: 118vw; }
-  .case-compare__img { width: auto; height: calc(var(--hr, 1) * 100%); }
-  .case-compare__bar { --s: 1.25px; }
-  .case-compare__labels { flex-direction: column; gap: 8px; margin: 16px 20px 0; width: auto; }
-  .oneu-s15__stats { flex-direction: column; gap: 32px; margin-top: 32px; }
-  .oneu-stat { width: auto; }
-  .oneu-stat__kicker { line-height: 1.3; }
-  .oneu-stat__val { font-size: 56px; }
-  .oneu-stat__sym { font-size: 34px; }
-}
 
 /* ---------- s08: 3 phones x104/523/942 (of 250), 375u wide, 44u gap; bottom fade = .fade-bottom on the row (row ~822u tall, fade over last 451u) ---------- */
 .oneu-s08 { position: relative; }
@@ -264,13 +207,6 @@ html[data-theme="dark"] { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.5); }
 /* Off-screen: js/base/case-sprite.js adds .is-paused */
 .oneu-s12__stage.is-paused *, .oneu-s12__stage.is-paused { animation-play-state: paused; }
 
-@media (max-width: 1023px) {
-  .oneu-s08__row { margin-top: 0; padding: 0; gap: 12px; overflow-x: auto; }
-  .oneu-s08__phone { flex: 0 0 62vw; margin-top: 0; }
-  .oneu-s08__row.fade-bottom { -webkit-mask-image: none; mask-image: none; }
-  .oneu-s12__text { width: auto; margin-left: 0; }
-  .oneu-s12__fig { margin-top: 24px; }
-}
 
 /* ---------- vertical rhythm (desktop): section start y = Figma frame 1828:9464 (1920u).
    margin-bottom = Figma next-section y - this section y - web section height.
@@ -290,4 +226,106 @@ html[data-theme="dark"] { --oneu-sticker-shadow: 1px 1px .5px rgba(0,0,0,.5); }
   .oneu-s12 { margin-bottom: calc(138 * var(--case-u)); }
   .oneu-s13 { margin-bottom: calc(179 * var(--case-u)); }
   .oneu-s14 { margin-bottom: calc(124 * var(--case-u)); }
+}
+
+/* ==========================================================================
+   RESPONSIVE (3 nấc, css/base/tokens.css): phone ≤767 · tablet 768–1023 · desktop ≥1024.
+   Below 1024 --case-u = 1px and .case-main has a side gutter --case-pad (tablet 40, phone 20);
+   anything that bleeds past the gutter uses calc(-1 * var(--case-pad)).
+   ========================================================================== */
+
+/* ---------- phone + tablet (≤1023) ---------- */
+@media (max-width: 1023px) {
+  /* s03 */
+  .oneu-s03 .case-row + .case-row { margin-top: 32px; }
+  .oneu-s03__body > * + * { margin-top: 16px; }
+
+  /* s05: diagram becomes art on top + 2x2 grid of pillars */
+  .oneu-s05 { margin-bottom: 64px; }
+  .oneu-s05__cols { margin-top: 32px; row-gap: 32px; }
+  .oneu-s05__p { margin-top: 12px; max-width: none; }
+  .oneu-s05__diagram { margin-top: 40px; aspect-ratio: auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px 16px; }
+  .oneu-s05__art { position: relative; left: auto; top: auto; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 1157 / 651; }
+  .oneu-s05__art img { position: static; translate: none; width: 100%; height: 100%; object-fit: contain; }
+  /* raster is "contain"ed (scaled 651/966, centred), so the logo % differ from desktop */
+  .oneu-s05__art .oneu-s05__logo { position: absolute; left: 40.677%; top: 39.489%; width: 18.758%; height: 26.207%; }
+  .oneu-s05__pillar { position: static; transform: none; width: auto; }
+  .oneu-s05__name { font-size: 24px; letter-spacing: 0; }
+  .oneu-s05__desc { font-size: 14px; line-height: 1.35; margin-top: 8px; }
+  .oneu-s05__pillar--dynamic { order: 1; } .oneu-s05__pillar--benefit { order: 2; }
+  .oneu-s05__pillar--trendy { order: 3; } .oneu-s05__pillar--personalized { order: 4; }
+
+  /* s06 */
+  .oneu-s06__inner { width: auto; margin-left: 0; }
+  .oneu-s06__head { flex-direction: column; gap: 4px; }
+  .oneu-s06__num { flex: none; }
+  .oneu-s06__body { width: auto; margin: 24px 0 0; }
+  .oneu-s06__body .case-p + .case-p { margin-top: 16px; }
+
+  /* s07 */
+  .oneu-s07__caption { margin-top: 12px; font-size: 18px; line-height: 1.2; }
+
+  /* s08: no left offset, no bottom mask (its 420u length is px here) */
+  .oneu-s08__row { margin-top: 0; padding: 0; gap: 12px; }
+  .oneu-s08__row.fade-bottom { -webkit-mask-image: none; mask-image: none; }
+
+  /* s09-s11 */
+  .oneu-s09 { margin-bottom: 32px; }
+  .oneu-s09__read, .oneu-s11__read { width: auto; margin-left: 0; }
+  .oneu-s09__cta { margin: 24px 0 0 0; padding: 12px 20px; border-radius: 20px; flex-wrap: wrap; row-gap: 0; transform: rotate(-1deg); }
+  .oneu-s09__cta-text { white-space: normal; }
+  .oneu-s10__cap { bottom: 2%; }
+  .oneu-s11__head { margin-left: 0; grid-template-columns: 36px 1fr; column-gap: 10px; font-size: 26px; }
+  .oneu-s11__read { margin-top: 20px; }
+  /* image = 830/1920 of the figure width; caps at Figma y894 → 46.5625cqw; room under them = 159/1920 of the width */
+  .oneu-s11__fig { margin-top: 32px; padding-bottom: calc((100% + 2 * var(--case-pad)) * 159 / 1920); }
+  .oneu-s11__cap { top: 46.5625cqw; font-size: 20px; }
+
+  /* s12 */
+  .oneu-s12__text { width: auto; margin-left: 0; }
+  .oneu-s12__fig { margin-top: 24px; }
+
+  /* s13-s15 */
+  .oneu-head { margin-left: 0; gap: 16px; }
+  .oneu-head__num { width: auto; }
+  .oneu-p24, .oneu-s13__text, .oneu-s15__stats { width: auto; margin-left: 0; }
+  .oneu-s13__cta { flex-wrap: wrap; padding: 11px 22px 13px; border-radius: 28px; margin-top: 32px; gap: 4px 8px; }
+  .oneu-s13__cta-text { white-space: normal; text-align: center; font-size: 18px; }
+  .oneu-s13__cta-note { font-size: 22px; }
+  .oneu-s13__banners { margin-top: 32px; }
+  .oneu-s14__p1 { margin-top: 20px; }
+  .oneu-s14 .case-compare { margin-top: 32px; width: calc(100% + 2 * var(--case-pad)); margin-left: calc(-1 * var(--case-pad)); }
+  .oneu-s14__p2 { margin-top: 24px; }
+  .case-compare__bar { --s: 1.25px; }
+  .case-compare__labels { margin: 16px var(--case-pad) 0; width: auto; }
+  .oneu-s15__stats { margin-top: 32px; }
+  .oneu-stat__kicker { line-height: 1.3; }
+  .oneu-stat__val { font-size: 56px; }
+  .oneu-stat__sym { font-size: 34px; }
+}
+
+/* ---------- tablet only (768–1023) ---------- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .oneu-s08__phone { flex: 1 1 0; min-width: 0; }               /* 3 phones fit side by side */
+  .oneu-s15__stats { gap: 24px; }
+  .oneu-stat { flex: 1 1 0; width: auto; min-width: 0; }        /* 3 stats stay in a row */
+}
+
+/* ---------- phone only (≤767) ---------- */
+@media (max-width: 767px) {
+  /* s08: phones too narrow for 3 across → horizontal scroll */
+  .oneu-s08__row { overflow-x: auto; }
+  .oneu-s08__phone { flex: 0 0 62vw; margin-top: 0; }
+  /* s11: centred caps would run off the left edge → start-align on the phones (x95 / x645 of 2000), allow wrapping */
+  .oneu-s11__fig { padding-bottom: 48px; }
+  .oneu-s11__cap { font-size: 16px; transform: none; white-space: normal; max-width: 26%; }
+  .oneu-s11__cap--tcb { left: 4.75%; }
+  .oneu-s11__cap--oneu { left: 32.25%; max-width: none; }
+  /* s14 compare: taller box, images sized by height, centred, so the phone screens stay readable */
+  .case-compare__stage { aspect-ratio: auto; height: 118vw; }
+  .case-compare__img { width: auto; height: calc(var(--hr, 1) * 100%); }
+  .case-compare__labels { flex-direction: column; gap: 8px; }
+  /* s15 */
+  .oneu-s15__stats { flex-direction: column; gap: 32px; }
+  .oneu-stat { width: auto; }
 }

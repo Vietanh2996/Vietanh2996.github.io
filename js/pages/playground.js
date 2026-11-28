@@ -20,7 +20,7 @@
     var r = node.getBoundingClientRect(), cr = canvas.getBoundingClientRect(), s = cr.width / SW || 1;
     return { x: (r.left - cr.left) / s, y: (r.top - cr.top) / s, w: r.width / s, h: r.height / s };
   }
-  var lit = 0, reduced = SP.reduced.matches;
+  var lit = 0, reduced = SP.reduced.matches, mq = window.__mobileFit && window.__mobileFit.mq;
   var SCROLL = { speed: 90, rest: 900, back: 1100 }, CYCLE = { step: 1600, offset: 400 };   // stage px/s, ms; ms per screen, delay between windows
 
   // full page sliding up inside its window: rest at the top, scroll down, rest, glide back up, repeat
@@ -90,6 +90,35 @@
       return { el: el, dIn: DIN[i % 5], dOut: DOUT[i % 5], amp: 2 + .5 * i, tilt: 0, kf: .5 - .05 * i, spin: .12,   // gentle drift: the screens must stay readable
                sat: { dx: 0, dy: 0, s0: .3, r0: -2 * ROT[i % 4] } };
     });
+    /* phones: the canvas only shows ~720 of its 1920 stage px, so windows beside the card would be cut off. Instead they gather in the
+       middle of the screen over the blurred page: the tall full pages side by side on top, the screen windows below at almost full width
+       (narrowed only when the stack would not fit the screen height). */
+    function phone(self, m, cx, cy) {
+      var cr = canvas.getBoundingClientRect(), s = cr.width / SW || 1, G = 10 / s, TOP = 70 / s;
+      var vx1 = -cr.left / s + G, vx2 = (window.innerWidth - cr.left) / s - G;
+      var vy1 = (TOP - cr.top) / s, vy2 = (window.innerHeight - 16 - cr.top) / s;
+      var talls = [], wides = [];
+      sats.forEach(function (el, i) { (el.tall ? talls : wides).push(i); });
+      var tRow = talls.length ? TH : 0, n = wides.length;
+      var avail = vy2 - vy1 - tRow - (talls.length && n ? CG : 0) - (n - 1) * CG;
+      var ww = Math.max(W, Math.min(vx2 - vx1, n ? (avail / n - 27) * 1.66 : 0)), wh = ww / 1.66 + 27;
+      var total = tRow + (talls.length && n ? CG : 0) + n * wh + (n - 1) * CG;
+      var mid = (vx1 + vx2) / 2 - m.x, y = Math.max(vy1, (vy1 + vy2 - total) / 2) - m.y;
+      var k = { x1: m.x, y1: m.y, x2: m.x + m.w, y2: m.y + m.h };
+      function put(i, x, yy, w, h, rot) {
+        var el = sats[i], u = self.units[i];
+        el.style.width = sats[i].tall ? '' : f(w) + 'px';
+        el.style.left = f(x) + 'px'; el.style.top = f(yy) + 'px'; el.style.rotate = rot + 'deg';
+        u.dx = cx - (x + w / 2); u.dy = cy - (yy + h / 2);
+        k.x1 = Math.min(k.x1, m.x + x); k.y1 = Math.min(k.y1, m.y + yy); k.x2 = Math.max(k.x2, m.x + x + w); k.y2 = Math.max(k.y2, m.y + yy + h);
+      }
+      var rw = talls.length * TW + (talls.length - 1) * CG;
+      talls.forEach(function (i, j) { put(i, mid - rw / 2 + j * (TW + CG), y, TW, TH, TROT[j % 2]); });
+      y += tRow + (talls.length && n ? CG : 0);
+      wides.forEach(function (i, j) { put(i, mid - ww / 2, y, ww, wh, j % 2 ? 1.5 : -1.5); y += wh + CG; });
+      var P = 10;
+      return { open: { rect: { x1: m.x - P, y1: m.y - P, x2: m.x + m.w + P, y2: m.y + m.h + P } }, keep: k };
+    }
     var inst = SP.create({
       comp: comp, source: card, space: canvas, spaceW: SW, units: units, clickOnly: true,
       layout: function (self) {
@@ -97,6 +126,8 @@
         if (!m.w) return null;
         comp.style.transform = 'translate(' + f(m.x) + 'px,' + f(m.y) + 'px)';
         var cx = m.w / 2, cy = m.h / 2;
+        if (mq && mq.matches) return phone(self, m, cx, cy);
+        sats.forEach(function (el) { el.style.width = ''; });
         // columns: each tall window is a column of its own, screens stack two to a column
         var talls = [], wides = [], cols = [];
         sats.forEach(function (el, i) { (el.tall ? talls : wides).push(i); });

@@ -85,8 +85,21 @@
   var g0 = 1;           // group scale at rest: avatar slot width / 165 / K, set in layout
   var avBase = [null, { dx: 213.14, dy: 184.93 }, { dx: -97.16, dy: 352.65 }, { dx: -345.25, dy: 167.04 }, { dx: 11.457, dy: -211.972 }];
 
+  /* phones: the open composition is drawn at ~9px text, so while it opens it zooms (ZQ) around the avatar circle (the face stays where it was,
+     like on desktop) as far as the screen width allows. AVB = its open bounds in design px with the phone layer boxes from mobile.css
+     (one-column contact card 425..715, narrower note -17..543, tagline top 19, note bottom ~739). */
+  var AVB = { x1: -17, y1: 19, x2: 725, y2: 739 }, ZW = null, ZQ = 1, avMq = window.__mobileFit && window.__mobileFit.mq;   // phone layer boxes (mobile.css)
+  function zoomComp(p) {
+    if (!ZW) return;
+    var t = SP.clamp(p, 0, 1), K = AV.K;
+    if (ZQ === 1 || t === 0) { avComp.style.transform = 'translate(' + ZW.x.toFixed(2) + 'px,' + ZW.y.toFixed(2) + 'px) scale(' + K + ')'; return; }
+    var bx = CIRCLE.x, by = CIRCLE.y;                                        // pivot: the avatar circle (design px)
+    var cx = ZW.x + bx * K, cy = ZW.y + by * K, k = K * (1 + (ZQ - 1) * t);  // stays put (stage px)
+    avComp.style.transform = 'translate(' + (cx - bx * k).toFixed(2) + 'px,' + (cy - by * k).toFixed(2) + 'px) scale(' + k.toFixed(4) + ')';
+  }
   function drawPerson(u) {
     var p = u.p;
+    zoomComp(p);
     groupEl.style.transform = 'translate3d(' + u.px.toFixed(2) + 'px,' + u.py.toFixed(2) + 'px,0) scale(' + (g0 + (G1 - g0) * p).toFixed(4) + ')';
     personEl.style.clipPath = 'circle(' + (82.5 + 92.5 * SP.clamp(p, 0, 1.15)).toFixed(2) + 'px at 81.208px 66.412px)';
     var po = (1 - SP.clamp(p / 0.25, 0, 1)).toFixed(3);
@@ -101,7 +114,17 @@
     g0 = m.w / 165 / K;
     // comp placed so the circle centre at rest (O + C * g0) lands on the avatar slot centre
     var Wx = Sx - K * (O.x + C.x * g0), Wy = Sy - K * (O.y + C.y * g0);
-    avComp.style.transform = 'translate(' + Wx.toFixed(2) + 'px,' + Wy.toFixed(2) + 'px) scale(' + K + ')';
+    ZW = { x: Wx, y: Wy };
+    var sc = space.getBoundingClientRect().width / SW || 1;
+    if (avMq && avMq.matches) {                 // widest zoom that keeps both sides 8px inside the screen, the circle fixed
+      var sl = space.getBoundingClientRect().left, pc = sl + (Wx + CIRCLE.x * K) * sc, G = 8;
+      ZQ = Math.max(1, Math.min((pc - G) / ((CIRCLE.x - AVB.x1) * K * sc), (window.innerWidth - G - pc) / ((AVB.x2 - CIRCLE.x) * K * sc)));
+      [[3, '.layer--card'], [4, '.layer--note']].forEach(function (a) {   // these boxes moved (mobile.css): fly out from the circle to their new centres
+        var l = avComp.querySelector(a[1]);
+        if (l) avBase[a[0]] = { dx: CIRCLE.x - (l.offsetLeft + l.offsetWidth / 2), dy: CIRCLE.y - (l.offsetTop + l.offsetHeight / 2) };
+      });
+    } else { ZQ = 1; avBase[3] = { dx: -345.25, dy: 167.04 }; avBase[4] = { dx: 11.457, dy: -211.972 }; }
+    zoomComp(inst && inst.isOpen ? 1 : 0);
     // satellites fly out of the slot centre (design coords of it: (S - W) / K); with g0 = 1 this is exactly the original offsets
     var sdx = (Sx - Wx) / K - CIRCLE.x, sdy = (Sy - Wy) / K - CIRCLE.y;
     for (var i = 1; i < inst.units.length; i++) { inst.units[i].dx = avBase[i].dx + sdx; inst.units[i].dy = avBase[i].dy + sdy; }
@@ -118,7 +141,8 @@
       })(),
       // original KEEP rect (design -40,-24 .. 860,610) mapped to stage px
       // bottom extended from 610 to 760: the handwritten note hangs down to design y 699 (+ the same ~60 padding)
-      keep: { x1: Wx - 40 * K, y1: Wy - 24 * K, x2: Wx + 860 * K, y2: Wy + 760 * K }
+      keep: ZQ > 1 ? { x1: -1e5, y1: -1e5, x2: 1e5, y2: 1e5 }   // zoomed to fill the phone screen: stays open until a tap outside the parts (engine)
+                   : { x1: Wx - 40 * K, y1: Wy - 24 * K, x2: Wx + 860 * K, y2: Wy + 760 * K }
     };
   }
 

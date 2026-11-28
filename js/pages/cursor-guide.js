@@ -34,7 +34,8 @@
   }
   function restTip(c) {                      // where the wander loop starts/rests (mirrors --rx/--ry in thumb.css, scroll top)
     var cs = getComputedStyle(c), S = parseFloat(getComputedStyle(root).getPropertyValue('--stage-scale')) || 1;
-    return { x: layer.clientWidth / 2 + (parseFloat(cs.getPropertyValue('--tx')) - 960) * S, y: layer.clientHeight / 2 + (parseFloat(cs.getPropertyValue('--ty')) - 540) * S };
+    var pad = parseFloat(cs.getPropertyValue('--cur-pad')) || 0, vw = layer.clientWidth - pad;   // phones: mobile.css shrinks --vw by the chip and clamps --rx
+    return { x: Math.min(vw / 2 + (parseFloat(cs.getPropertyValue('--tx')) - 960) * S, pad ? vw - 6.3 : Infinity), y: layer.clientHeight / 2 + (parseFloat(cs.getPropertyValue('--ty')) - 540) * S };
   }
   function fly(c, from, toFn, ms) {          // toFn re-read every frame so a moving target (resize, chrome scale) is still hit
     return new Promise(function (done) {
@@ -77,15 +78,20 @@
       .then(function () {
         chip.textContent = ''; chip.classList.add('is-chat');
         msg = document.createElement('span'); msg.className = 'cg-msg'; chip.appendChild(msg);
-        msg.textContent = o.text; chip.style.visibility = 'hidden';       // measure the full hint: would it run off the right edge?
-        chip.classList.toggle('is-flip', chip.getBoundingClientRect().right > layer.clientWidth - 12);
+        msg.textContent = o.text; chip.style.visibility = 'hidden';       // measure the full hint: would it run off the right / bottom edge?
+        var W = layer.clientWidth, H = layer.clientHeight, k = c.getBoundingClientRect().width / 56 || 1, r;
+        chip.classList.toggle('is-flip', chip.getBoundingClientRect().right > W - 12);
+        chip.classList.toggle('is-up', chip.getBoundingClientRect().bottom > H - 12);   // e.g. the theme / language combo at the bottom on phones
+        r = chip.getBoundingClientRect();                                  // still too wide (narrow phone): slide it back inside the screen
+        var dx = Math.max(12 - r.left, Math.min(0, W - 12 - r.right));
+        chip.style.translate = dx ? (dx / k).toFixed(1) + 'px 0' : '';
         msg.textContent = ''; chip.style.visibility = '';
         return typeInto(msg, o.text, T.type);
       })
       .then(function () { return wait(o.hold || T.hold); })
       .then(function () { return eraseFrom(msg, T.erase); })
       .then(function () {
-        chip.classList.remove('is-chat', 'is-flip'); chip.textContent = name; target.classList.remove('is-guided');
+        chip.classList.remove('is-chat', 'is-flip', 'is-up'); chip.style.translate = ''; chip.textContent = name; target.classList.remove('is-guided');
         return fly(c, nowTip(c), function () { return restTip(c); }, T.home);
       })
       .then(function () {                                           // hand back: the wander keyframes start at the rest spot, so no jump
@@ -111,15 +117,57 @@
 
   window.CursorGuide = { show: show, schedule: schedule, timing: T };
 
-  /* ---------- home page: Claude-chan points at the light/dark toggle, once shortly after the intro, then every minute,
+  /* ---------- home page: the Việt Anh cursor (pink) guides the visitor around the site. It points at the light/dark toggle, once shortly after the intro, then every minute,
      until the visitor clicks the toggle on this page view ---------- */
   var toggle = document.querySelector('.theme-toggle');
   if (toggle) {
     var used = false;
     toggle.addEventListener('click', function () { used = true; });
     schedule({
-      cursor: '.cursor--yellow', target: toggle, get text() { return window.I18N ? I18N.t('cursor.mode', 'Try here to change mode') : 'Try here to change mode'; },
+      cursor: '.cursor--pink', target: toggle, get text() { return window.I18N ? I18N.t('cursor.mode', 'Try here to change mode') : 'Try here to change mode'; },
       first: 3000, every: 60000, until: function () { return used; }
     });
+  }
+  /* ---------- language toggle: same, ~15s after the intro (so it doesn't queue right behind the theme hint), then every minute ---------- */
+  var langBtn = document.querySelector('.lang-toggle');
+  if (langBtn) {
+    var langUsed = false;
+    langBtn.addEventListener('click', function () { langUsed = true; });
+    schedule({
+      cursor: '.cursor--pink', target: langBtn, at: [.5, .62],
+      get text() { var fb = root.lang === 'vi' ? 'Đổi sang tiếng Anh ở đây nè' : 'Switch to Vietnamese here'; return window.I18N ? I18N.t('cursor.lang', fb) : fb; },
+      first: 15000, every: 60000, until: function () { return langUsed; }
+    });
+  }
+
+  /* ---------- About: once the Việt Anh avatar is fully on screen, the Việt Anh cursor flies over and says to click it (the avatar spotlight).
+     Once per time it scrolls into view, at most twice per page view; never again after the visitor hovers or clicks the avatar / pill.
+     Text: key 'cursor.avatar' (not in js/pages/lang.js yet, so the fallback per language below is what shows). ---------- */
+  var av = document.getElementById('who-avatar'), pill = document.querySelector('.who-pill');
+  if (av && 'IntersectionObserver' in window) {
+    var avUsed = false, avIn = false, avTimer = 0, avShown = 0, AV_MAX = 2;
+    [av, pill].forEach(function (el) {
+      if (!el) return;
+      el.addEventListener('click', function () { avUsed = true; });
+      el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') avUsed = true; });
+    });
+    function avText() {
+      var fb = root.lang === 'vi' ? 'Bấm thử đi, có cái này hay lắm' : 'Click me, there’s something fun';
+      return window.I18N ? I18N.t('cursor.avatar', fb) : fb;
+    }
+    function avTry() {
+      avTimer = 0;
+      if (avUsed || !avIn || avShown >= AV_MAX) return;
+      show({ cursor: '.cursor--pink', target: av, text: avText(), at: [.72, .78], hold: 2600 }).then(function (ok) {
+        if (ok) avShown++;
+        else if (avIn && !avUsed) avTimer = setTimeout(avTry, 1500);   // busy (theme hint, spotlight...): try again while it is still in view
+      });
+    }
+    new IntersectionObserver(function (es) {
+      var e = es[es.length - 1], was = avIn;
+      avIn = e.isIntersecting && e.intersectionRatio > .95;
+      if (avIn && !was && !avTimer) avTimer = setTimeout(avTry, 1200);    // let the scroll settle first
+      if (!avIn && avTimer) { clearTimeout(avTimer); avTimer = 0; }
+    }, { threshold: [0, .95, 1] }).observe(av);
   }
 })();

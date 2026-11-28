@@ -2,6 +2,13 @@
    Design tokens for the whole site (index.html, work/*.html). Load FIRST on every page.
    Proposal approved 2026-11-28: _review/ds-proposal.html
 
+   BREAKPOINTS (chốt 2026-11-29, mọi file CSS theo đúng 3 nấc này; biến CSS không dùng được trong @media nên chỉ chốt số)
+     phone    ≤767        @media (max-width: 767px)
+     tablet   768–1023    @media (min-width: 768px) and (max-width: 1023px)
+     desktop  ≥1024       @media (min-width: 1024px)
+     "Không phải desktop" (phone + tablet chung một rule) = @media (max-width: 1023px).
+     Cỡ màn kiểm: 375 · 390 · 430 · 768 · 1024 · 1280 · 1440 · 1920.
+
    TWO TIERS, NO GLOBAL PALETTE
      1. Theme   --theme-*   raw values, two modes: Light (:root) and Dark (html[data-theme="dark"]).
                             Dark mode overrides ONLY this tier. Never use --theme-* in component CSS.
@@ -29,7 +36,9 @@
      Display / Heading / Title / Note sizes are design px at 1920, multiplied by --u, with a mobile floor:
        size = max(floor, design * --u)
      Home: --u = 1px (the home stage scales as a whole). Case pages (css/base/case.css): --u = --case-u
-     (min(100vw,1600px)/1920) and below 1024px --u = 0px, so every style sits on its floor.
+     (min(100vw,1600px)/1920) and below 1024px --u = 0px, so every style sits on its floor
+     (at 1024 the desktop sizes are already on their floors, so tablet continues seamlessly). B1/B2: tablet keeps
+     18/16 like desktop, phone drops to 16/14 (case.css).
      Body and UI styles are fixed px.
    ========================================================================== */
 

@@ -171,18 +171,31 @@
     }
 
     var b = sp.bounds, K = 1.25, inst;
+    /* phones: the open spotlight is wider than the screen (the note alone is 526 card px), so while it opens the whole composition shrinks
+       to fit (Q) around the middle of its open bounds, and that middle slides to the screen centre. Q = 1 elsewhere. */
+    var M = null, Q = 1, PV = { x: (b.x1 + b.x2) / 2, y: (b.y1 + b.y2) / 2 }, mq = window.__mobileFit && window.__mobileFit.mq;
+    function place(p) {
+      if (!M) return;
+      var t = clamp(p, 0, 1), z = 1 + (Q - 1) * t, k = K * z;
+      var px = M.x + PV.x * K, py = M.y + PV.y * K;                       // pivot at rest, stage px
+      var cx = px + (SW / 2 - px) * (Q < 1 ? t : 0);                       // slides to the screen centre (stage is centred on screen)
+      comp.style.transform = 'translate(' + f(cx - PV.x * k) + 'px,' + f(py - PV.y * k) + 'px) scale(' + k.toFixed(4) + ')';
+    }
+    (function () { var u0 = units[0], d0 = u0.draw; u0.draw = function (u) { place(u.p); d0(u); }; })();
     inst = SP.create({
       comp: comp, source: a, space: space, spaceW: SW, dimWhenOther: true,
       units: units,
       layout: function () {
         var m = measure(a);
         if (!m.w) return null;
-        K = m.w / 360;
-        comp.style.transform = 'translate(' + f(m.x) + 'px,' + f(m.y) + 'px) scale(' + K.toFixed(4) + ')';
-        var P = 10, KP = 40;
+        K = m.w / 360; M = m;
+        var sc = space.getBoundingClientRect().width / SW || 1;
+        Q = mq && mq.matches ? Math.min(1, (window.innerWidth - 24) / sc / ((b.x2 - b.x1) * K)) : 1;
+        place(inst && inst.isOpen ? 1 : 0);
+        var P = 10, KP = 40, k = K * Q, ox = (Q < 1 ? SW / 2 : m.x + PV.x * K) - PV.x * k, oy = m.y + PV.y * K - PV.y * k;   // open pose origin
         return {
           open: { rect: { x1: m.x - P, y1: m.y - P, x2: m.x + m.w + P, y2: m.y + m.h + P } },
-          keep: { x1: m.x + b.x1 * K - KP, y1: m.y + b.y1 * K - KP, x2: m.x + b.x2 * K + KP, y2: m.y + b.y2 * K + KP }
+          keep: { x1: Math.min(m.x, ox + b.x1 * k) - KP, y1: Math.min(m.y, oy + b.y1 * k) - KP, x2: Math.max(m.x + m.w, ox + b.x2 * k) + KP, y2: Math.max(m.y + m.h, oy + b.y2 * k) + KP }
         };
       },
       onShown: function (on) {   // reduced motion: poses snap, so cross-fade the whole composition instead
